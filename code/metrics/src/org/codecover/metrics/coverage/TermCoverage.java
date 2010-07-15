@@ -246,7 +246,27 @@ public class TermCoverage extends AbstractCoverageMetric {
             if("OR".equals(operationString)) {
             	 operation = OPERATION_OR;
             }
-                                 
+
+            // the ! operator
+            if(operatorTerm.getOperands().size() ==1) {
+            	BooleanTerm rhs = operatorTerm.getOperands().get(0);
+            	BooleanResult resultR = termResults.get(rhs);
+            	
+   	 			if(rhs instanceof BasicBooleanTerm) {
+           	 		if(resultR == BooleanResult.TRUE) {
+      	 				wirksamMapT.put(rhs, BooleanResult.TRUE);                   	 		           	 				           	 			
+           	 		}
+           	 		if(resultR == BooleanResult.FALSE) {
+      	 				wirksamMapF.put(rhs, BooleanResult.FALSE);                   	 		           	 				           	 			
+           	 		}
+  	 			} else {
+  	 				// the !(...) construction
+           	 		evaluateTermWirksamkeit(rootTerm, rhs, termResults, wirksamMapT, wirksamMapF);  	 				
+  	 			}
+           
+            }
+            
+            
            if(operatorTerm.getOperands().size() == 2) {
             	BooleanTerm lhs = operatorTerm.getOperands().get(0);
             	BooleanTerm rhs = operatorTerm.getOperands().get(1);

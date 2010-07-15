@@ -615,10 +615,13 @@ public class TestCase extends AbstractMetaDataProvider {
                     // assignment in the map which cannot occur (according
                     // to the static data.)
                     // TODO: Check this on the TestCase construction
-                    throw new RuntimeException("Illegal assignment in map");
+                    // throw new RuntimeException("Illegal assignment in map");
+                	
+                	// RS, 12.07.2010 Problems in termcovergae using a expression like false && a()
+                } else {
+                    result.put(booleanAssignment, assignmentResult);                	
                 }
 
-                result.put(booleanAssignment, assignmentResult);
             }
             result = Collections.unmodifiableMap(result);
             synchronized (this.cachedAssignments) {

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/codecover_1.0.0.9.jar" id="codecover" version="1.0.0.9">
+   <feature url="features/codecover_1.0.1.0.jar" id="codecover" version="1.0.1.0">
       <category name="CodeCover"/>
    </feature>
    <category-def name="CodeCover" label="CodeCover">
       <description>
-         CodeCover is a coverage measurement tool released unter the EPL.
+         CodeCover is a coverage measurement tool released under the EPL.
       </description>
    </category-def>
 </site>

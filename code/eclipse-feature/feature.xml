@@ -3,7 +3,7 @@
 <feature
       id="codecover"
       label="CodeCover"
-      version="1.0.0.9"
+      version="1.0.1.1"
       plugin="http://update.codecover.org/">
 
    <description url="http://www.codecover.org/">
@@ -11,9 +11,9 @@
    </description>
 
    <copyright>
-      Copyright (c) 2007-2009 Stefan Franke, Robert Hanussek, Benjamin Keil,
+      Copyright (c) 2007-2010 Stefan Franke, Robert Hanussek, Benjamin Keil,
 Steffen Kieß, Johannes Langauf, Christoph Marian Müller, Igor
-Podolskiy, Tilmann Scheller, Michael Starzmann, Markus Wittlinger.
+Podolskiy, Tilmann Scheller, Michael Starzmann, Markus Wittlinger, Rainer Schmidberger.
 All rights reserved. This program and the accompanying materials
 are made available under the terms of the Eclipse Public License
 v1.0 which accompanies this distribution, and is available at
@@ -134,65 +134,65 @@ This Agreement is governed by the laws of the State of New York and the intellec
          id="org.codecover.eclipse"
          download-size="0"
          install-size="0"
-         version="1.0.0.9"
+         version="1.0.1.0"
          unpack="false"/>
 
    <plugin
          id="org.codecover.instrumentation"
          download-size="0"
          install-size="0"
-         version="1.0.0.8"
+         version="1.0.1.0"
          unpack="false"/>
 
    <plugin
          id="org.codecover.instrumentation.java"
          download-size="0"
          install-size="0"
-         version="1.0.0.8"
+         version="1.0.1.0"
          unpack="false"/>
 
    <plugin
          id="org.codecover.instrumentation.java.junit"
          download-size="0"
          install-size="0"
-         version="1.0.0.8"/>
+         version="1.0.1.0"/>
 
    <plugin
          id="org.codecover.instrumentation.java.measurement"
          download-size="0"
          install-size="0"
-         version="1.0.0.8"/>
+         version="1.0.1.0"/>
 
    <plugin
          id="org.codecover.metrics"
          download-size="0"
          install-size="0"
-         version="1.0.0.8"
+         version="1.0.1.1"
          unpack="false"/>
 
    <plugin
          id="org.codecover.model"
          download-size="0"
          install-size="0"
-         version="1.0.0.9"/>
+         version="1.0.1.0"/>
 
    <plugin
          id="org.codecover.report"
          download-size="0"
          install-size="0"
-         version="1.0.0.8"
+         version="1.0.1.0"
          unpack="false"/>
 
    <plugin
          id="org.codecover.report.html"
          download-size="0"
          install-size="0"
-         version="1.0.0.8"/>
+         version="1.0.1.0"/>
 
    <plugin
          id="org.codecover.report.csv"
          download-size="0"
          install-size="0"
-         version="1.0.0.8"/>
+         version="1.0.1.0"/>
 
 </feature>
