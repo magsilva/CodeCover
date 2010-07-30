@@ -224,8 +224,20 @@ public class TermCoverage extends AbstractCoverageMetric {
             Map<BooleanTerm, BooleanResult> termResults, 
             Map<BooleanTerm, BooleanResult> wirksamMapT, Map<BooleanTerm, BooleanResult> wirksamMapF) {
     	            
-    	// BasicBooleanTerm müssen nicht behandelt werden, da sie bereits vom Vaterknoten behandelt sind
+    	// der Term ist nur ein BasicBooleanTerm 
+        if (booleanTerm instanceof BasicBooleanTerm) {
+ 
+        	BooleanResult result = termResults.get(booleanTerm);
+        	
+   	 		if(result == BooleanResult.TRUE) {
+ 				wirksamMapT.put(booleanTerm, BooleanResult.TRUE);                   	 		           	 				           	 			
+   	 		}
+   	 		if(result == BooleanResult.FALSE) {
+ 				wirksamMapF.put(booleanTerm, BooleanResult.FALSE);                   	 		           	 				           	 			
+   	 		}        	        	
+        }    	
     	
+        // der Term ist irgendwie zusammengesetzt und wird jetzt traversiert
         if (booleanTerm instanceof OperatorTerm) {
         	
         	OperatorTerm operatorTerm = (OperatorTerm)booleanTerm;

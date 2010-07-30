@@ -15,7 +15,7 @@ package org.codecover.model.mast;
  * @author Steffen Kieß
  * @version 1.0 ($Id$)
  */
-abstract class AbstractLocatableMetaDataObject extends AbstractMetaDataObject
+public abstract class AbstractLocatableMetaDataObject extends AbstractMetaDataObject
         implements Locatable {
     private final LocationList location;
 
@@ -45,4 +45,13 @@ abstract class AbstractLocatableMetaDataObject extends AbstractMetaDataObject
     public String toString() {
         return getClass().toString() + " -- " + getLocation().toString();
     }
+    
+    /**
+     * RS, 26.07.10, in most child classes overwritten
+     * @return
+     */
+    public CoverableItem getCoverableItem() {
+    	return null;
+    }
+    	 
 }

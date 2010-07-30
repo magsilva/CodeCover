@@ -13,6 +13,8 @@ package org.codecover.model.mast;
 
 import java.util.*;
 
+import org.codecover.model.TestCase;
+
 /**
  * A RootTerm is a boolean term which is not a part of another boolean term. A
  * RootTerm consists of a BooleanTerm and a CoverableItem.
@@ -88,6 +90,14 @@ public class RootTerm extends AbstractMetaDataObject {
 
         return this.termMap.get(basicTerm);
     }
+    
+    /**
+     * Für Auswertungen ggf. ganz nützlich: die Anzahl der Einzelterme
+     * @return
+     */
+    public int getAmountBasicBooleanTerms() {
+    	return this.termMap.size();
+    }
 
     /**
      * returns the BasicBooleanTerm at the specified position in the RootTerm or
@@ -118,6 +128,8 @@ public class RootTerm extends AbstractMetaDataObject {
     public CoverableItem getCoverableItem() {
         return this.coverableItem;
     }
+    
+ 
 
     /**
      * Gets the result the condition contained in the {@link RootTerm} produces

@@ -65,7 +65,7 @@ public abstract class AbstractCoverageMetric implements CoverageMetric {
      */
     protected static final Set<Hint> noHints = Collections.<Hint> emptySet();
 
-    private static final class SumVisitor implements PostMetricVisitor {
+    public static final class SumVisitor implements PostMetricVisitor {
         private int coveredItems = 0;
 
         private int totalItems = 0;
