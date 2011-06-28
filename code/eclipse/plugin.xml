@@ -63,6 +63,13 @@
             icon="icons/calculate_correlation.gif"
             id="org.codecover.eclipse.views.ManualRedundancyView"
             name="Manual Redundancy"/>
+      <view
+            category="org.codecover.eclipse.views.CodeCoverCategory"
+            class="org.codecover.eclipse.views.RecommendationsView"
+            icon="icons/sample.gif"
+            id="org.codecover.eclipse.views.RecommendationsView"
+            name="RecommendationsView">
+      </view>
    </extension>
    <extension
          id="org.codecover.eclipse.popup"
@@ -725,5 +732,23 @@
             id="org.codecover.eclipse.perspectives.CodeCoverPerspective"
             name="CodeCover">
       </perspective>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.eclipse.jdt.ui.JavaPerspective">
+         <view
+               id="org.codecover.eclipse.views.RecommendationsView"
+               ratio="0.5"
+               relationship="right"
+               relative="org.eclipse.ui.views.TaskList">
+         </view>
+      </perspectiveExtension>
+   </extension>
+   <extension
+         point="org.eclipse.help.contexts">
+      <contexts
+            file="contexts.xml">
+      </contexts>
    </extension>
 </plugin>

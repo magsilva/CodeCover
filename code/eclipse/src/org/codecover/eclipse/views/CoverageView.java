@@ -110,14 +110,10 @@ import org.eclipse.ui.texteditor.ITextEditor;
  * @author Robert Hanussek, Markus Wittlinger
  * @version 1.0 ($Id$)
  */
-public class CoverageView extends ViewPart
+public class CoverageView extends CodeCoverView
         implements TSContainerManagerListener {
 
-    private static final String DIALOG_ERROR_NO_CODE_MSG = Messages
-            .getString("CoverageView.DIALOG_ERROR_NO_CODE_MSG"); //$NON-NLS-1$
-
-    private static final String DIALOG_ERROR_NO_CODE_TITLE = Messages
-            .getString("CoverageView.DIALOG_ERROR_NO_CODE_TITLE"); //$NON-NLS-1$
+   
 
     private static final String DIALOG_ERROR_INCONSISTENCY_TITLE = Messages
             .getString("CoverageView.DIALOG_ERROR_INCONSISTENCY_TITLE"); //$NON-NLS-1$
@@ -137,40 +133,9 @@ public class CoverageView extends ViewPart
      * fields which save the data which is visualized in the view
      */
 
-    /**
-     * The <code>ActiveTSContainerInfo</code> which contains the test session
-     * container which is visualized by this view and the active test cases
-     * which are visualized by this view.
-     */
-    private ActiveTSContainerInfo activeTSCInfo;
+    
 
-    /**
-     * The <code>ActiveTSContainerInfo</code> which is queued and will be used
-     * to update the viewer. This queuing mechanism reduces the number of
-     * updates if for example multiple test cases are deleted in a short period
-     * of time (this happens when deleting a test session).
-     */
-    private ActiveTSContainerInfo queuedActiveTSCInfo;
-
-    /**
-     * Locks the update queue which only has a size of one and consists of
-     * {@link #queuedActiveTSCInfo} and {@link #updatePending} which tells if
-     * the queue is full or empty.
-     */
-    private final Object queueLock;
-
-    /**
-     * Locks the update of the viewer and the field {@link #activeTSCInfo}.
-     */
-    private final Object updateLock;
-
-    /**
-     * <code>true</code>, if there is an update of {@link #activeTSCInfo} (and
-     * thus an update of the viewer) pending (this also means that an active
-     * test session container is queued in {@link #queuedActiveTSCInfo}),
-     * <code>false</code> otherwise
-     */
-    private boolean updatePending;
+    
 
     private final List<CoverageMetric> sortedCoverageMetrics;
 
@@ -330,37 +295,10 @@ public class CoverageView extends ViewPart
      * methods to set and get the data which is visualized by this view
      */
 
-    /**
-     * Sets the input of the viewer to the given data.
-     */
-    private void setViewerInput(ActiveTSContainerInfo activeTSCInfo) {
-        Display display = this.getViewSite().getShell().getDisplay();
-        synchronized(this.queueLock) {
-            this.queuedActiveTSCInfo = activeTSCInfo;
-            if(this.updatePending) {
-                /*
-                 * if there is already an update pending, don't queue another
-                 * one
-                 */
-                return;
-            } else {
-                /*
-                 * if there is no update pending, queue a runnable which
-                 * performs the update
-                 */
-                this.updatePending = true;
-            }
-        }
+    
 
-        // queue an update of the viewer
-        display.asyncExec(new Runnable() {
-            public void run() {
-                CoverageView.this.performUpdate();
-            }
-        });
-    }
-
-    private void performUpdate() {
+    @Override
+    protected void performUpdate() {
         boolean performFullUpdate = false;
         synchronized(this.updateLock) {
             synchronized(this.queueLock) {
@@ -445,35 +383,7 @@ public class CoverageView extends ViewPart
         }
     }
 
-    /**
-     * Returns the <code>TestSessionContainer</code> which is currently
-     * visualized by this view.
-     *
-     * @return  the <code>TestSessionContainer</code> which is currently
-     *          visualized by this view.
-     */
-    private TestSessionContainer getVisTSC() {
-        synchronized(this.updateLock) {
-            return (this.activeTSCInfo != null) ?
-                    this.activeTSCInfo.getTestSessionContainer()
-                    : null;
-        }
-    }
 
-    /**
-     * Returns the <code>TSContainerInfo</code>-representation of the test
-     * session container which is currently visualized by this view.
-     *
-     * @return  the <code>TSContainerInfo</code>-representation of the test
-     *          session container which is currently visualized by this view.
-     */
-    private TSContainerInfo getVisTSCInfo() {
-        synchronized(this.updateLock) {
-            return (this.activeTSCInfo != null) ?
-                    this.activeTSCInfo.getTSContainerInfo()
-                    : null;
-        }
-    }
 
     /**
      * Returns the <code>TestCase</code>s which are currently visualized by this
@@ -1138,34 +1048,7 @@ public class CoverageView extends ViewPart
         });
     }
 
-    /**
-     * Open and shown in Editor if possible. Inform user of errors.
-     *
-     * @param hLev
-     * a java element that has code (no package)
-     */
-    protected void showHierarchyLevelInEditor(HierarchyLevel hLev) {
-        TestSessionContainer tsc;
-        tsc = CoverageView.this.getVisTSC();
-
-        /* open hLev in a text editor with highlighting */
-        ITextEditor editor = EclipseMASTLinkage.openClassInEditor(hLev, tsc);
-
-        if (editor == null) {
-            /* failed: no suitable Resource can be opened */
-
-            String mesg = String.format(DIALOG_ERROR_NO_CODE_MSG,
-                    hLev.getName());
-            MessageDialog.openWarning(
-                    CoverageView.this.getSite().getShell(),
-                    DIALOG_ERROR_NO_CODE_TITLE,
-                    mesg);
-        } else {
-            /* show hLev in the Editor */
-            EclipseMASTLinkage.showInEditor(editor,
-                    MAST.getHighlightLocation(hLev));
-        }
-    }
+   
 
     /*
      * method and class for creating the buttons which can group the content
@@ -1205,7 +1088,7 @@ public class CoverageView extends ViewPart
      * tree (displayed in the tree viewer) by a specific {@link Type},
      * e.g packages or classes.
      */
-    private class GroupByActionsManager {
+    class GroupByActionsManager {
 
         final Map <Type, Action> actions;
 
@@ -1315,110 +1198,14 @@ public class CoverageView extends ViewPart
     /*
      * The following constants are the internal names of all types.
      */
-    private static final String DEFAULT_PACKAGE_NAME
+    static final String DEFAULT_PACKAGE_NAME
              = "default package";                              //$NON-NLS-1$
-    private static final String PACKAGE_NAME = "package";      //$NON-NLS-1$
-    private static final String CLASS_NAME = "class";          //$NON-NLS-1$
-    private static final String INTERFACE_NAME = "interface";  //$NON-NLS-1$
-    private static final String ENUM_NAME = "enum";            //$NON-NLS-1$
-    private static final String ANNOTATION_NAME = "@interface";//$NON-NLS-1$
-    private static final String METHOD_NAME = "method";        //$NON-NLS-1$
-
-    /**
-     * The types of hierarchical levels, e.g. packages or classes. This enum is
-     * used to categorize the hierarchical code levels to be able to group the
-     * code tree by specific types.
-     * <p>
-     * Bear in mind that classes, interfaces and enums are subsumed under
-     * {@link #CLASS}.
-     * <p>
-     * A <code>Type</code> is greater than another one if a corresponding
-     * <code>HierarchyLevel</code> would be a parent (or grandparent) of a
-     * <code>HierarchyLevel</code> of the other type, i.e. packages are greater
-     * than classes.
-     *
-     * @see GroupByActionsManager
-     */
-    private static enum Type {
-        /**
-         * Constant for projects.
-         */
-        PROJECT     (DEFAULT_PACKAGE_NAME),
-        /**
-         * Constant for packages.
-         */
-        PACKAGE     (PACKAGE_NAME),
-        /**
-         * Constant for classes, interfaces and enums.
-         */
-        CLASS       (CLASS_NAME),
-        /**
-         * Constant for methods.
-         */
-        METHOD      (METHOD_NAME);
-
-        private final String internalName;
-
-        private Type(String internalName) {
-            this.internalName = internalName;
-        }
-
-        /**
-         * Returns the internal name of the corresponding type of a
-         * <code>HierarchyLevel</code>
-         * (see <code>HierarchyLevelType.getInternalName()</code>).
-         * Java default packages are displayed as the project nodes, which are
-         * always on top-level.
-         * The name for
-         * the {@link #CLASS} type is returned as &quot;class&quot; although it
-         * subsumes classes, interfaces and enums.
-         *
-         * @return  the internal name of the <code>HierarchyLevel</code>
-         */
-        public String getName() {
-            return this.internalName;
-        }
-
-        /**
-         * Returns the <code>Type</code> which matches the internal name
-         * of the given <code>HierarchyLevel</code>.
-         *
-         * @param hLev  the <code>HierarchyLevel</code>
-         *
-         * @return  the <code>Type</code> which matches the internal name of the
-         *          given <code>HierarchyLevel</code>
-         */
-        public static Type typeOf(HierarchyLevel hLev) {
-            return Type.typeOf(hLev.getType().getInternalName());
-        }
-
-        /**
-         * Returns the <code>Type</code> which matches the given internal name
-         * of a <code>HierarchyLevel</code>.
-         *
-         * @param name  the name
-         *
-         * @return  the <code>Type</code> which matches the given internal name
-         *          of a <code>HierarchyLevel</code>
-         */
-        public static Type typeOf(String name) {
-            if(name.equals(INTERFACE_NAME)
-                    || name.equals(ENUM_NAME)
-                    || name.equals(ANNOTATION_NAME)) {
-                return Type.CLASS;
-            }
-            for(Type type : Type.values()) {
-                if(type.getName().equals(name)) {
-                    return type;
-                }
-            }
-            return null;
-        }
-    }
-
-    /*
-     * methods and classes for filtering by coverage measurements
-     */
+    static final String PACKAGE_NAME = "package";      //$NON-NLS-1$
+    static final String CLASS_NAME = "class";          //$NON-NLS-1$
+    static final String INTERFACE_NAME = "interface";  //$NON-NLS-1$
+    static final String ENUM_NAME = "enum";            //$NON-NLS-1$
+    static final String ANNOTATION_NAME = "@interface";//$NON-NLS-1$
+    static final String METHOD_NAME = "method";        //$NON-NLS-1$
 
     private void createCoverageFilterControls(Composite parent) {
         final int initialMetricIndex = 0;

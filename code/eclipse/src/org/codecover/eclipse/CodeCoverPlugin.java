@@ -119,7 +119,19 @@ public class CodeCoverPlugin extends AbstractUIPlugin {
         TEST_LEVEL("icons/testlevel.ico"), //$NON-NLS-1$
         COVERAGE_CRITERIA("icons/coveragecriteria.ico"), //$NON-NLS-1$
         DRAW_GRAPH("icons/draw_graph.gif"), //$NON-NLS-1$
-        CSV_EXPORT2("icons/csv_export2.gif"); //$NON-NLS-1$
+        CSV_EXPORT2("icons/csv_export2.gif"), //$NON-NLS-1$
+        
+        //Added by Ralf Ebert:
+        REC_WIZ_WEIGHT("icons/rec_wiz_weight.gif"),
+        REC_WIZ_CODE("icons/rec_wiz_code.gif"),
+        REC_WIZ_VERSION("icons/rec_wiz_version.gif"),
+        REC_WIZ_CC("icons/rec_wiz_cc.gif"),
+        REC_WIZ_PROCESS("icons/rec_wiz_process.gif"),
+        REC_WIZ_QS("icons/rec_wiz_qs.gif"),
+        REC_WIZ_EXPERT("icons/rec_wiz_expert.gif"),
+        REC_FILTER("icons/filter.gif"), //$NON-NLS-1$
+        REC_DEL_CLASS_FILTER("icons/rec_del_class_filter.gif"), //$NON-NLS-1$
+        REC_SORT("icons/sort.gif"); //$NON-NLS-1$
 
         private final String path;
 

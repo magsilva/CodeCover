@@ -11,18 +11,36 @@
 
 package org.codecover.eclipse.utils;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.codecover.eclipse.CodeCoverPlugin;
 import org.codecover.model.MASTBuilder;
 import org.codecover.model.TestSessionContainer;
-import org.codecover.model.mast.*;
+import org.codecover.model.mast.HierarchyLevel;
+import org.codecover.model.mast.Location;
+import org.codecover.model.mast.SourceFile;
 import org.codecover.model.utils.Logger;
 import org.codecover.model.utils.file.FileTool;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jdt.core.*;
-import org.eclipse.jdt.core.search.*;
+import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IMember;
+import org.eclipse.jdt.core.IPackageFragment;
+import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.core.search.IJavaSearchConstants;
+import org.eclipse.jdt.core.search.IJavaSearchScope;
+import org.eclipse.jdt.core.search.SearchEngine;
+import org.eclipse.jdt.core.search.SearchMatch;
+import org.eclipse.jdt.core.search.SearchParticipant;
+import org.eclipse.jdt.core.search.SearchPattern;
+import org.eclipse.jdt.core.search.SearchRequestor;
 import org.eclipse.jdt.internal.core.SourceType;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.text.ITextSelection;
@@ -30,11 +48,6 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.texteditor.ITextEditor;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.Charset;
-import java.util.*;
 
 /**
  * Utilities to provide mappings between Eclipse Models and the MAST.
@@ -159,9 +172,9 @@ public abstract class EclipseMASTLinkage {
                     + "', because content is unavailable:", e);
             return false;
         }
-
-        if (! sourceFile.getContent().equals(contentOfFile)) {
-            return false;
+        String sourceFileContent = sourceFile.getContent();
+        if (! sourceFileContent.equals(contentOfFile)) {
+        	return false;
         }
         
         return true;
