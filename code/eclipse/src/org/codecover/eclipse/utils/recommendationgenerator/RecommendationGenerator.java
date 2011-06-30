@@ -1,7 +1,6 @@
 package org.codecover.eclipse.utils.recommendationgenerator;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -20,12 +19,11 @@ import org.codecover.eclipse.utils.recommendationgenerator.datacollectors.CodeFi
 import org.codecover.eclipse.utils.recommendationgenerator.datacollectors.FileAgeDataCollector;
 import org.codecover.eclipse.utils.recommendationgenerator.datacollectors.FindBugsDataCollector;
 import org.codecover.eclipse.utils.recommendationgenerator.datacollectors.LengthOfPredicateDataCollector;
-import org.codecover.eclipse.utils.recommendationgenerator.datacollectors.UncBranchLineCountDataCollector;
 import org.codecover.eclipse.utils.recommendationgenerator.datacollectors.PassingTestCaseCountDataCollector;
+import org.codecover.eclipse.utils.recommendationgenerator.datacollectors.UncBranchLineCountDataCollector;
 import org.codecover.eclipse.views.PackageFilterMode;
 import org.codecover.model.TestCase;
 import org.codecover.model.TestSessionContainer;
-import org.codecover.model.exceptions.FileLoadException;
 import org.codecover.model.mast.HierarchyLevel;
 import org.codecover.model.mast.Location;
 import org.codecover.model.mast.LocationList;
@@ -51,9 +49,6 @@ public class RecommendationGenerator {
 
 	private ArrayList<UncoveredBranch> sortedList;
 
-	private HashMap<HierarchyLevel, IResource> hLevToFileCache = new HashMap<HierarchyLevel, IResource>();
-	private HashMap<HierarchyLevel, IJavaElement> hLevToPackageCache = new HashMap<HierarchyLevel, IJavaElement>();
-	
 	private Comparator<UncoveredBranch> weightSorter = new Comparator<UncoveredBranch>() {
 		public int compare(UncoveredBranch o1, UncoveredBranch o2) {
 			return o2.score.compareTo(o1.score);
@@ -66,12 +61,7 @@ public class RecommendationGenerator {
 	private List<BranchType> filterBranches = Arrays.asList(BranchType.values());
 	private List<String> excludeClassList = new ArrayList<String>();
 
-	public HashMap<HierarchyLevel, ICompilationUnit> hLevToCompUnitCache = new HashMap<HierarchyLevel, ICompilationUnit>();
-
-
 	private HashSet<IResource> relevantFiles;
-	
-	private static HashMap<IResource, List<TestCase>> fileToTestCaseMap = new HashMap<IResource, List<TestCase>>();
 	
 	public RecommendationGenerator(TestSessionContainer testSessionContainer, File testCaseListFile) {
 		super();
@@ -103,22 +93,50 @@ public class RecommendationGenerator {
 	private void initProcessDataSource() {
 		this.processDataSource = new ErrorDataSource("Prozess");
 		errorDataSources.add(this.processDataSource);
+		
+		ErrorIndicator indi = new ErrorIndicator("Überstunden", "Entstandene Arbeit während viele Überstunden geleistet wurden, ist vermutlich fehleranfällig.");
+		indi.addParameter(new Parameter("file", "Datei, die die Informationen enthält.", new File("."), false, true));
+		this.processDataSource.addErrorIndicator(indi);
+		
+		indi = new ErrorIndicator("Überstunden", "Entstandene Arbeit während das Projekt im Verzug war, ist vermutlich fehleranfällig.");
+		indi.addParameter(new Parameter("file", "Datei, die die Informationen enthält.", new File("."), false, true));
+		this.processDataSource.addErrorIndicator(indi);
 	}
 
 	private void initQAErrorDataSource() {
 		this.qualityErrorDataSource = new ErrorDataSource("QS-Maßnahmen");
 		errorDataSources.add(this.qualityErrorDataSource);
+		
+		ErrorIndicator indi = new ErrorIndicator("Unittests", "Module, die mit Unit-Tests qualitätsgesichert wurden.");
+		indi.addParameter(new Parameter("file", "Datei, die die Informationen enthält.", new File("."), false, true));
+		this.qualityErrorDataSource.addErrorIndicator(indi);
+		
+		indi = new ErrorIndicator("Unittests", "Module, die unter Einsatz von PairProgramming oder ähnlichen QS-Maßnahmen implementiert wurden.");
+		indi.addParameter(new Parameter("file", "Datei, die die Informationen enthält.", new File("."), false, true));
+		this.qualityErrorDataSource.addErrorIndicator(indi);
+		
+		indi = new ErrorIndicator("Unittests", "Module, die Reviews oder anderen Inspektionen unterzogen wurden.");
+		indi.addParameter(new Parameter("file", "Datei, die die Informationen enthält.", new File("."), false, true));
+		this.qualityErrorDataSource.addErrorIndicator(indi);
 	}
 
 	private void initExpertErrorDataSource() {
 		this.expertErrorDataSource = new ErrorDataSource("Expertenwissen");
 		errorDataSources.add(this.expertErrorDataSource);
 		
-		ErrorIndicator indi = new ErrorIndicator("Anfälligste Module", "20% des Codes mit der höchsten ");
+		ErrorIndicator indi = new ErrorIndicator("Anfälligste Module", "20% des Codes mit der höchsten erwarteten Fehleranfälligkeit");
 		indi.addParameter(new Parameter("file", "Datei, die die Informationen enthält.", new File("."), false, true));
 		this.expertErrorDataSource.addErrorIndicator(indi);
 		
 		indi = new ErrorIndicator("Architekturprobleme", "Klassen mit Architekturproblemen.");
+		indi.addParameter(new Parameter("file", "Datei, die die Informationen enthält.", new File("."), false, true));
+		this.expertErrorDataSource.addErrorIndicator(indi);
+		
+		indi = new ErrorIndicator("Funktionale Komplexität", "Klassen, die besonders schwierigen Code oder schwierige Algorithmen enthalten");
+		indi.addParameter(new Parameter("file", "Datei, die die Informationen enthält.", new File("."), false, true));
+		this.expertErrorDataSource.addErrorIndicator(indi);
+		
+		indi = new ErrorIndicator("Refactoring", "Klassen, die der Entwickler gerne überarbeiten würde.");
 		indi.addParameter(new Parameter("file", "Datei, die die Informationen enthält.", new File("."), false, true));
 		this.expertErrorDataSource.addErrorIndicator(indi);
 		
@@ -264,9 +282,10 @@ public class RecommendationGenerator {
 	
 	public void sort() {
 		
-		this.hLevToFileCache = new HashMap<HierarchyLevel, IResource>();
+		Cache.hLevToFileCache = new HashMap<HierarchyLevel, IResource>();
 		determineRelevantFiles();
 		
+		// Datensammelprozess aller Datenquellen gleichzeitig anstoßen
 		List<Thread> threads = new ArrayList<Thread>();
 		for (final ErrorDataSource eds : this.errorDataSources) {
 			Thread thread = new Thread() {
@@ -287,20 +306,24 @@ public class RecommendationGenerator {
 			}
 		}
 		
-		
+		// Eigentliche Sortierung. Die errorDataSources haben jetzt ihre Fehlerdatenwerte. Diese werden jetzt für jeden UncoveredBranch
+		// abgefragt.
 		this.sortedList = new ArrayList<UncoveredBranch>(200);
 		for (UncoveredBranch ub : this.baseRecommendationListCreator.getUncoveredBranches()) {
 			ub.score = 0.0;
+			// Die InfoMsg wird nacher bei der Detailansicht der Punktevergabe eines Zweigs angezeigt
 			StringBuilder infoMsg = new StringBuilder();
 			for (ErrorDataSource eds : this.errorDataSources) {
 				infoMsg.append("EDS: "+eds.getName()+"\n");
 				Double score = 0.0d;
 				if (ub.resource != null) {
+					// Dateibasierte Fehlerdaten
 					for (ErrorIndicator ei : eds.getErrorIndicators()) {
 						double t = ei.getValueFor(ub.resource);
 						score += t;
 						if (t>0.0) infoMsg.append("EI-file: "+ei.getName()+": "+t+"\n");
 					}
+					// Zeilenbasierte Fehlerdaten
 					for (int line = ub.lineFrom ; line < ub.lineTo ; line++) {
 						for (ErrorIndicator ei : eds.getErrorIndicators()) {
 							double t = ei.getValueFor(ub.resource, line) * eds.getWeight();
@@ -309,12 +332,15 @@ public class RecommendationGenerator {
 						}
 					}
 				}
+				// UncoveredBranch-basierte Fehlerdaten
 				for (ErrorIndicator ei : eds.getErrorIndicators()) {
 					double t = ei.getValueFor(ub);
 					score += t;
 					if (t>0.0) infoMsg.append("EI-branch: "+ei.getName()+": "+t+"\n");
 				}
+				// SourceScore enthält die Wertungen der einzelnen Datenquellen
 				ub.sourceScore.put(eds, score);
+				// score ist die Gesamtpunktzahl
 				ub.score += score;
 				ub.info = infoMsg.toString();
 			}
@@ -324,21 +350,25 @@ public class RecommendationGenerator {
 		filter(this.sortedList);
 	}
 
-	private void filter(ArrayList<UncoveredBranch> sortedList2) {
+	/**
+	 * Filtert die übergebene Liste nach den eingestellten Paket- und Typfiltern.
+	 * @param sourceList
+	 */
+	private void filter(ArrayList<UncoveredBranch> sourceList) {
 		if (!(this.filterPackages == null || this.filterPackages.size() == 0 || this.packageFilterMode == PackageFilterMode.NONE)) {
 			List<UncoveredBranch> matches = new ArrayList<UncoveredBranch>();
-			for (UncoveredBranch uncoveredBranch : sortedList2) {
+			for (UncoveredBranch uncoveredBranch : sourceList) {
 				HierarchyLevel hLev = MAST.getTopLevelClass(uncoveredBranch.m_branchInfo.m_hierarchyLevel, this.testSessionContainer);
 				IJavaElement packagge = null;
-				if (hLevToPackageCache.containsKey(hLev)) {
-					packagge = hLevToPackageCache.get(hLev);
+				if (Cache.hLevToPackageCache.containsKey(hLev)) {
+					packagge = Cache.hLevToPackageCache.get(hLev);
 				} else {
 					String fqn = MAST.getFQName(hLev, this.testSessionContainer);
 					Set<ICompilationUnit> cuSet = EclipseMASTLinkage.Eclipse.findCompilationUnit(fqn);
 					// Scheinbar enthält das Set stets nur eine CompilationUnit...
 					for (ICompilationUnit cu : cuSet) {
 						IJavaElement parent = cu.getParent();
-						hLevToPackageCache.put(hLev, parent);
+						Cache.hLevToPackageCache.put(hLev, parent);
 						packagge = parent;
 					}
 				}
@@ -348,51 +378,62 @@ public class RecommendationGenerator {
 			}
 			if (this.packageFilterMode == PackageFilterMode.BLACKLIST) {
 				for (UncoveredBranch uncoveredBranch : matches) {
-					sortedList2.remove(uncoveredBranch);
+					sourceList.remove(uncoveredBranch);
 				}
 			} else if (this.packageFilterMode == PackageFilterMode.WHITELIST) {
-				sortedList2.clear();
-				sortedList2.addAll(matches);
+				sourceList.clear();
+				sourceList.addAll(matches);
 			}
 		}
 		
 		// Typ-Filter
 		List<UncoveredBranch> matches = new ArrayList<UncoveredBranch>();
-		for (UncoveredBranch uncoveredBranch : sortedList2) {
+		for (UncoveredBranch uncoveredBranch : sourceList) {
 			if (!this.getFilterBranches().contains(uncoveredBranch.m_branchInfo.m_type)) {
 				matches.add(uncoveredBranch);
 			}
 		}
 		
-		sortedList2.removeAll(matches);
+		sourceList.removeAll(matches);
 		
 		
 		List<UncoveredBranch> remove = new ArrayList<UncoveredBranch>();
-		for (UncoveredBranch uncoveredBranch : sortedList2) {
+		for (UncoveredBranch uncoveredBranch : sourceList) {
 			HierarchyLevel hLev = MAST.getTopLevelClass(uncoveredBranch.m_branchInfo.m_hierarchyLevel, this.testSessionContainer);
-			if (this.hLevToCompUnitCache.containsKey(hLev)) {
-				String name = this.hLevToCompUnitCache.get(hLev).getElementName();
+			if (Cache.hLevToCompUnitCache.containsKey(hLev)) {
+				String name = Cache.hLevToCompUnitCache.get(hLev).getElementName();
 				if (this.excludeClassList.contains(name)) {
 					remove.add(uncoveredBranch);
 				}
 			}
 		}
 		
-		sortedList2.removeAll(remove);
+		sourceList.removeAll(remove);
 	}
 	
-	public void excludeClass(UncoveredBranch o) {
-		HierarchyLevel hLev = MAST.getTopLevelClass(o.m_branchInfo.m_hierarchyLevel, this.testSessionContainer);
-		if (this.hLevToCompUnitCache.containsKey(hLev)) {
-			String className = this.hLevToCompUnitCache.get(hLev).getElementName();
+	/**
+	 * Fügt die Klasse des übergebenen Branch der Einzelklassen-Filter-Liste hinzu.
+	 * @param branch
+	 */
+	public void excludeClass(UncoveredBranch branch) {
+		HierarchyLevel hLev = MAST.getTopLevelClass(branch.m_branchInfo.m_hierarchyLevel, this.testSessionContainer);
+		if (hLev != null && Cache.hLevToCompUnitCache.containsKey(hLev)) {
+			String className = Cache.hLevToCompUnitCache.get(hLev).getElementName();
 			this.excludeClassList.add(className);
 		}
 	}
 	
+	/**
+	 * Löscht den Einzelklassen-Filter
+	 */
 	public void resetClassFilter() {
 		this.excludeClassList.clear();
 	}
 
+	/**
+	 * Gibt den Modus zurück, nach dem Pakete gefiltert werden. Möglich sind BlackList- und WhiteList-Modus
+	 * @return
+	 */
 	public PackageFilterMode getPackageFilterMode() {
 		return packageFilterMode;
 	}
@@ -402,8 +443,8 @@ public class RecommendationGenerator {
 
 		HierarchyLevel hLev = MAST.getTopLevelClass(ub.m_branchInfo.m_hierarchyLevel, this.testSessionContainer);
 
-		if (hLevToFileCache.containsKey(hLev)) {
-			return hLevToFileCache.get(hLev);
+		if (Cache.hLevToFileCache.containsKey(hLev)) {
+			return Cache.hLevToFileCache.get(hLev);
 		}
 		/* find corresponding compilation unit by class name */
 		String fqn = MAST.getFQName(hLev, this.testSessionContainer);
@@ -413,10 +454,10 @@ public class RecommendationGenerator {
 		// Scheinbar enthält das Set stets nur eine CompilationUnit...
 		for (ICompilationUnit cu : cuSet) {
 			resource = cu.getResource();
-			this.hLevToCompUnitCache.put(hLev, cu);
-			fileToTestCaseMap.put(resource, ub.m_testCaseList);
+			Cache.hLevToCompUnitCache.put(hLev, cu);
+			Cache.fileToTestCaseMap.put(resource, ub.m_testCaseList);
 			if (resource != null) {
-				this.hLevToFileCache.put(hLev, resource);
+				Cache.hLevToFileCache.put(hLev, resource);
 			}
 			break;
 		}
@@ -425,7 +466,7 @@ public class RecommendationGenerator {
 	}
 	
 	public static List<TestCase> getTestCasesOfFile(IResource resource) {
-		return fileToTestCaseMap.get(resource);
+		return Cache.fileToTestCaseMap.get(resource);
 	}
 
 	public List<UncoveredBranch> getSortedList() {

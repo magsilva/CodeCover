@@ -13,6 +13,7 @@ import org.codecover.eclipse.CodeCoverPlugin;
 import org.codecover.eclipse.tscmanager.ActiveTSContainerInfo;
 import org.codecover.eclipse.utils.EclipseMASTLinkage;
 import org.codecover.eclipse.utils.EclipseMASTLinkage.MAST;
+import org.codecover.eclipse.utils.recommendationgenerator.Cache;
 import org.codecover.eclipse.utils.recommendationgenerator.ChangeErrorDataSourceWeightWizard;
 import org.codecover.eclipse.utils.recommendationgenerator.ErrorDataSource;
 import org.codecover.eclipse.utils.recommendationgenerator.ErrorDataWizard;
@@ -364,7 +365,7 @@ public class RecommendationsView extends CodeCoverView {
 				List<String> classes = new ArrayList<String>();
 				TestSessionContainer tsc = RecommendationsView.this.getVisTSC();
 				for (HierarchyLevel lev : getClasses(tsc.getCode())) {
-					ICompilationUnit iCompilationUnit = recommendationGenerator.hLevToCompUnitCache.get(lev);
+					ICompilationUnit iCompilationUnit = Cache.hLevToCompUnitCache.get(lev);
 					if (iCompilationUnit == null) {
 						String fqn = MAST.getFQName(lev, getVisTSC());
 						Set<ICompilationUnit> cuSet;
@@ -372,7 +373,7 @@ public class RecommendationsView extends CodeCoverView {
 						if (cuSet.size() > 0) {
 							iCompilationUnit = cuSet.iterator().next();
 							if (iCompilationUnit != null) {
-								recommendationGenerator.hLevToCompUnitCache.put(lev, iCompilationUnit);
+								Cache.hLevToCompUnitCache.put(lev, iCompilationUnit);
 							}
 						}
 					}

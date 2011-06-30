@@ -73,10 +73,24 @@ public class ErrorDataSource {
 	
 	public void invoke() {
 		long a = new Date().getTime();
-		for (ErrorIndicator ei : this.errorIndicators) {
-			ei.setRelevantFiles(this.relevantFiles);
-			ei.setBranches(this.branches);
-			ei.invoke();
+		List<Thread> threads = new ArrayList<Thread>();
+		for (final ErrorIndicator ei : this.errorIndicators) {
+			Thread thread = new Thread() {
+				public void run() {
+					ei.setRelevantFiles(relevantFiles);
+					ei.setBranches(branches);
+					ei.invoke();
+				};
+			};
+			threads.add(thread);
+			thread.start();
+		}
+		for (Thread t : threads) {
+			try {
+				t.join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 		System.out.println("Dauer von "+this.name+": "+(new Date().getTime()-a)/1000+" Sekunden");
 	}
