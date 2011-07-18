@@ -1,6 +1,7 @@
 package org.codecover.eclipse.views;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -51,6 +52,7 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
@@ -60,6 +62,7 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
@@ -109,6 +112,10 @@ public class RecommendationsView extends CodeCoverView {
 
 	private Action createInfoFileAction;
 
+	private Action exportAction;
+
+	private RecViewViewLabelProvider recViewViewLabelProvider;
+
 	public RecommendationsView() {
 		TestSessionContainer testSessionContainer = CodeCoverPlugin.getDefault().getTSContainerManager().getActiveTSContainer()
 				.getTestSessionContainer();
@@ -124,7 +131,11 @@ public class RecommendationsView extends CodeCoverView {
 		try {
 			for (ErrorDataSource eds : this.recommendationGenerator.getErrorDataSources()) {
 				Float float1 = memento.getFloat(fix(eds.getName()) + "-weight"); //$NON-NLS-1$
-				eds.setWeight(float1);
+				try {
+					eds.setWeight(float1);
+				} catch (Exception e) {
+					eds.setWeight(1.0);
+				}
 				for (ErrorIndicator ei : eds.getErrorIndicators()) {
 					String mode = memento.getString(fix(ei.getName()) + "-mode");
 					if (mode == null) {
@@ -232,7 +243,8 @@ public class RecommendationsView extends CodeCoverView {
 		recViewViewContentProvider = new RecViewViewContentProvider(this, viewer, this.recommendationGenerator);
 
 		viewer.setContentProvider(recViewViewContentProvider);
-		viewer.setLabelProvider(new RecViewViewLabelProvider(this));
+		recViewViewLabelProvider = new RecViewViewLabelProvider(this);
+		viewer.setLabelProvider(recViewViewLabelProvider);
 		viewer.setInput(getViewSite());
 		viewer.setComparator(null);
 
@@ -344,6 +356,7 @@ public class RecommendationsView extends CodeCoverView {
 	}
 
 	private void fillLocalToolBar(IToolBarManager manager) {
+		manager.add(exportAction);
 		manager.add(createInfoFileAction);
 		manager.add(delClassFilterAction);
 		manager.add(packageFilterAction);
@@ -358,7 +371,37 @@ public class RecommendationsView extends CodeCoverView {
 	}
 
 	private void makeActions() {
-
+		
+		exportAction = new Action() {
+			@Override
+			public void run() {
+				StringBuilder csv = new StringBuilder();
+				csv.append("\"Methode\",\"Statement\",\"LOC\",\"# TF\",\"Typ\",\"Code\",\"Version\",\"CC\",\"Experten\",\"Prozess\",\"QS\"\n");
+				FileDialog fg = new FileDialog(new Shell(), SWT.SAVE);
+				fg.setText("Datei auswählen...");
+				String file = fg.open();
+				if (file != null && file.length() > 2) {
+					File selectedFile = new File(file);
+					int row = 0;
+					while (viewer.getElementAt(row) != null) {
+						for (int col = 0; col < viewer.getTable().getColumnCount(); col++) {
+							csv.append("\""+RecommendationsView.this.recViewViewLabelProvider.getColumnText(viewer.getElementAt(row), col)+"\",");
+						}
+						row++;
+						csv.append("\n");
+					}
+					String csvOut = csv.toString().replaceAll(",\n", "\n");
+					try {
+						new FileWriter(selectedFile).append(csv.toString());
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		};
+		exportAction.setText("CSV-Export");
+		
 		createInfoFileAction = new Action() {
 			@Override
 			public void run() {

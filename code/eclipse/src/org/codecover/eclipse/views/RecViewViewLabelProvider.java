@@ -31,7 +31,7 @@ class RecViewViewLabelProvider extends LabelProvider implements ITableLabelProvi
 		case 0:
 			return branch.m_methode;
 		case 1:
-			return branch.m_branchInfo.m_statementText;
+			return branch.m_branchInfo.m_statementText.replaceAll("\t", " ").replaceAll("\n", " ").replaceAll("\r", " ").replaceAll("  ", " ");
 		case 2:
 			return branch.m_branchInfo.m_amountLines + "";
 		case 3:
