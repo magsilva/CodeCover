@@ -257,18 +257,14 @@ public class RecommendationsView extends CodeCoverView {
 		column = new TableColumn(table, SWT.LEFT);
 		column.setText("Statement");
 		column.setWidth(340);
-
-		column = new TableColumn(table, SWT.LEFT);
-		column.setText("# LOC");
-		column.setWidth(45);
-
-		column = new TableColumn(table, SWT.LEFT);
-		column.setText("# Testfälle");
-		column.setWidth(45);
-
+		
 		column = new TableColumn(table, SWT.LEFT);
 		column.setText("Typ");
 		column.setWidth(90);
+		
+		column = new TableColumn(table, SWT.LEFT);
+		column.setText("Summe");
+		column.setWidth(45);
 
 		column = new TableColumn(table, SWT.LEFT);
 		column.setText("Code");
@@ -293,10 +289,17 @@ public class RecommendationsView extends CodeCoverView {
 		column = new TableColumn(table, SWT.LEFT);
 		column.setText("QS");
 		column.setWidth(45);
+		
+		column = new TableColumn(table, SWT.LEFT);
+		column.setText("# LOC");
+		column.setWidth(45);
 
 		column = new TableColumn(table, SWT.LEFT);
-		column.setText("Summe");
+		column.setText("# Testfälle");
 		column.setWidth(45);
+
+
+		
 
 		// // Pack the columns
 		// for (int i = 0, n = table.getColumnCount(); i < n; i++) {

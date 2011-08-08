@@ -33,42 +33,49 @@ class RecViewViewLabelProvider extends LabelProvider implements ITableLabelProvi
 		case 1:
 			return branch.m_branchInfo.m_statementText.replaceAll("\t", " ").replaceAll("\n", " ").replaceAll("\r", " ").replaceAll("  ", " ");
 		case 2:
-			return branch.m_branchInfo.m_amountLines + "";
-		case 3:
-			return branch.m_testCaseList.size() + "";
-		case 4:
 			return branch.m_branchInfo.m_type.getNiceName();
-		case 5:
-			double1 = branch.sourceScore.get(this.recommendationsView.recommendationGenerator.getCodeErrorDataSource());
-			if (double1 == null) return "";
-			return df.format(double1);
-		case 6:
-			double1 = branch.sourceScore.get(this.recommendationsView.recommendationGenerator.getVersionErrorDataSource());
-			if (double1 == null) return "";
-			return df.format(double1);
-		case 7:
-			double1 = branch.sourceScore.get(this.recommendationsView.recommendationGenerator.getCcErrorDataSource());
-			if (double1 == null) return "";
-			return df.format(double1);
-		case 8:
-			double1 = branch.sourceScore.get(this.recommendationsView.recommendationGenerator.getExpertErrorDataSource());
-			if (double1 == null) return "";
-			return df.format(double1);
-		case 9:
-			double1 = branch.sourceScore.get(this.recommendationsView.recommendationGenerator.getProcessDataSource());
-			if (double1 == null) return "";
-			return df.format(double1);
-		case 10:
-			double1 = branch.sourceScore.get(this.recommendationsView.recommendationGenerator.getQualityErrorDataSource());
-			if (double1 == null) return "";
-			return df.format(double1);
-		case 11:
+		case 3:
 			double1 = branch.score;
 			if (double1 == null) return "";
 			return df.format(double1);
+		case 4:
+			double1 = branch.sourceScore.get(this.recommendationsView.recommendationGenerator.getCodeErrorDataSource());
+			if (double1 == null) return "";
+			return df.format(double1);
+		case 5:
+			double1 = branch.sourceScore.get(this.recommendationsView.recommendationGenerator.getVersionErrorDataSource());
+			if (double1 == null) return "";
+			return df.format(double1);
+		case 6:
+			double1 = branch.sourceScore.get(this.recommendationsView.recommendationGenerator.getCcErrorDataSource());
+			if (double1 == null) return "";
+			return df.format(double1);
+		case 7:
+			double1 = branch.sourceScore.get(this.recommendationsView.recommendationGenerator.getExpertErrorDataSource());
+			if (double1 == null) return "";
+			return df.format(double1);
+		case 8:
+			double1 = branch.sourceScore.get(this.recommendationsView.recommendationGenerator.getProcessDataSource());
+			if (double1 == null) return "";
+			return df.format(double1);
+		case 9:
+			double1 = branch.sourceScore.get(this.recommendationsView.recommendationGenerator.getQualityErrorDataSource());
+			if (double1 == null) return "";
+			return df.format(double1);
+		case 10:
+			return branch.m_branchInfo.m_amountLines + "";
+		case 11:
+			return branch.m_testCaseList.size() + "";
+		
 		default:
 			return getText(obj);
+			
+			
+		
 		}
+		
+		
+		
 
 	}
 
