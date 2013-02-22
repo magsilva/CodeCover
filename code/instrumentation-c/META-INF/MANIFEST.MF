@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: org.codecover.instrumentation.c
+Bundle-SymbolicName: org.codecover.instrumentation.c
+Bundle-Version: 1.0.1.2
+Bundle-ClassPath: bin
+Export-Package: org.codecover.instrumentation.c,
+ org.codecover.instrumentation.c.counter,
+ org.codecover.instrumentation.c.location,
+ org.codecover.instrumentation.c.manipulators,
+ org.codecover.instrumentation.c.measurement,
+ org.codecover.instrumentation.c.parser,
+ org.codecover.instrumentation.c.syntaxtree,
+ org.codecover.instrumentation.c.visitor
+Require-Bundle: org.codecover.instrumentation,
+ org.codecover.model
+Bundle-Vendor: CodeCover.org

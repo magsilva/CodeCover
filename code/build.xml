@@ -21,6 +21,7 @@
     <ant antfile="build-manual.xml" dir="instrumentation-java" target="jar" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="instrumentation-java-junit" target="jar" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="instrumentation-cobol" target="jar" inheritAll="false" />
+    <ant antfile="build-manual.xml" dir="instrumentation-c" target="jar" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="report" target="jar" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="report-html" target="jar" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="report-csv" target="jar" inheritAll="false" />
@@ -102,6 +103,13 @@
     <delete file="tmp/META-INF/MANIFEST.MF" />
     <copy file="instrumentation-cobol/src/codecover-plugin.xml" tofile="tmp/codecover-plugin.xml" />
     <jar destfile="${release-lib}plugins/org.codecover.instrumentation.cobol85-0.1.jar" basedir="tmp" />
+    <delete dir="tmp" />
+
+    <mkdir dir="tmp" />
+    <unzip src="instrumentation-c/instrumentation-c.jar" dest="tmp" />
+    <delete file="tmp/META-INF/MANIFEST.MF" />
+    <copy file="instrumentation-c/src/codecover-plugin.xml" tofile="tmp/codecover-plugin.xml" />
+    <jar destfile="${release-lib}plugins/org.codecover.instrumentation.c-0.1.jar" basedir="tmp" />
     <delete dir="tmp" />
 
     <mkdir dir="tmp" />
@@ -209,6 +217,7 @@
     <ant antfile="build-manual.xml" dir="instrumentation-java" target="compile" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="instrumentation-java-junit" target="compile" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="instrumentation-cobol" target="compile" inheritAll="false" />
+    <ant antfile="build-manual.xml" dir="instrumentation-c" target="compile" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="report" target="compile" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="report-html" target="compile" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="report-csv" target="compile" inheritAll="false" />
@@ -228,6 +237,7 @@
     <ant antfile="build-manual.xml" dir="instrumentation-java" target="test" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="instrumentation-java-junit" target="test" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="instrumentation-cobol" target="test" inheritAll="false" />
+    <ant antfile="build-manual.xml" dir="instrumentation-c" target="test" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="report" target="test" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="report-html" target="test" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="report-csv" target="test" inheritAll="false" />
@@ -257,6 +267,7 @@
     <ant antfile="build-manual.xml" dir="instrumentation-java" target="clean" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="instrumentation-java-junit" target="clean" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="instrumentation-cobol" target="clean" inheritAll="false" />
+    <ant antfile="build-manual.xml" dir="instrumentation-c" target="clean" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="report" target="clean" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="report-html" target="clean" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="report-csv" target="clean" inheritAll="false" />
@@ -281,6 +292,7 @@
     <ant antfile="build-manual.xml" dir="instrumentation-java" target="set-svn-properties" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="instrumentation-java-junit" target="set-svn-properties" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="instrumentation-cobol" target="set-svn-properties" inheritAll="false" />
+    <ant antfile="build-manual.xml" dir="instrumentation-c" target="set-svn-properties" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="report" target="set-svn-properties" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="report-html" target="set-svn-properties" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="report-csv" target="set-svn-properties" inheritAll="false" />
@@ -371,6 +383,9 @@
       <packageset dir="instrumentation-cobol/src" defaultexcludes="yes">
         <include name="**"/>
       </packageset>
+      <packageset dir="instrumentation-c/src" defaultexcludes="yes">
+        <include name="**"/>
+      </packageset>
       <packageset dir="eclipse/src" defaultexcludes="yes">
         <include name="**"/>
       </packageset>
@@ -395,6 +410,7 @@
     <ant antfile="build-manual.xml" dir="instrumentation-java" target="deletebom" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="instrumentation-java-junit" target="deletebom" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="instrumentation-cobol" target="deletebom" inheritAll="false" />
+    <ant antfile="build-manual.xml" dir="instrumentation-c" target="deletebom" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="utils" target="deletebom" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="report" target="deletebom" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="report-html" target="deletebom" inheritAll="false" />
@@ -412,6 +428,7 @@
     <ant antfile="build-manual.xml" dir="instrumentation-java" target="compiletest" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="instrumentation-java-junit" target="compiletest" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="instrumentation-cobol" target="compiletest" inheritAll="false" />
+    <ant antfile="build-manual.xml" dir="instrumentation-c" target="compiletest" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="utils" target="compiletest" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="report" target="compiletest" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="report-html" target="compiletest" inheritAll="false" />
@@ -431,6 +448,7 @@
     <ant antfile="build-manual.xml" dir="instrumentation-java" target="get-javadoc-package-lists" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="instrumentation-java-junit" target="get-javadoc-package-lists" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="instrumentation-cobol" target="get-javadoc-package-lists" inheritAll="false" />
+    <ant antfile="build-manual.xml" dir="instrumentation-c" target="get-javadoc-package-lists" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="utils" target="get-javadoc-package-lists" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="report" target="get-javadoc-package-lists" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="report-html" target="get-javadoc-package-lists" inheritAll="false" />
@@ -448,6 +466,7 @@
     <ant antfile="build-manual.xml" dir="instrumentation-java" target="showtodo" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="instrumentation-java-junit" target="showtodo" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="instrumentation-cobol" target="showtodo" inheritAll="false" />
+    <ant antfile="build-manual.xml" dir="instrumentation-c" target="showtodo" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="utils" target="showtodo" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="report" target="showtodo" inheritAll="false" />
     <ant antfile="build-manual.xml" dir="report-html" target="showtodo" inheritAll="false" />
