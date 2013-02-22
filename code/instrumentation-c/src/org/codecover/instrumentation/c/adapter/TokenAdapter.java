@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.Reader;
 
 public class TokenAdapter implements TokenManager {
-    Preprocessor pp;
+    CCPreprocessor pp;
 
     public TokenAdapter(File source) throws IOException {
         pp = new CCPreprocessor(source);
@@ -34,7 +34,7 @@ public class TokenAdapter implements TokenManager {
         int kind;
         Token t;
         do {
-            t = pp.token();
+            t = pp.ccToken();
             //System.out.print(t.getText());
             kind = convertKind(t, t.getType());
         } while(kind == -1);

@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class CCPreprocessor extends Preprocessor {
-    private boolean ignoreTokens;
+    private boolean ignoreTokens = false;
 
     public CCPreprocessor(File file) throws IOException {
         super(file);
@@ -32,12 +32,11 @@ public class CCPreprocessor extends Preprocessor {
         }
     }
 
-    @Override
-    public Token token() throws IOException, LexerException {
+    public Token ccToken() throws IOException, LexerException {
         Token t;
         do {
-            t = super.token();
-        } while (ignoreTokens);
+            t = token();
+        } while (ignoreTokens && t.getType() != Token.EOF);
         return t;
     }
 }
