@@ -61,7 +61,7 @@ public class Helper {
         out.println("RB_HEAD(CodeCover_ConditionCounterMap, CodeCover_ConditionCounter);");
 
         out.println("static int cmp_num;");
-        out.println("static int CodeCover_ConditionCounter_cmp(struct CodeCover_ConditionCounter *left, struct CodeCover_ConditionCounter *right) {return memcmp(left, right, cmp_num);}");
+        out.println("static int CodeCover_ConditionCounter_cmp(struct CodeCover_ConditionCounter *left, struct CodeCover_ConditionCounter *right) {return memcmp(left->values, right->values, cmp_num);}");
 
         out.println("RB_PROTOTYPE(CodeCover_ConditionCounterMap, CodeCover_ConditionCounter, linkage, CodeCover_ConditionCounter_cmp);");
         out.println("RB_GENERATE(CodeCover_ConditionCounterMap, CodeCover_ConditionCounter, linkage, CodeCover_ConditionCounter_cmp)");
@@ -90,8 +90,6 @@ public class Helper {
         out.println("void CodeCover_ConditionAdd(struct CodeCover_Condition* cont, unsigned char* values, int num) {\n" +
                 "    struct CodeCover_ConditionCounter find, *res;\n" +
                 "    find.values = values;\n" +
-                "    find.counter = 0;\n" +
-                "    memset(&find.linkage, 0, sizeof(find.linkage));\n" +
                 "\n" +
                 "    cont->num = num;\n" +
                 "\n" +
