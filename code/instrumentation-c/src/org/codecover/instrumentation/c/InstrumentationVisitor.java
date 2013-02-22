@@ -5,24 +5,29 @@ import org.codecover.instrumentation.c.manipulators.BranchManipulator;
 import org.codecover.instrumentation.c.manipulators.ConditionManipulator;
 import org.codecover.instrumentation.c.manipulators.LoopManipulator;
 import org.codecover.instrumentation.c.manipulators.StatementManipulator;
+import org.codecover.instrumentation.c.parser.CParserConstants;
 import org.codecover.instrumentation.c.syntaxtree.*;
 import org.codecover.instrumentation.c.syntaxtree.Statement;
+import org.codecover.instrumentation.c.visitor.DepthFirstVisitor;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.Writer;
 
-public class InstrumentationVisitor extends SimpleTreeDumper {
-    private StatementManipulator statementManipulator;
-    private BranchManipulator branchManipulator;
-    private LoopManipulator loopManipulator;
-    private ConditionManipulator conditionManipulator;
+public class InstrumentationVisitor extends DepthFirstVisitor {
+    private final PrintWriter out;
+
+    private final StatementManipulator statementManipulator;
+    private final BranchManipulator branchManipulator;
+    private final LoopManipulator loopManipulator;
+    private final ConditionManipulator conditionManipulator;
 
     public InstrumentationVisitor(Writer writer,
                                   StatementManipulator statementManipulator,
                                   BranchManipulator branchManipulator,
                                   LoopManipulator loopManipulator,
                                   ConditionManipulator conditionManipulator) {
-        super(writer);
+        out = new PrintWriter(writer);
         this.statementManipulator = statementManipulator;
         this.branchManipulator = branchManipulator;
         this.loopManipulator = loopManipulator;
@@ -171,5 +176,20 @@ public class InstrumentationVisitor extends SimpleTreeDumper {
         n.statement.accept(this);
         out.println("}");
         loopManipulator.visitAfter(out, n);
+    }
+
+    /**
+     * Dumps the current NodeToken to the output stream
+     */
+    public void visit(NodeToken n) {
+        out.append(n.tokenImage);
+
+        if(n.kind == CParserConstants.SEMICOLON
+                || n.kind == CParserConstants.CBL
+                || n.kind == CParserConstants.CBR) {
+            out.append('\n');
+        } else {
+            out.append(' ');
+        }
     }
 }

@@ -1,7 +1,6 @@
 package org.codecover.instrumentation.c;
 
 import org.codecover.instrumentation.HierarchyLevelContainer;
-import org.codecover.instrumentation.booleanterms.InstrBooleanTerm;
 import org.codecover.instrumentation.c.counter.CounterManager;
 import org.codecover.instrumentation.c.syntaxtree.*;
 import org.codecover.instrumentation.c.syntaxtree.Statement;
