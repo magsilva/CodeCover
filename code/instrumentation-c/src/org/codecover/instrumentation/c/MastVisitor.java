@@ -116,7 +116,7 @@ public class MastVisitor extends DepthFirstVisitor {
     public void visit(org.codecover.instrumentation.c.syntaxtree.Statement n) {
         super.visit(n);
         // We don't need ids for all kinds of statements
-        if(n.nodeChoice.which == 1 || n.nodeChoice.which >= 3) {
+        if(n.nodeChoice.which == 1 || n.nodeChoice.which == 5) {
             n.stmtNum = cm.newStmtID();
             atticStatement(n, cm.stmtPrefix() + Integer.toString(n.stmtNum));
         }
