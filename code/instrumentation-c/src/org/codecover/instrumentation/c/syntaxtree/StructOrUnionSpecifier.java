@@ -8,20 +8,17 @@ package org.codecover.instrumentation.c.syntaxtree;
  * Grammar production:
  * <PRE>
 
- * f0 -> StructOrUnion()
- * f1 -> ( [ &lt;IDENTIFIER&gt; ] "{" StructDeclarationList() "}" | &lt;IDENTIFIER&gt; )
+ * structOrUnion -> StructOrUnion()
+ * nodeChoice -> ( [ &lt;IDENTIFIER&gt; ] "{" StructDeclarationList() "}" | &lt;IDENTIFIER&gt; )
  * </PRE>
  */
-public class StructOrUnionSpecifier implements Node {
-   private Node parent;
-   public StructOrUnion f0;
-   public NodeChoice f1;
+public class StructOrUnionSpecifier extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
+   public StructOrUnion structOrUnion;
+   public NodeChoice nodeChoice;
 
    public StructOrUnionSpecifier(StructOrUnion n0, NodeChoice n1) {
-      f0 = n0;
-      if ( f0 != null ) f0.setParent(this);
-      f1 = n1;
-      if ( f1 != null ) f1.setParent(this);
+      structOrUnion = n0;
+      nodeChoice = n1;
    }
 
    public void accept(org.codecover.instrumentation.c.visitor.Visitor v) {
@@ -36,7 +33,5 @@ public class StructOrUnionSpecifier implements Node {
    public <A> void accept(org.codecover.instrumentation.c.visitor.GJVoidVisitor<A> v, A argu) {
       v.visit(this,argu);
    }
-   public void setParent(Node n) { parent = n; }
-   public Node getParent()       { return parent; }
 }
 

@@ -7,7 +7,7 @@ package org.codecover.instrumentation.c.syntaxtree;
 /**
  * Represents an grammar optional node, e.g. ( A )? or [ A ]
  */
-public class NodeOptional implements Node {
+public class NodeOptional extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
    public NodeOptional() {
       node = null;
    }
@@ -21,7 +21,6 @@ public class NodeOptional implements Node {
          throw new Error("Attempt to set optional node twice");
 
       node = n;
-      n.setParent(this);
    }
    public void accept(org.codecover.instrumentation.c.visitor.Visitor v) {
       v.visit(this);
@@ -37,10 +36,6 @@ public class NodeOptional implements Node {
    }
    public boolean present()   { return node != null; }
 
-   public void setParent(Node n) { parent = n; }
-   public Node getParent()       { return parent; }
-
-   private Node parent;
    public Node node;
 }
 

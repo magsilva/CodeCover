@@ -9,7 +9,7 @@ import java.util.*;
 /**
  * Represents a grammar list, e.g. ( A )+
  */
-public class NodeList implements NodeListInterface {
+public class NodeList extends org.codecover.instrumentation.c.adapter.CCNode implements NodeListInterface {
    public NodeList() {
       nodes = new Vector<Node>();
    }
@@ -21,7 +21,6 @@ public class NodeList implements NodeListInterface {
 
    public void addNode(Node n) {
       nodes.addElement(n);
-      n.setParent(this);
    }
 
    public Enumeration<Node> elements() { return nodes.elements(); }
@@ -40,10 +39,6 @@ public class NodeList implements NodeListInterface {
       v.visit(this,argu);
    }
 
-   public void setParent(Node n) { parent = n; }
-   public Node getParent()       { return parent; }
-
-   private Node parent;
    public Vector<Node> nodes;
 }
 

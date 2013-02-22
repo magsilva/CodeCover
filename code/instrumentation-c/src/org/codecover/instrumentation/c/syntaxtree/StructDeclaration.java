@@ -7,33 +7,26 @@ package org.codecover.instrumentation.c.syntaxtree;
 /**
  * Grammar production:
  * <PRE>
- * f0 -> SpecifierQualifierList()
- * f1 -> StructDeclaratorList()
- * f2 -> ";"
+ * specifierQualifierList -> SpecifierQualifierList()
+ * structDeclaratorList -> StructDeclaratorList()
+ * nodeToken -> ";"
  * </PRE>
  */
-public class StructDeclaration implements Node {
-   private Node parent;
-   public SpecifierQualifierList f0;
-   public StructDeclaratorList f1;
-   public NodeToken f2;
+public class StructDeclaration extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
+   public SpecifierQualifierList specifierQualifierList;
+   public StructDeclaratorList structDeclaratorList;
+   public NodeToken nodeToken;
 
    public StructDeclaration(SpecifierQualifierList n0, StructDeclaratorList n1, NodeToken n2) {
-      f0 = n0;
-      if ( f0 != null ) f0.setParent(this);
-      f1 = n1;
-      if ( f1 != null ) f1.setParent(this);
-      f2 = n2;
-      if ( f2 != null ) f2.setParent(this);
+      specifierQualifierList = n0;
+      structDeclaratorList = n1;
+      nodeToken = n2;
    }
 
    public StructDeclaration(SpecifierQualifierList n0, StructDeclaratorList n1) {
-      f0 = n0;
-      if ( f0 != null ) f0.setParent(this);
-      f1 = n1;
-      if ( f1 != null ) f1.setParent(this);
-      f2 = new NodeToken(";");
-      if ( f2 != null ) f2.setParent(this);
+      specifierQualifierList = n0;
+      structDeclaratorList = n1;
+      nodeToken = new NodeToken(";");
    }
 
    public void accept(org.codecover.instrumentation.c.visitor.Visitor v) {
@@ -48,7 +41,5 @@ public class StructDeclaration implements Node {
    public <A> void accept(org.codecover.instrumentation.c.visitor.GJVoidVisitor<A> v, A argu) {
       v.visit(this,argu);
    }
-   public void setParent(Node n) { parent = n; }
-   public Node getParent()       { return parent; }
 }
 

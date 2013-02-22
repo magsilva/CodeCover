@@ -32,25 +32,7 @@ public class CParser
 
 class JTBToolkit {
    static NodeToken makeNodeToken(Token t) {
-      NodeToken node = new NodeToken(t.image.intern(), t.kind, t.beginLine, t.beginColumn, t.endLine, t.endColumn);
-
-      if ( t.specialToken == null )
-         return node;
-
-      Vector temp = new Vector();
-      Token orig = t;
-
-      while ( t.specialToken != null ) {
-         t = t.specialToken;
-         temp.addElement(new NodeToken(t.image.intern(), t.kind, t.beginLine, t.beginColumn, t.endLine, t.endColumn));
-      }
-
-      // Reverse the special token list
-      for ( int i = temp.size() - 1; i >= 0; --i )
-         node.addSpecial((NodeToken)temp.elementAt(i));
-
-      node.trimSpecials();
-      return node;
+      return new NodeToken(t.image.intern(), t.kind, t.beginLine, t.beginColumn, t.endLine, t.endColumn);
    }
 }
 

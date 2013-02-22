@@ -7,27 +7,22 @@ package org.codecover.instrumentation.c.syntaxtree;
 /**
  * Grammar production:
  * <PRE>
- * f0 -> &lt;ENUM&gt;
- * f1 -> ( [ &lt;IDENTIFIER&gt; ] "{" EnumeratorList() "}" | &lt;IDENTIFIER&gt; )
+ * nodeToken -> &lt;ENUM&gt;
+ * nodeChoice -> ( [ &lt;IDENTIFIER&gt; ] "{" EnumeratorList() "}" | &lt;IDENTIFIER&gt; )
  * </PRE>
  */
-public class EnumSpecifier implements Node {
-   private Node parent;
-   public NodeToken f0;
-   public NodeChoice f1;
+public class EnumSpecifier extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
+   public NodeToken nodeToken;
+   public NodeChoice nodeChoice;
 
    public EnumSpecifier(NodeToken n0, NodeChoice n1) {
-      f0 = n0;
-      if ( f0 != null ) f0.setParent(this);
-      f1 = n1;
-      if ( f1 != null ) f1.setParent(this);
+      nodeToken = n0;
+      nodeChoice = n1;
    }
 
    public EnumSpecifier(NodeChoice n0) {
-      f0 = new NodeToken("enum");
-      if ( f0 != null ) f0.setParent(this);
-      f1 = n0;
-      if ( f1 != null ) f1.setParent(this);
+      nodeToken = new NodeToken("enum");
+      nodeChoice = n0;
    }
 
    public void accept(org.codecover.instrumentation.c.visitor.Visitor v) {
@@ -42,7 +37,5 @@ public class EnumSpecifier implements Node {
    public <A> void accept(org.codecover.instrumentation.c.visitor.GJVoidVisitor<A> v, A argu) {
       v.visit(this,argu);
    }
-   public void setParent(Node n) { parent = n; }
-   public Node getParent()       { return parent; }
 }
 

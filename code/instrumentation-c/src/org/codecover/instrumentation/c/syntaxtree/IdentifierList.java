@@ -7,20 +7,17 @@ package org.codecover.instrumentation.c.syntaxtree;
 /**
  * Grammar production:
  * <PRE>
- * f0 -> &lt;IDENTIFIER&gt;
- * f1 -> ( "," &lt;IDENTIFIER&gt; )*
+ * nodeToken -> &lt;IDENTIFIER&gt;
+ * nodeListOptional -> ( "," &lt;IDENTIFIER&gt; )*
  * </PRE>
  */
-public class IdentifierList implements Node {
-   private Node parent;
-   public NodeToken f0;
-   public NodeListOptional f1;
+public class IdentifierList extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
+   public NodeToken nodeToken;
+   public NodeListOptional nodeListOptional;
 
    public IdentifierList(NodeToken n0, NodeListOptional n1) {
-      f0 = n0;
-      if ( f0 != null ) f0.setParent(this);
-      f1 = n1;
-      if ( f1 != null ) f1.setParent(this);
+      nodeToken = n0;
+      nodeListOptional = n1;
    }
 
    public void accept(org.codecover.instrumentation.c.visitor.Visitor v) {
@@ -35,7 +32,5 @@ public class IdentifierList implements Node {
    public <A> void accept(org.codecover.instrumentation.c.visitor.GJVoidVisitor<A> v, A argu) {
       v.visit(this,argu);
    }
-   public void setParent(Node n) { parent = n; }
-   public Node getParent()       { return parent; }
 }
 

@@ -7,20 +7,17 @@ package org.codecover.instrumentation.c.syntaxtree;
 /**
  * Grammar production:
  * <PRE>
- * f0 -> RelationalExpression()
- * f1 -> [ ( &lt;EQ: "=="&gt; | &lt;NE: "!="&gt; ) EqualityExpression() ]
+ * relationalExpression -> RelationalExpression()
+ * nodeOptional -> [ ( &lt;EQ: "=="&gt; | &lt;NE: "!="&gt; ) EqualityExpression() ]
  * </PRE>
  */
-public class EqualityExpression implements Node {
-   private Node parent;
-   public RelationalExpression f0;
-   public NodeOptional f1;
+public class EqualityExpression extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
+   public RelationalExpression relationalExpression;
+   public NodeOptional nodeOptional;
 
    public EqualityExpression(RelationalExpression n0, NodeOptional n1) {
-      f0 = n0;
-      if ( f0 != null ) f0.setParent(this);
-      f1 = n1;
-      if ( f1 != null ) f1.setParent(this);
+      relationalExpression = n0;
+      nodeOptional = n1;
    }
 
    public void accept(org.codecover.instrumentation.c.visitor.Visitor v) {
@@ -35,7 +32,5 @@ public class EqualityExpression implements Node {
    public <A> void accept(org.codecover.instrumentation.c.visitor.GJVoidVisitor<A> v, A argu) {
       v.visit(this,argu);
    }
-   public void setParent(Node n) { parent = n; }
-   public Node getParent()       { return parent; }
 }
 

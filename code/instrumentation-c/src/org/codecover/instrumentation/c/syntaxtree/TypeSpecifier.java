@@ -7,16 +7,14 @@ package org.codecover.instrumentation.c.syntaxtree;
 /**
  * Grammar production:
  * <PRE>
- * f0 -> ( &lt;VOID&gt; | &lt;CHAR&gt; | &lt;SHORT&gt; | &lt;INT&gt; | &lt;LONG&gt; | &lt;FLOAT&gt; | &lt;DOUBLE&gt; | &lt;SIGNED&gt; | &lt;UNSIGNED&gt; | StructOrUnionSpecifier() | EnumSpecifier() | TypedefName() )
+ * nodeChoice -> ( &lt;VOID&gt; | &lt;CHAR&gt; | &lt;SHORT&gt; | &lt;INT&gt; | &lt;LONG&gt; | &lt;FLOAT&gt; | &lt;DOUBLE&gt; | &lt;SIGNED&gt; | &lt;UNSIGNED&gt; | StructOrUnionSpecifier() | EnumSpecifier() | TypedefName() )
  * </PRE>
  */
-public class TypeSpecifier implements Node {
-   private Node parent;
-   public NodeChoice f0;
+public class TypeSpecifier extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
+   public NodeChoice nodeChoice;
 
    public TypeSpecifier(NodeChoice n0) {
-      f0 = n0;
-      if ( f0 != null ) f0.setParent(this);
+      nodeChoice = n0;
    }
 
    public void accept(org.codecover.instrumentation.c.visitor.Visitor v) {
@@ -31,7 +29,5 @@ public class TypeSpecifier implements Node {
    public <A> void accept(org.codecover.instrumentation.c.visitor.GJVoidVisitor<A> v, A argu) {
       v.visit(this,argu);
    }
-   public void setParent(Node n) { parent = n; }
-   public Node getParent()       { return parent; }
 }
 

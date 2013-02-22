@@ -7,20 +7,17 @@ package org.codecover.instrumentation.c.syntaxtree;
 /**
  * Grammar production:
  * <PRE>
- * f0 -> InitDeclarator()
- * f1 -> ( "," InitDeclarator() )*
+ * initDeclarator -> InitDeclarator()
+ * nodeListOptional -> ( "," InitDeclarator() )*
  * </PRE>
  */
-public class InitDeclaratorList implements Node {
-   private Node parent;
-   public InitDeclarator f0;
-   public NodeListOptional f1;
+public class InitDeclaratorList extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
+   public InitDeclarator initDeclarator;
+   public NodeListOptional nodeListOptional;
 
    public InitDeclaratorList(InitDeclarator n0, NodeListOptional n1) {
-      f0 = n0;
-      if ( f0 != null ) f0.setParent(this);
-      f1 = n1;
-      if ( f1 != null ) f1.setParent(this);
+      initDeclarator = n0;
+      nodeListOptional = n1;
    }
 
    public void accept(org.codecover.instrumentation.c.visitor.Visitor v) {
@@ -35,7 +32,5 @@ public class InitDeclaratorList implements Node {
    public <A> void accept(org.codecover.instrumentation.c.visitor.GJVoidVisitor<A> v, A argu) {
       v.visit(this,argu);
    }
-   public void setParent(Node n) { parent = n; }
-   public Node getParent()       { return parent; }
 }
 

@@ -7,20 +7,17 @@ package org.codecover.instrumentation.c.syntaxtree;
 /**
  * Grammar production:
  * <PRE>
- * f0 -> ParameterList()
- * f1 -> [ "," &lt;ELLIPSIS: "..."&gt; ]
+ * parameterList -> ParameterList()
+ * nodeOptional -> [ "," &lt;ELLIPSIS: "..."&gt; ]
  * </PRE>
  */
-public class ParameterTypeList implements Node {
-   private Node parent;
-   public ParameterList f0;
-   public NodeOptional f1;
+public class ParameterTypeList extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
+   public ParameterList parameterList;
+   public NodeOptional nodeOptional;
 
    public ParameterTypeList(ParameterList n0, NodeOptional n1) {
-      f0 = n0;
-      if ( f0 != null ) f0.setParent(this);
-      f1 = n1;
-      if ( f1 != null ) f1.setParent(this);
+      parameterList = n0;
+      nodeOptional = n1;
    }
 
    public void accept(org.codecover.instrumentation.c.visitor.Visitor v) {
@@ -35,7 +32,5 @@ public class ParameterTypeList implements Node {
    public <A> void accept(org.codecover.instrumentation.c.visitor.GJVoidVisitor<A> v, A argu) {
       v.visit(this,argu);
    }
-   public void setParent(Node n) { parent = n; }
-   public Node getParent()       { return parent; }
 }
 

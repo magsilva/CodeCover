@@ -7,20 +7,17 @@ package org.codecover.instrumentation.c.syntaxtree;
 /**
  * Grammar production:
  * <PRE>
- * f0 -> ParameterDeclaration()
- * f1 -> ( "," ParameterDeclaration() )*
+ * parameterDeclaration -> ParameterDeclaration()
+ * nodeListOptional -> ( "," ParameterDeclaration() )*
  * </PRE>
  */
-public class ParameterList implements Node {
-   private Node parent;
-   public ParameterDeclaration f0;
-   public NodeListOptional f1;
+public class ParameterList extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
+   public ParameterDeclaration parameterDeclaration;
+   public NodeListOptional nodeListOptional;
 
    public ParameterList(ParameterDeclaration n0, NodeListOptional n1) {
-      f0 = n0;
-      if ( f0 != null ) f0.setParent(this);
-      f1 = n1;
-      if ( f1 != null ) f1.setParent(this);
+      parameterDeclaration = n0;
+      nodeListOptional = n1;
    }
 
    public void accept(org.codecover.instrumentation.c.visitor.Visitor v) {
@@ -35,7 +32,5 @@ public class ParameterList implements Node {
    public <A> void accept(org.codecover.instrumentation.c.visitor.GJVoidVisitor<A> v, A argu) {
       v.visit(this,argu);
    }
-   public void setParent(Node n) { parent = n; }
-   public Node getParent()       { return parent; }
 }
 

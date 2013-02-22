@@ -7,20 +7,17 @@ package org.codecover.instrumentation.c.syntaxtree;
 /**
  * Grammar production:
  * <PRE>
- * f0 -> PrimaryExpression()
- * f1 -> ( "[" Expression() "]" | "(" [ ArgumentExpressionList() ] ")" | "." &lt;IDENTIFIER&gt; | &lt;ARROW: "-&gt;"&gt; &lt;IDENTIFIER&gt; | "++" | "--" )*
+ * primaryExpression -> PrimaryExpression()
+ * nodeListOptional -> ( "[" Expression() "]" | "(" [ ArgumentExpressionList() ] ")" | "." &lt;IDENTIFIER&gt; | &lt;ARROW: "-&gt;"&gt; &lt;IDENTIFIER&gt; | "++" | "--" )*
  * </PRE>
  */
-public class PostfixExpression implements Node {
-   private Node parent;
-   public PrimaryExpression f0;
-   public NodeListOptional f1;
+public class PostfixExpression extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
+   public PrimaryExpression primaryExpression;
+   public NodeListOptional nodeListOptional;
 
    public PostfixExpression(PrimaryExpression n0, NodeListOptional n1) {
-      f0 = n0;
-      if ( f0 != null ) f0.setParent(this);
-      f1 = n1;
-      if ( f1 != null ) f1.setParent(this);
+      primaryExpression = n0;
+      nodeListOptional = n1;
    }
 
    public void accept(org.codecover.instrumentation.c.visitor.Visitor v) {
@@ -35,7 +32,5 @@ public class PostfixExpression implements Node {
    public <A> void accept(org.codecover.instrumentation.c.visitor.GJVoidVisitor<A> v, A argu) {
       v.visit(this,argu);
    }
-   public void setParent(Node n) { parent = n; }
-   public Node getParent()       { return parent; }
 }
 

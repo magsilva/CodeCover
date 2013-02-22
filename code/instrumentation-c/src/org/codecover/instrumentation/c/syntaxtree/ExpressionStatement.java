@@ -7,27 +7,22 @@ package org.codecover.instrumentation.c.syntaxtree;
 /**
  * Grammar production:
  * <PRE>
- * f0 -> [ Expression() ]
- * f1 -> ";"
+ * nodeOptional -> [ Expression() ]
+ * nodeToken -> ";"
  * </PRE>
  */
-public class ExpressionStatement implements Node {
-   private Node parent;
-   public NodeOptional f0;
-   public NodeToken f1;
+public class ExpressionStatement extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
+   public NodeOptional nodeOptional;
+   public NodeToken nodeToken;
 
    public ExpressionStatement(NodeOptional n0, NodeToken n1) {
-      f0 = n0;
-      if ( f0 != null ) f0.setParent(this);
-      f1 = n1;
-      if ( f1 != null ) f1.setParent(this);
+      nodeOptional = n0;
+      nodeToken = n1;
    }
 
    public ExpressionStatement(NodeOptional n0) {
-      f0 = n0;
-      if ( f0 != null ) f0.setParent(this);
-      f1 = new NodeToken(";");
-      if ( f1 != null ) f1.setParent(this);
+      nodeOptional = n0;
+      nodeToken = new NodeToken(";");
    }
 
    public void accept(org.codecover.instrumentation.c.visitor.Visitor v) {
@@ -42,7 +37,5 @@ public class ExpressionStatement implements Node {
    public <A> void accept(org.codecover.instrumentation.c.visitor.GJVoidVisitor<A> v, A argu) {
       v.visit(this,argu);
    }
-   public void setParent(Node n) { parent = n; }
-   public Node getParent()       { return parent; }
 }
 

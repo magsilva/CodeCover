@@ -7,20 +7,17 @@ package org.codecover.instrumentation.c.syntaxtree;
 /**
  * Grammar production:
  * <PRE>
- * f0 -> ANDExpression()
- * f1 -> [ "^" ExclusiveORExpression() ]
+ * aNDExpression -> ANDExpression()
+ * nodeOptional -> [ "^" ExclusiveORExpression() ]
  * </PRE>
  */
-public class ExclusiveORExpression implements Node {
-   private Node parent;
-   public ANDExpression f0;
-   public NodeOptional f1;
+public class ExclusiveORExpression extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
+   public ANDExpression aNDExpression;
+   public NodeOptional nodeOptional;
 
    public ExclusiveORExpression(ANDExpression n0, NodeOptional n1) {
-      f0 = n0;
-      if ( f0 != null ) f0.setParent(this);
-      f1 = n1;
-      if ( f1 != null ) f1.setParent(this);
+      aNDExpression = n0;
+      nodeOptional = n1;
    }
 
    public void accept(org.codecover.instrumentation.c.visitor.Visitor v) {
@@ -35,7 +32,5 @@ public class ExclusiveORExpression implements Node {
    public <A> void accept(org.codecover.instrumentation.c.visitor.GJVoidVisitor<A> v, A argu) {
       v.visit(this,argu);
    }
-   public void setParent(Node n) { parent = n; }
-   public Node getParent()       { return parent; }
 }
 

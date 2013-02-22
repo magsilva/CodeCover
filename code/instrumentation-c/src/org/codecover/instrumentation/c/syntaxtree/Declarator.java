@@ -7,20 +7,17 @@ package org.codecover.instrumentation.c.syntaxtree;
 /**
  * Grammar production:
  * <PRE>
- * f0 -> [ Pointer() ]
- * f1 -> DirectDeclarator()
+ * nodeOptional -> [ Pointer() ]
+ * directDeclarator -> DirectDeclarator()
  * </PRE>
  */
-public class Declarator implements Node {
-   private Node parent;
-   public NodeOptional f0;
-   public DirectDeclarator f1;
+public class Declarator extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
+   public NodeOptional nodeOptional;
+   public DirectDeclarator directDeclarator;
 
    public Declarator(NodeOptional n0, DirectDeclarator n1) {
-      f0 = n0;
-      if ( f0 != null ) f0.setParent(this);
-      f1 = n1;
-      if ( f1 != null ) f1.setParent(this);
+      nodeOptional = n0;
+      directDeclarator = n1;
    }
 
    public void accept(org.codecover.instrumentation.c.visitor.Visitor v) {
@@ -35,7 +32,5 @@ public class Declarator implements Node {
    public <A> void accept(org.codecover.instrumentation.c.visitor.GJVoidVisitor<A> v, A argu) {
       v.visit(this,argu);
    }
-   public void setParent(Node n) { parent = n; }
-   public Node getParent()       { return parent; }
 }
 

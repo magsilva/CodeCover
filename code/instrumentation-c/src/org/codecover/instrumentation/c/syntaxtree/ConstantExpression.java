@@ -7,16 +7,14 @@ package org.codecover.instrumentation.c.syntaxtree;
 /**
  * Grammar production:
  * <PRE>
- * f0 -> ConditionalExpression()
+ * conditionalExpression -> ConditionalExpression()
  * </PRE>
  */
-public class ConstantExpression implements Node {
-   private Node parent;
-   public ConditionalExpression f0;
+public class ConstantExpression extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
+   public ConditionalExpression conditionalExpression;
 
    public ConstantExpression(ConditionalExpression n0) {
-      f0 = n0;
-      if ( f0 != null ) f0.setParent(this);
+      conditionalExpression = n0;
    }
 
    public void accept(org.codecover.instrumentation.c.visitor.Visitor v) {
@@ -31,7 +29,5 @@ public class ConstantExpression implements Node {
    public <A> void accept(org.codecover.instrumentation.c.visitor.GJVoidVisitor<A> v, A argu) {
       v.visit(this,argu);
    }
-   public void setParent(Node n) { parent = n; }
-   public Node getParent()       { return parent; }
 }
 

@@ -7,14 +7,13 @@ package org.codecover.instrumentation.c.syntaxtree;
 /**
  * Represents a grammar choice, e.g. ( A | B )
  */
-public class NodeChoice implements Node {
+public class NodeChoice extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
    public NodeChoice(Node node) {
       this(node, -1);
    }
 
    public NodeChoice(Node node, int whichChoice) {
       choice = node;
-      choice.setParent(this);
       which = whichChoice;
    }
 
@@ -31,10 +30,6 @@ public class NodeChoice implements Node {
       choice.accept(v,argu);
    }
 
-   public void setParent(Node n) { parent = n; }
-   public Node getParent()       { return parent; }
-
-   private Node parent;
    public Node choice;
    public int which;
 }

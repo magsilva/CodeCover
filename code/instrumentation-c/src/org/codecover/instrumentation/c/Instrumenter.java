@@ -35,6 +35,10 @@ public class Instrumenter extends org.codecover.instrumentation.Instrumenter {
         TranslationUnit translationUnit = cParser.TranslationUnit();
         CounterManager cm = new CounterManager();
 
+        MastVisitor mastVisitor = new MastVisitor(builder, sourceFile, rootContainer, cm);
+
+        mastVisitor.visit(translationUnit);
+
         InstrumentationVisitor instrumentationVisitor =
                 new InstrumentationVisitor(target,
                         isCriterionSet(StatementCoverage.getInstance()) ? new DefaultStatementManipulator(cm) : new DummyStatementManipulator());

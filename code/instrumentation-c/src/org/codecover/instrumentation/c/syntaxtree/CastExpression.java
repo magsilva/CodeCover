@@ -7,16 +7,14 @@ package org.codecover.instrumentation.c.syntaxtree;
 /**
  * Grammar production:
  * <PRE>
- * f0 -> ( "(" TypeName() ")" CastExpression() | UnaryExpression() )
+ * nodeChoice -> ( "(" TypeName() ")" CastExpression() | UnaryExpression() )
  * </PRE>
  */
-public class CastExpression implements Node {
-   private Node parent;
-   public NodeChoice f0;
+public class CastExpression extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
+   public NodeChoice nodeChoice;
 
    public CastExpression(NodeChoice n0) {
-      f0 = n0;
-      if ( f0 != null ) f0.setParent(this);
+      nodeChoice = n0;
    }
 
    public void accept(org.codecover.instrumentation.c.visitor.Visitor v) {
@@ -31,7 +29,5 @@ public class CastExpression implements Node {
    public <A> void accept(org.codecover.instrumentation.c.visitor.GJVoidVisitor<A> v, A argu) {
       v.visit(this,argu);
    }
-   public void setParent(Node n) { parent = n; }
-   public Node getParent()       { return parent; }
 }
 

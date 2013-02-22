@@ -10,7 +10,7 @@ import java.util.*;
  * Represents a sequence of nodes nested within a choice, list,
  * optional list, or optional, e.g. ( A B )+ or [ C D E ]
  */
-public class NodeSequence implements NodeListInterface {
+public class NodeSequence extends org.codecover.instrumentation.c.adapter.CCNode implements NodeListInterface {
    public NodeSequence(int n) {
       nodes = new Vector<Node>(n);
    }
@@ -22,7 +22,6 @@ public class NodeSequence implements NodeListInterface {
 
    public void addNode(Node n) {
       nodes.addElement(n);
-      n.setParent(this);
    }
 
    public Node elementAt(int i)  { return nodes.elementAt(i); }
@@ -41,10 +40,6 @@ public class NodeSequence implements NodeListInterface {
       v.visit(this,argu);
    }
 
-   public void setParent(Node n) { parent = n; }
-   public Node getParent()       { return parent; }
-
-   private Node parent;
    public Vector<Node> nodes;
 }
 

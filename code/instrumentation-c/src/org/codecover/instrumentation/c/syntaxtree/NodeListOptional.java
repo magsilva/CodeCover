@@ -9,7 +9,7 @@ import java.util.*;
 /**
  * Represents an optional grammar list, e.g. ( A )*
  */
-public class NodeListOptional implements NodeListInterface {
+public class NodeListOptional extends org.codecover.instrumentation.c.adapter.CCNode implements NodeListInterface {
    public NodeListOptional() {
       nodes = new Vector<Node>();
    }
@@ -21,7 +21,6 @@ public class NodeListOptional implements NodeListInterface {
 
    public void addNode(Node n) {
       nodes.addElement(n);
-      n.setParent(this);
    }
 
    public Enumeration<Node> elements() { return nodes.elements(); }
@@ -41,10 +40,6 @@ public class NodeListOptional implements NodeListInterface {
       v.visit(this,argu);
    }
 
-   public void setParent(Node n) { parent = n; }
-   public Node getParent()       { return parent; }
-
-   private Node parent;
    public Vector<Node> nodes;
 }
 

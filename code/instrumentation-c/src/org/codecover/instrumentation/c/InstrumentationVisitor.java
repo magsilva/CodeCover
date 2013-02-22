@@ -30,14 +30,14 @@ public class InstrumentationVisitor extends SimpleTreeDumper {
     boolean isMain = false;
 
     public void visit(FunctionDefinition n) {
-        n.f0.accept(this);
-        if(n.f1.f1.f0.which == 0) {
-            String name = ((NodeToken) n.f1.f1.f0.choice).tokenImage;
+        n.nodeOptional.accept(this);
+        if(n.declarator.directDeclarator.nodeChoice.which == 0) {
+            String name = ((NodeToken) n.declarator.directDeclarator.nodeChoice.choice).tokenImage;
             isMain = "main".equals(name);
         }
-        n.f1.accept(this);
-        n.f2.accept(this);
-        n.f3.accept(this);
+        n.declarator.accept(this);
+        n.nodeOptional1.accept(this);
+        n.compoundStatement.accept(this);
         isMain = false;
     }
 
@@ -59,7 +59,7 @@ public class InstrumentationVisitor extends SimpleTreeDumper {
     @Override
     public void visit(Statement n) {
         // After addBraces and no compound statement
-        boolean tmp = addBraces && (n.f0.which != 2);
+        boolean tmp = addBraces && (n.nodeChoice.which != 2);
         addBraces = false;
         if(tmp)
             out.append("{\n");

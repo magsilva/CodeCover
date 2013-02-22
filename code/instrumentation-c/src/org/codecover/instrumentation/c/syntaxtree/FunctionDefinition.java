@@ -7,28 +7,23 @@ package org.codecover.instrumentation.c.syntaxtree;
 /**
  * Grammar production:
  * <PRE>
- * f0 -> [ DeclarationSpecifiers() ]
- * f1 -> Declarator()
- * f2 -> [ DeclarationList() ]
- * f3 -> CompoundStatement()
+ * nodeOptional -> [ DeclarationSpecifiers() ]
+ * declarator -> Declarator()
+ * nodeOptional1 -> [ DeclarationList() ]
+ * compoundStatement -> CompoundStatement()
  * </PRE>
  */
-public class FunctionDefinition implements Node {
-   private Node parent;
-   public NodeOptional f0;
-   public Declarator f1;
-   public NodeOptional f2;
-   public CompoundStatement f3;
+public class FunctionDefinition extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
+   public NodeOptional nodeOptional;
+   public Declarator declarator;
+   public NodeOptional nodeOptional1;
+   public CompoundStatement compoundStatement;
 
    public FunctionDefinition(NodeOptional n0, Declarator n1, NodeOptional n2, CompoundStatement n3) {
-      f0 = n0;
-      if ( f0 != null ) f0.setParent(this);
-      f1 = n1;
-      if ( f1 != null ) f1.setParent(this);
-      f2 = n2;
-      if ( f2 != null ) f2.setParent(this);
-      f3 = n3;
-      if ( f3 != null ) f3.setParent(this);
+      nodeOptional = n0;
+      declarator = n1;
+      nodeOptional1 = n2;
+      compoundStatement = n3;
    }
 
    public void accept(org.codecover.instrumentation.c.visitor.Visitor v) {
@@ -43,7 +38,5 @@ public class FunctionDefinition implements Node {
    public <A> void accept(org.codecover.instrumentation.c.visitor.GJVoidVisitor<A> v, A argu) {
       v.visit(this,argu);
    }
-   public void setParent(Node n) { parent = n; }
-   public Node getParent()       { return parent; }
 }
 

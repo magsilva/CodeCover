@@ -7,33 +7,26 @@ package org.codecover.instrumentation.c.syntaxtree;
 /**
  * Grammar production:
  * <PRE>
- * f0 -> DeclarationSpecifiers()
- * f1 -> [ InitDeclaratorList() ]
- * f2 -> ";"
+ * declarationSpecifiers -> DeclarationSpecifiers()
+ * nodeOptional -> [ InitDeclaratorList() ]
+ * nodeToken -> ";"
  * </PRE>
  */
-public class Declaration implements Node {
-   private Node parent;
-   public DeclarationSpecifiers f0;
-   public NodeOptional f1;
-   public NodeToken f2;
+public class Declaration extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
+   public DeclarationSpecifiers declarationSpecifiers;
+   public NodeOptional nodeOptional;
+   public NodeToken nodeToken;
 
    public Declaration(DeclarationSpecifiers n0, NodeOptional n1, NodeToken n2) {
-      f0 = n0;
-      if ( f0 != null ) f0.setParent(this);
-      f1 = n1;
-      if ( f1 != null ) f1.setParent(this);
-      f2 = n2;
-      if ( f2 != null ) f2.setParent(this);
+      declarationSpecifiers = n0;
+      nodeOptional = n1;
+      nodeToken = n2;
    }
 
    public Declaration(DeclarationSpecifiers n0, NodeOptional n1) {
-      f0 = n0;
-      if ( f0 != null ) f0.setParent(this);
-      f1 = n1;
-      if ( f1 != null ) f1.setParent(this);
-      f2 = new NodeToken(";");
-      if ( f2 != null ) f2.setParent(this);
+      declarationSpecifiers = n0;
+      nodeOptional = n1;
+      nodeToken = new NodeToken(";");
    }
 
    public void accept(org.codecover.instrumentation.c.visitor.Visitor v) {
@@ -48,7 +41,5 @@ public class Declaration implements Node {
    public <A> void accept(org.codecover.instrumentation.c.visitor.GJVoidVisitor<A> v, A argu) {
       v.visit(this,argu);
    }
-   public void setParent(Node n) { parent = n; }
-   public Node getParent()       { return parent; }
 }
 

@@ -7,33 +7,26 @@ package org.codecover.instrumentation.c.syntaxtree;
 /**
  * Grammar production:
  * <PRE>
- * f0 -> "*"
- * f1 -> [ TypeQualifierList() ]
- * f2 -> [ Pointer() ]
+ * nodeToken -> "*"
+ * nodeOptional -> [ TypeQualifierList() ]
+ * nodeOptional1 -> [ Pointer() ]
  * </PRE>
  */
-public class Pointer implements Node {
-   private Node parent;
-   public NodeToken f0;
-   public NodeOptional f1;
-   public NodeOptional f2;
+public class Pointer extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
+   public NodeToken nodeToken;
+   public NodeOptional nodeOptional;
+   public NodeOptional nodeOptional1;
 
    public Pointer(NodeToken n0, NodeOptional n1, NodeOptional n2) {
-      f0 = n0;
-      if ( f0 != null ) f0.setParent(this);
-      f1 = n1;
-      if ( f1 != null ) f1.setParent(this);
-      f2 = n2;
-      if ( f2 != null ) f2.setParent(this);
+      nodeToken = n0;
+      nodeOptional = n1;
+      nodeOptional1 = n2;
    }
 
    public Pointer(NodeOptional n0, NodeOptional n1) {
-      f0 = new NodeToken("*");
-      if ( f0 != null ) f0.setParent(this);
-      f1 = n0;
-      if ( f1 != null ) f1.setParent(this);
-      f2 = n1;
-      if ( f2 != null ) f2.setParent(this);
+      nodeToken = new NodeToken("*");
+      nodeOptional = n0;
+      nodeOptional1 = n1;
    }
 
    public void accept(org.codecover.instrumentation.c.visitor.Visitor v) {
@@ -48,7 +41,5 @@ public class Pointer implements Node {
    public <A> void accept(org.codecover.instrumentation.c.visitor.GJVoidVisitor<A> v, A argu) {
       v.visit(this,argu);
    }
-   public void setParent(Node n) { parent = n; }
-   public Node getParent()       { return parent; }
 }
 

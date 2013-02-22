@@ -12,9 +12,5 @@ public interface Node extends java.io.Serializable {
    public <R,A> R accept(org.codecover.instrumentation.c.visitor.GJVisitor<R,A> v, A argu);
    public <R> R accept(org.codecover.instrumentation.c.visitor.GJNoArguVisitor<R> v);
    public <A> void accept(org.codecover.instrumentation.c.visitor.GJVoidVisitor<A> v, A argu);
-   // It is the responsibility of each implementing class to call
-   // setParent() on each of its child Nodes.
-   public void setParent(Node n);
-   public Node getParent();
 }
 
