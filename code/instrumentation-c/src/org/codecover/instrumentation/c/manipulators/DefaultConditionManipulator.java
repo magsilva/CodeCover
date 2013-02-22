@@ -54,11 +54,15 @@ public class DefaultConditionManipulator implements ConditionManipulator {
                                                String helper,
                                                String counter,
                                                int numValues) {
-        InstrBooleanTerm write = new InstrBasicBooleanTerm(
+        InstrBooleanTerm writeT = new InstrBasicBooleanTerm(
                 String.format("(CodeCover_ConditionAdd(%s,%s,%d), 1)", counter, helper, numValues) ,-1 ,-1);
+        InstrBooleanTerm writeF = new InstrBasicBooleanTerm(
+                String.format("(CodeCover_ConditionAdd(%s,%s,%d), 0)", counter, helper, numValues) ,-1 ,-1);
 
-        return new InstrOperatorTerm(new InstrBracketTerm(root),
-                CBooleanExpressions.andOperator, write, -1, -1);
+        InstrBooleanTerm t = new InstrOperatorTerm(new InstrBracketTerm(root),
+                CBooleanExpressions.andOperator, writeT, -1, -1);
+
+        return new InstrOperatorTerm(new InstrBracketTerm(t), CBooleanExpressions.orOperator, writeF, -1, -1);
     }
 
     private void visitBasicTerms(String helper, ArrayList<InstrBasicBooleanTerm> terms) {
