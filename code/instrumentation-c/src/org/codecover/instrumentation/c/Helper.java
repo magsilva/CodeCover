@@ -115,8 +115,13 @@ public class Helper {
 
 
         out.println("void CodeCover_dump() {");
-        out.println("int i; FILE* f;");
-        out.println("f = fopen(\"coverage_log.clf\", \"w\");");
+        out.println("int i; FILE* f; const char* format_string = \"coverage_log%i.clf\"; char filename[256];");
+        out.println("do {");
+        out.println("snprintf(filename, sizeof(filename), format_string, i++);");
+        out.println("f = fopen(filename, \"r\");");
+        out.println("if(f!=0) fclose(f);");
+        out.println("} while(f != 0);");
+        out.println("f = fopen(filename, \"w\");");
         out.format("fprintf(f, \"TEST_SESSION_CONTAINER \\\"%s\\\"\\n\");\n", testSessionContainerUID);
         out.println("fprintf(f, \"START_TEST_CASE \\\"Single Test Case\\\"\\n\");");
         for(CounterManager cm : counterManagers) {
