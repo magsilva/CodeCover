@@ -42,7 +42,7 @@ public class InstrumentationVisitor extends SimpleTreeDumper {
         n.nodeOptional1.accept(this);
         if(isMain) {
             out.println("{");
-            // Not need because the arrays have a static storarage duration, which means that they are initialized to 0.
+            // Not need because the arrays have a static storage duration, which means that they are initialized to 0.
             //out.println("CodeCover_reset();");
             out.println("atexit(CodeCover_dump);");
         }
