@@ -1,10 +1,7 @@
 package org.codecover.instrumentation.c;
 
 import org.codecover.instrumentation.booleanterms.InstrBooleanTerm;
-import org.codecover.instrumentation.c.manipulators.BranchManipulator;
-import org.codecover.instrumentation.c.manipulators.ConditionManipulator;
-import org.codecover.instrumentation.c.manipulators.LoopManipulator;
-import org.codecover.instrumentation.c.manipulators.StatementManipulator;
+import org.codecover.instrumentation.c.manipulators.*;
 import org.codecover.instrumentation.c.parser.CParserConstants;
 import org.codecover.instrumentation.c.syntaxtree.*;
 import org.codecover.instrumentation.c.syntaxtree.Statement;
@@ -21,17 +18,20 @@ public class InstrumentationVisitor extends DepthFirstVisitor {
     private final BranchManipulator branchManipulator;
     private final LoopManipulator loopManipulator;
     private final ConditionManipulator conditionManipulator;
+    private final QMOManipulator qmoManipulator;
 
     public InstrumentationVisitor(Writer writer,
                                   StatementManipulator statementManipulator,
                                   BranchManipulator branchManipulator,
                                   LoopManipulator loopManipulator,
-                                  ConditionManipulator conditionManipulator) {
+                                  ConditionManipulator conditionManipulator,
+                                  QMOManipulator qmoManipulator) {
         out = new PrintWriter(writer);
         this.statementManipulator = statementManipulator;
         this.branchManipulator = branchManipulator;
         this.loopManipulator = loopManipulator;
         this.conditionManipulator = conditionManipulator;
+        this.qmoManipulator = qmoManipulator;
     }
 
     @Override
@@ -42,6 +42,7 @@ public class InstrumentationVisitor extends DepthFirstVisitor {
         branchManipulator.writeForwardDeclaration(out);
         loopManipulator.writeForwardDeclaration(out);
         conditionManipulator.writeForwardDeclaration(out);
+        qmoManipulator.writeForwardDeclaration(out);
         super.visit(n);
     }
 
