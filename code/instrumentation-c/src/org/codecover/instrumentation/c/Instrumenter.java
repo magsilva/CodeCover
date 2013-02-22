@@ -33,19 +33,12 @@ public class Instrumenter extends org.codecover.instrumentation.Instrumenter {
                                   Map<String, Object> instrumenterDirectives) throws ParseException, IOException {
         CParser cParser = new CParser(new TokenAdapter(source));
         TranslationUnit translationUnit = cParser.TranslationUnit();
-        InstrumentationVisitor instrumentationVisitor = new InstrumentationVisitor(
-                target, builder, rootContainer,
-                testSessionContainerUID);
-
         CounterManager cm = new CounterManager();
 
-        if (super.isCriterionSet(StatementCoverage.getInstance())) {
-            instrumentationVisitor.setStatementManipulator(
-                    new DefaultStatementManipulator(cm));
-        } else {
-            instrumentationVisitor.setStatementManipulator(
-                    new DummyStatementManipulator());
-        }
+        InstrumentationVisitor instrumentationVisitor =
+                new InstrumentationVisitor(target,
+                        isCriterionSet(StatementCoverage.getInstance()) ? new DefaultStatementManipulator(cm) : new DummyStatementManipulator());
+
 
         instrumentationVisitor.visit(translationUnit);
 

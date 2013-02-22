@@ -3,29 +3,18 @@ package org.codecover.instrumentation.c;
 import org.codecover.instrumentation.HierarchyLevelContainer;
 import org.codecover.instrumentation.c.manipulators.StatementManipulator;
 import org.codecover.instrumentation.c.syntaxtree.*;
+import org.codecover.instrumentation.c.syntaxtree.Statement;
 import org.codecover.model.MASTBuilder;
-import org.codecover.model.mast.SourceFile;
+import org.codecover.model.mast.*;
 
 import java.io.Writer;
+import java.util.*;
 
 public class InstrumentationVisitor extends SimpleTreeDumper {
-    private MASTBuilder builder;
-    private HierarchyLevelContainer hierarchyLevelContainer;
-    private String testSessionContainerUID;
     private StatementManipulator statementManipulator;
 
-    public InstrumentationVisitor(Writer writer,
-                                  MASTBuilder builder,
-                                  HierarchyLevelContainer hierarchyLevelContainer,
-                                  String testSessionContainerUID) {
+    public InstrumentationVisitor(Writer writer, StatementManipulator statementManipulator) {
         super(writer);
-
-        this.builder = builder;
-        this.hierarchyLevelContainer = hierarchyLevelContainer;
-        this.testSessionContainerUID = testSessionContainerUID;
-    }
-
-    public void setStatementManipulator(StatementManipulator statementManipulator) {
         this.statementManipulator = statementManipulator;
     }
 
