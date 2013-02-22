@@ -1,27 +1,23 @@
-package org.codecover.instrumentation.c;
+package org.codecover.instrumentation.c.adapter;
 
 import org.anarres.cpp.*;
 import org.codecover.instrumentation.c.parser.CParserConstants;
-import org.codecover.instrumentation.c.parser.CParserTokenManager;
+import org.codecover.instrumentation.c.parser.TokenManager;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 
-public class TokenAdapter extends CParserTokenManager {
+public class TokenAdapter implements TokenManager {
     Preprocessor pp;
 
     public TokenAdapter(File file) throws IOException {
-        super(null);
-
         pp = new Preprocessor(file);
         //pp.addFeature(Feature.VERBOSE);
         //pp.addFeature(Feature.DEBUG);
     }
 
     public TokenAdapter(Reader reader) throws IOException {
-        super(null);
-
         pp = new Preprocessor(new LexerSource(reader, true));
         //pp.addFeature(Feature.VERBOSE);
         //pp.addFeature(Feature.DEBUG);
@@ -253,7 +249,7 @@ public class TokenAdapter extends CParserTokenManager {
         } if("case".equals(image)) {
             return CParserConstants.CASE;
         } if("default".equals(image)) {
-            return CParserConstants.DEFAULT;
+            return CParserConstants.DFLT;
         } if("float".equals(image)) {
             return CParserConstants.FLOAT;
         } if("const".equals(image)) {

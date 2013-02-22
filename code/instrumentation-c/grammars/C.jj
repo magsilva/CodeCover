@@ -41,6 +41,11 @@
 - Preprocessor directives are now simply SKIP'd, so no need to run C files through GCC first
 
   */
+options {
+    STATIC=false;
+    USER_TOKEN_MANAGER=true;
+    TOKEN_EXTENDS="org.codecover.instrumentation.c.adapter.CCToken";
+}
 
 PARSER_BEGIN(CParser)
 package org.codecover.instrumentation.c.parser;
@@ -66,76 +71,9 @@ import java.util.*;
     private void addType(String type){
    	  types.add(type);
     }
-
-    // Prints out all the types used in parsing the c source
-    private void printTypes(){
-      for (Iterator i = types.iterator(); i.hasNext();) {
-        System.out.println(i.next());
-      }
-    }
-
-    // Run the parser
-    public static void main ( String args [ ] ) {
-      CParser parser ;
-
-      if(args.length == 0){
-        System.out.println("C Parser Version 0.1Alpha:  Reading from standard input . . .");
-        parser = new CParser(System.in);
-      }
-      else if(args.length == 1){
-        System.out.println("C Parser Version 0.1Alpha:  Reading from file " + args[0] + " . . ." );
-      try {
-        parser = new CParser(new java.io.FileInputStream(args[0]));
-      }
-      catch(java.io.FileNotFoundException e){
-        System.out.println("C Parser Version 0.1:  File " + args[0] + " not found.");
-        return ;
-        }
-      }
-      else {
-        System.out.println("C Parser Version 0.1Alpha:  Usage is one of:");
-        System.out.println("         java CParser < inputfile");
-        System.out.println("OR");
-        System.out.println("         java CParser inputfile");
-        return ;
-      }
-      try {
-        parser.TranslationUnit();
-        System.out.println("C Parser Version 0.1Alpha:  Java program parsed successfully.");
-      }
-      catch(ParseException e){
-        System.out.println("C Parser Version 0.1Alpha:  Encountered errors during parse.");
-        e.printStackTrace();
-      }
-    }
   }
 
 PARSER_END(CParser)
-
-SKIP : {
- " "
-|  "\t"
-|  "\n"
-|  "\r"
-|  <"//" (~["\n","\r"])* ("\n" | "\r" | "\r\n")>
-|  <"/*" (~["*"])* "*" ("*" | ~["*","/"] (~["*"])* "*")* "/">
-| "#" : PREPROCESSOR_OUTPUT
-}
-
-<PREPROCESSOR_OUTPUT> SKIP:
-{
-     "\n" : DEFAULT
-}
-
-<PREPROCESSOR_OUTPUT> MORE:
-{
- "\\\n"
- |
- "\\\r\n"
- |
- < ~[] >
-}
-
 
 TOKEN: {
     <NUMBER: (<INTEGER_LITERAL> | <FLOATING_POINT_LITERAL>)>
@@ -265,7 +203,7 @@ void StorageClassSpecifier() : {}
 {
 	( <AUTO> | <REGISTER> | <STATIC> | <EXTERN> | <TYPEDEF>
 	{
-		typedefParsingStack.push(Boolean.TRUE);
+		typedefParsingStack.push(true);
 	} )
 }
 
@@ -283,7 +221,7 @@ void TypeQualifier() : {}
 void StructOrUnionSpecifier() : {}
 {
 	{
-			typedefParsingStack.push(Boolean.FALSE);
+			typedefParsingStack.push(false);
 	}
 
 	StructOrUnion() ( LOOKAHEAD(3) [ <IDENTIFIER> ] "{" StructDeclarationList() "}" | <IDENTIFIER> )
@@ -308,7 +246,7 @@ void InitDeclaratorList() : {}
 	InitDeclarator() ("," InitDeclarator())*
 	{
 		// Finished with a typedefDeclaration??
-		if(!(typedefParsingStack.empty()) && (typedefParsingStack.peek()).booleanValue()){
+		if(!(typedefParsingStack.empty()) && (typedefParsingStack.peek())){
 		   	typedefParsingStack.pop();
 	  }
 	}
@@ -366,13 +304,13 @@ void DirectDeclarator() : { Token t;}
 {
 	( t = <IDENTIFIER>
 
-	{ if(!(typedefParsingStack.empty()) && (typedefParsingStack.peek()).booleanValue()){
+	{ if(!(typedefParsingStack.empty()) && (typedefParsingStack.peek())){
 				addType(t.image);
 	  }
 	}
 	 | "(" Declarator() ")" )
   
-  { typedefParsingStack.push( Boolean.FALSE ); }
+  { typedefParsingStack.push( false ); }
 
 	( "[" [ ConstantExpression() ] "]" |
 	    LOOKAHEAD(3) "(" ParameterTypeList() ")" |

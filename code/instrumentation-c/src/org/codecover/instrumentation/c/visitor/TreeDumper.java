@@ -3,7 +3,6 @@
 //
 package org.codecover.instrumentation.c.visitor;
 
-import org.codecover.instrumentation.c.parser.CParserConstants;
 import org.codecover.instrumentation.c.syntaxtree.*;
 import java.util.*;
 import java.io.*;
@@ -63,15 +62,56 @@ public class TreeDumper extends DepthFirstVisitor {
     *   before the previous token.
     */
    public void visit(NodeToken n) {
-       printToken(n.tokenImage);
+      if ( n.beginLine == -1 || n.beginColumn == -1 ) {
+         printToken(n.tokenImage);
+         return;
+      }
 
-       if(n.kind == CParserConstants.SEMICOLON
-               || n.kind == CParserConstants.CBL
-               || n.kind == CParserConstants.CBR) {
-           out.append('\n');
-       } else {
-           out.append(' ');
-       }
+      //
+      // Handle special tokens
+      //
+      if ( printSpecials && n.numSpecials() > 0 )
+         for ( Enumeration<NodeToken> e = n.specialTokens.elements(); e.hasMoreElements(); )
+            visit(e.nextElement());
+
+      //
+      // Handle startAtNextToken option
+      //
+      if ( startAtNextToken ) {
+         curLine = n.beginLine;
+         curColumn = 1;
+         startAtNextToken = false;
+
+         if ( n.beginColumn < curColumn )
+            out.println();
+      }
+
+      //
+      // Check for invalid token position relative to current position.
+      //
+      if ( n.beginLine < curLine )
+         throw new IllegalStateException("at token \"" + n.tokenImage +
+            "\", n.beginLine = " + Integer.toString(n.beginLine) +
+            ", curLine = " + Integer.toString(curLine));
+      else if ( n.beginLine == curLine && n.beginColumn < curColumn )
+         throw new IllegalStateException("at token \"" + n.tokenImage +
+            "\", n.beginColumn = " +
+            Integer.toString(n.beginColumn) + ", curColumn = " +
+            Integer.toString(curColumn));
+
+      //
+      // Move output "cursor" to proper location, then print the token
+      //
+      if ( curLine < n.beginLine ) {
+         curColumn = 1;
+         for ( ; curLine < n.beginLine; ++curLine )
+            out.println();
+      }
+
+      for ( ; curColumn < n.beginColumn; ++curColumn )
+         out.print(" ");
+
+      printToken(n.tokenImage);
    }
 
    private void printToken(String s) {
