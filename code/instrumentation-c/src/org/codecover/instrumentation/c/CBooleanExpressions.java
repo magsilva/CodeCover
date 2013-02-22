@@ -11,6 +11,8 @@ public class CBooleanExpressions {
     public final static InstrBooleanOperator orOperator;
     public final static InstrBooleanOperator andOperator;
     public final static InstrBooleanOperator notOperator;
+    public final static InstrBooleanOperator trueOperator;
+    public final static InstrBooleanOperator falseOperator;
 
     static {
         HashMap<BooleanAssignment, Boolean> possibleAssignments =
@@ -64,5 +66,28 @@ public class CBooleanExpressions {
 
         notOperator = InstrBooleanOperator.getOneArgumentOperator(
                 "NOT", "!", false, possibleAssignments);
+    }
+
+    static {
+        HashMap<BooleanAssignment, Boolean> possibleAssignments =
+                new HashMap<BooleanAssignment, Boolean>();
+
+        possibleAssignments.put(new BooleanAssignment(),
+                Boolean.TRUE);
+
+
+        trueOperator = InstrBooleanOperator.getConstantOperator(
+                "TRUE", "1", possibleAssignments);
+    }
+
+    static {
+        HashMap<BooleanAssignment, Boolean> possibleAssignments =
+                new HashMap<BooleanAssignment, Boolean>();
+
+        possibleAssignments.put(new BooleanAssignment(),
+                Boolean.FALSE);
+
+        falseOperator = InstrBooleanOperator.getConstantOperator(
+                "FALSE", "0", possibleAssignments);
     }
 }

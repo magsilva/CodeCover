@@ -212,12 +212,27 @@ public class CExpressionParser extends GJNoArguDepthFirst<InstrBooleanTerm> impl
             return InstrBasicBooleanVisitor.convertToInstrBasicBoolean(n);
         } else {
             NodeChoice choice = (NodeChoice) n.nodeChoice.choice;
-            if(choice.which == 1) {
+            if(choice.which == 4) {
                 // Nested Expression
                 NodeSequence seq = (NodeSequence) choice.choice;
                 return seq.elementAt(1).accept(this);
-            } else if () {
-                // TODO convert 0 and numbers > 1 to boolean terms
+            } else if (choice.which == 1) {
+                // Constant
+                Constant c = (Constant) choice.choice;
+                // number
+                if (c.nodeChoice.which == 0) {
+                    NodeToken t = (NodeToken) c.nodeChoice.choice;
+                    if(Integer.parseInt(t.tokenImage) == 0) {
+                        return new InstrOperatorTerm(CBooleanExpressions.falseOperator,
+                                t.beginOffset, t.endOffset);
+                    } else {
+                        return new InstrOperatorTerm(CBooleanExpressions.trueOperator,
+                                t.beginOffset, t.endOffset);
+                    }
+                } else {
+                    return InstrBasicBooleanVisitor.convertToInstrBasicBoolean(n);
+                }
+                // TODO treat identiefers named "true" and "false" as booleans
             } else {
                 return InstrBasicBooleanVisitor.convertToInstrBasicBoolean(n);
             }
