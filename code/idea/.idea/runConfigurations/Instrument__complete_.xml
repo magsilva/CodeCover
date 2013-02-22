@@ -11,6 +11,8 @@
     <option name="PASS_PARENT_ENVS" value="true" />
     <module name="batch" />
     <envs />
+    <RunnerSettings RunnerId="Run" />
+    <ConfigurationWrapper RunnerId="Run" />
     <method />
   </configuration>
 </component>
