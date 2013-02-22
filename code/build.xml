@@ -109,8 +109,14 @@
     <unzip src="instrumentation-c/instrumentation-c.jar" dest="tmp" />
     <delete file="tmp/META-INF/MANIFEST.MF" />
     <copy file="instrumentation-c/src/codecover-plugin.xml" tofile="tmp/codecover-plugin.xml" />
-    <jar destfile="${release-lib}plugins/org.codecover.instrumentation.c-0.1.jar" basedir="tmp" />
+    <jar destfile="${release-lib}plugins/org.codecover.instrumentation.c-0.1.jar" basedir="tmp" >
+      <manifest>
+          <attribute name="Class-Path" value="anarres-cpp.jar"/>
+      </manifest>
+    </jar>
     <delete dir="tmp" />
+
+    <copy file="instrumentation-c/lib/anarres-cpp.jar" todir="${release-lib}plugins" />
 
     <mkdir dir="tmp" />
     <unzip src="ant/ant.jar" dest="tmp" />
