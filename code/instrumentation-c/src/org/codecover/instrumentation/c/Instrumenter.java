@@ -101,7 +101,7 @@ public class Instrumenter extends org.codecover.instrumentation.Instrumenter {
 
     @Override
     protected HierarchyLevelType getPackageHierarchyLevelType(MASTBuilder builder) {
-        return HierachyLevelTypes.getSourceFileType(builder);
+        return HierachyLevelTypes.getProgramType(builder);
     }
 
     @Override

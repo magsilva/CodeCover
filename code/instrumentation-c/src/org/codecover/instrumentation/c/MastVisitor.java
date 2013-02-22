@@ -88,9 +88,9 @@ public class MastVisitor extends DepthFirstVisitor {
         List<StatementSequence> programStatements = createStatementSequenceList();
         HierarchyLevel programHL = builder.createHierarchyLevel(
                 createLocationList(start, end),
-                "PROGRAM",
+                sourceFile.getFileName(),
                 createLocationList(headerStartOffset, headerEndOffset),
-                HierachyLevelTypes.getProgramType(builder),
+                HierachyLevelTypes.getSourceFileType(builder),
                 Collections.<HierarchyLevel>emptyList(),
                 programStatements);
         rootContainer.addHierarchyLevelToRoot(programHL);
