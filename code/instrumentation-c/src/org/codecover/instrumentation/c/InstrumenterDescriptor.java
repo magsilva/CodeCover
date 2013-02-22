@@ -1,6 +1,5 @@
 package org.codecover.instrumentation.c;
 
-import org.codecover.instrumentation.*;
 import org.codecover.instrumentation.Instrumenter;
 import org.codecover.model.utils.criteria.*;
 import org.codecover.model.utils.file.FileTool;
@@ -14,9 +13,6 @@ public class InstrumenterDescriptor extends org.codecover.instrumentation.Instru
     private static final String INSTRUMENTER_UNIQUE_KEY = "CodeCover_C";
 
     private static final String PROGRAMMING_LANGUAGE = "C";
-
-    private static final Pattern NAME_PATTERN = Pattern.compile("C",
-            Pattern.CASE_INSENSITIVE);
 
     private static final String AUTHOR = "Steffen Hanikel";
 
@@ -44,8 +40,8 @@ public class InstrumenterDescriptor extends org.codecover.instrumentation.Instru
 
         super.addSupportedCriteria(StatementCoverage.getInstance());
         super.addSupportedCriteria(BranchCoverage.getInstance());
-        super.addSupportedCriteria(ConditionCoverage.getInstance());
-        super.addSupportedCriteria(LoopCoverage.getInstance());
+        //super.addSupportedCriteria(LoopCoverage.getInstance());
+        //super.addSupportedCriteria(ConditionCoverage.getInstance());
     }
 
     @Override
