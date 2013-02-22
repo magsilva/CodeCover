@@ -47,6 +47,7 @@ public class InstrumenterDescriptor extends org.codecover.instrumentation.Instru
         registerDirective(IncludeDirs.INSTANCE);
         registerDirective(Defines.INSTANCE);
         registerDirective(Types.INSTANCE);
+        registerDirective(Debug.INSTANCE);
     }
 
     @Override
@@ -136,6 +137,29 @@ public class InstrumenterDescriptor extends org.codecover.instrumentation.Instru
         @Override
         public Object getDefaultValue() {
             return new String[0];
+        }
+    }
+
+    public static class Debug extends InstrumenterDirective {
+        public static final String KEY = "Debug";
+
+        private static final String DIRECTIVE_DESCRIPTION =
+                "Set to true to use the debug parser.";
+
+        static final Debug INSTANCE = new Debug();
+
+        public Debug() {
+            super(KEY, DIRECTIVE_DESCRIPTION);
+        }
+
+        @Override
+        public Object parseValue(String value) throws IllegalArgumentException {
+            return value.equalsIgnoreCase("true") || value.equalsIgnoreCase("1");
+        }
+
+        @Override
+        public Object getDefaultValue() {
+            return false;
         }
     }
 }

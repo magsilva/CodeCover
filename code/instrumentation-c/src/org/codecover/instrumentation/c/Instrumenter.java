@@ -5,6 +5,7 @@ import org.codecover.instrumentation.c.adapter.TokenAdapter;
 import org.codecover.instrumentation.c.counter.CounterManager;
 import org.codecover.instrumentation.c.manipulators.*;
 import org.codecover.instrumentation.c.parser.CParser;
+import org.codecover.instrumentation.c.parser.DebugCParser;
 import org.codecover.instrumentation.c.syntaxtree.TranslationUnit;
 import org.codecover.instrumentation.exceptions.InstrumentationException;
 import org.codecover.instrumentation.exceptions.ParseException;
@@ -40,13 +41,24 @@ public class Instrumenter extends org.codecover.instrumentation.Instrumenter {
                                   String testSessionContainerUID,
                                   Map<String, Object> instrumenterDirectives) throws ParseException, IOException {
         try {
+            TranslationUnit translationUnit;
+
             String[] includeDirs = (String[])instrumenterDirectives.get(InstrumenterDescriptor.IncludeDirs.KEY);
             String[] defines = (String[])instrumenterDirectives.get(InstrumenterDescriptor.Defines.KEY);
-            CParser cParser = new CParser(new TokenAdapter(currentSourceFile, Arrays.asList(includeDirs), Arrays.asList(defines)));
-            for(String type : (String[])instrumenterDirectives.get(InstrumenterDescriptor.Types.KEY)) {
-                cParser.addType(type);
+            if ((Boolean)instrumenterDirectives.get(InstrumenterDescriptor.Debug.KEY)) {
+                DebugCParser cParser = new DebugCParser(new TokenAdapter(currentSourceFile, Arrays.asList(includeDirs), Arrays.asList(defines)));
+                for(String type : (String[])instrumenterDirectives.get(InstrumenterDescriptor.Types.KEY)) {
+                    cParser.addType(type);
+                }
+                translationUnit = cParser.TranslationUnit();
+            } else {
+                CParser cParser = new CParser(new TokenAdapter(currentSourceFile, Arrays.asList(includeDirs), Arrays.asList(defines)));
+                for(String type : (String[])instrumenterDirectives.get(InstrumenterDescriptor.Types.KEY)) {
+                    cParser.addType(type);
+                }
+                translationUnit = cParser.TranslationUnit();
             }
-            TranslationUnit translationUnit = cParser.TranslationUnit();
+
             CounterManager cm = new CounterManager(Integer.toString(maxId++), sourceFile.getFileName());
 
             MastVisitor mastVisitor = new MastVisitor(builder, sourceFile, rootContainer, cm);

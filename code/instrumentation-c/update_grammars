@@ -8,14 +8,20 @@ cd tmp_grammar
 java -jar ${JTB} -jd -pp -ns org.codecover.instrumentation.c.adapter.CCNode -p org.codecover.instrumentation.c -f -o ../grammars/C.jtb.jj ../grammars/C.jj
 sed -i 's/t=n2=<IDENTIFIER> { n1 = JTBToolkit\.makeNodeToken(n2); }/t=<IDENTIFIER> { n1 = JTBToolkit\.makeNodeToken(n2); }/g' ../grammars/C.jtb.jj
 ${JAVACC} ../grammars/C.jtb.jj
-sed -i 's/private Set types = new HashSet();/private Set<String> types = new HashSet();/g' CParser.java
-sed -i 's/private Stack typedefParsingStack = new Stack();/private Stack<Boolean> typedefParsingStack = new Stack();/g' CParser.java
-sed -i 's/t = jj_consume_token(IDENTIFIER);/t = n2 = jj_consume_token(IDENTIFIER);/g' CParser.java
+${JAVACC} -output_directory=debug -debug_parser ../grammars/C.jtb.jj
+mv debug/CParser.java DebugCParser.java
+sed -i 's/public class CParser implements CParserConstants/public class DebugCParser implements CParserConstants/g' DebugCParser.java
+sed -i 's/public CParser(TokenManager tm)/public DebugCParser(TokenManager tm)/g' DebugCParser.java
+sed -i 's/class JTBToolkit/class DebugJTBToolkit/g' DebugCParser.java
+sed -i 's/private Set types = new HashSet();/private Set<String> types = new HashSet();/g' CParser.java DebugCParser.java
+sed -i 's/private Stack typedefParsingStack = new Stack();/private Stack<Boolean> typedefParsingStack = new Stack();/g' CParser.java DebugCParser.java
+sed -i 's/t = jj_consume_token(IDENTIFIER);/t = n2 = jj_consume_token(IDENTIFIER);/g' CParser.java DebugCParser.java
 sed -i 's/return new NodeToken(t\.image\.intern(), t\.kind, t\.beginLine, t\.beginColumn, t\.endLine, t\.endColumn);/NodeToken n = new NodeToken(t\.image\.intern(), t\.kind, t\.beginLine, t\.beginColumn, t\.endLine, t\.endColumn);\
         n\.beginOffset = t\.beginOffset;\
         n\.endOffset = t\.endOffset;\
-        return n;/g' CParser.java
+        return n;/g' CParser.java DebugCParser.java
 sed -i 's/public class ParseException extends Exception {/public class ParseException extends org.codecover.instrumentation.exceptions.ParseException {/g' ParseException.java
+rm -r debug/
 rm TokenMgrError.java
 cd ..
 
