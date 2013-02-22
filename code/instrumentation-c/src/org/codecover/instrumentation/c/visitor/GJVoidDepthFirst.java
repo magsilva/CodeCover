@@ -431,11 +431,39 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
 
    /**
     * <PRE>
-    * nodeChoice -> ( &lt;IDENTIFIER&gt; ":" Statement() | &lt;CASE&gt; ConstantExpression() ":" Statement() | &lt;DFLT&gt; ":" Statement() )
+    * nodeChoice -> ( &lt;IDENTIFIER&gt; ":" Statement() | CaseStatement() | DefaultStatement() )
     * </PRE>
     */
    public void visit(LabeledStatement n, A argu) {
       n.nodeChoice.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * nodeToken -> &lt;CASE&gt;
+    * constantExpression -> ConstantExpression()
+    * nodeToken1 -> ":"
+    * statement -> Statement()
+    * </PRE>
+    */
+   public void visit(CaseStatement n, A argu) {
+      n.nodeToken.accept(this, argu);
+      n.constantExpression.accept(this, argu);
+      n.nodeToken1.accept(this, argu);
+      n.statement.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * nodeToken -> &lt;DFLT&gt;
+    * nodeToken1 -> ":"
+    * statement -> Statement()
+    * </PRE>
+    */
+   public void visit(DefaultStatement n, A argu) {
+      n.nodeToken.accept(this, argu);
+      n.nodeToken1.accept(this, argu);
+      n.statement.accept(this, argu);
    }
 
    /**

@@ -255,6 +255,71 @@ public class MastVisitor extends DepthFirstVisitor {
                 );
     }
 
+    private Stack<List<Branch>> branchesStack = new Stack<List<Branch>>();
+    private Stack<Boolean> hasDefaultStack = new Stack<Boolean>();
+
+    @Override
+    public void visit(SwitchStatement n) {
+        n.nodeToken.accept(this);
+        n.nodeToken1.accept(this);
+        n.expression.accept(this);
+        n.nodeToken2.accept(this);
+        hasDefaultStack.push(false);
+        branchesStack.push(new ArrayList<Branch>());
+        n.statement.accept(this);
+
+        List<Branch> branches = branchesStack.pop();
+
+        // Misuse the branchNum field of the SwitchStatement so that we can pass the ID of the implicit default branch.
+        if(!hasDefaultStack.pop()) {
+            n.branchNum = cm.newBranchID();
+            // We need another statement level, so that the branch can pop one
+            pushStatementLevel();
+            branches.add(createBranch(cm.branchID(n.branchNum),-1,-1,-1,-1, true));
+        } else {
+            n.branchNum = -1;
+        }
+
+        createConditionalStatement(
+                cm.stmtID(((Statement) n.getParent().getParent()).stmtNum),
+                n.nodeToken.beginOffset, lastEndOffset,
+                null, branches,
+                n.nodeToken.beginOffset, n.nodeToken.endOffset
+        );
+    }
+
+
+
+    @Override
+    public void visit(CaseStatement n) {
+        n.branchNum = cm.newBranchID();
+
+        n.nodeToken.accept(this);
+        n.constantExpression.accept(this);
+        int decisionEnd = lastEndOffset;
+        n.nodeToken1.accept(this);
+        pushStatementLevel();
+        n.statement.accept(this);
+
+        branchesStack.peek().add(createBranch(cm.branchID(n.branchNum),
+                n.nodeToken.beginOffset, lastEndOffset, n.nodeToken.beginOffset, decisionEnd, false));
+    }
+
+    @Override
+    public void visit(DefaultStatement n) {
+        n.branchNum = cm.newBranchID();
+
+        n.nodeToken.accept(this);
+        n.nodeToken1.accept(this);
+        pushStatementLevel();
+        n.statement.accept(this);
+
+        branchesStack.peek().add(createBranch(cm.branchID(n.branchNum),
+                n.nodeToken.beginOffset, lastEndOffset,
+                n.nodeToken.beginOffset, n.nodeToken.endOffset,
+                false));
+    }
+
     @Override
     public void visit(WhileStatement n) {
         n.nodeToken.accept(this);

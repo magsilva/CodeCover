@@ -71,7 +71,7 @@ public class InstrumentationVisitor extends SimpleTreeDumper {
         out.println("} else {");
         branchManipulator.visitElse(out, n);
         if ( n.nodeOptional.present() ) {
-            // skip the else and visit the else body directly
+            // skip the "else" and visit the else body directly
             ((NodeSequence)n.nodeOptional.node).elementAt(1).accept(this);
         }
         out.println("}");
@@ -79,17 +79,36 @@ public class InstrumentationVisitor extends SimpleTreeDumper {
 
     @Override
     public void visit(SwitchStatement n) {
-        boolean braces = !(n.statement.nodeChoice.choice instanceof CompoundStatement);
-
         n.nodeToken.accept(this);
         n.nodeToken1.accept(this);
         n.expression.accept(this);
         n.nodeToken2.accept(this);
-        if(braces)
-            out.println("{");
+        out.println("{");
+        // Put the default to the beginning so that it doesn't get executed by mistake
+        if(n.branchNum != -1) {
+            out.print("default:");
+            branchManipulator.visit(out, n);
+        }
         n.statement.accept(this);
-        if(braces)
-            out.println("}");
+        // We need an implicit default branch
+        out.println("}");
+    }
+
+    @Override
+    public void visit(CaseStatement n) {
+        n.nodeToken.accept(this);
+        n.constantExpression.accept(this);
+        n.nodeToken1.accept(this);
+        branchManipulator.visit(out, n);
+        n.statement.accept(this);
+    }
+
+    @Override
+    public void visit(DefaultStatement n) {
+        n.nodeToken.accept(this);
+        n.nodeToken1.accept(this);
+        branchManipulator.visit(out, n);
+        n.statement.accept(this);
     }
 
     @Override

@@ -421,11 +421,39 @@ public class DepthFirstVisitor implements Visitor {
 
    /**
     * <PRE>
-    * nodeChoice -> ( &lt;IDENTIFIER&gt; ":" Statement() | &lt;CASE&gt; ConstantExpression() ":" Statement() | &lt;DFLT&gt; ":" Statement() )
+    * nodeChoice -> ( &lt;IDENTIFIER&gt; ":" Statement() | CaseStatement() | DefaultStatement() )
     * </PRE>
     */
    public void visit(LabeledStatement n) {
       n.nodeChoice.accept(this);
+   }
+
+   /**
+    * <PRE>
+    * nodeToken -> &lt;CASE&gt;
+    * constantExpression -> ConstantExpression()
+    * nodeToken1 -> ":"
+    * statement -> Statement()
+    * </PRE>
+    */
+   public void visit(CaseStatement n) {
+      n.nodeToken.accept(this);
+      n.constantExpression.accept(this);
+      n.nodeToken1.accept(this);
+      n.statement.accept(this);
+   }
+
+   /**
+    * <PRE>
+    * nodeToken -> &lt;DFLT&gt;
+    * nodeToken1 -> ":"
+    * statement -> Statement()
+    * </PRE>
+    */
+   public void visit(DefaultStatement n) {
+      n.nodeToken.accept(this);
+      n.nodeToken1.accept(this);
+      n.statement.accept(this);
    }
 
    /**

@@ -309,10 +309,29 @@ public interface Visitor {
 
    /**
     * <PRE>
-    * nodeChoice -> ( &lt;IDENTIFIER&gt; ":" Statement() | &lt;CASE&gt; ConstantExpression() ":" Statement() | &lt;DFLT&gt; ":" Statement() )
+    * nodeChoice -> ( &lt;IDENTIFIER&gt; ":" Statement() | CaseStatement() | DefaultStatement() )
     * </PRE>
     */
    public void visit(LabeledStatement n);
+
+   /**
+    * <PRE>
+    * nodeToken -> &lt;CASE&gt;
+    * constantExpression -> ConstantExpression()
+    * nodeToken1 -> ":"
+    * statement -> Statement()
+    * </PRE>
+    */
+   public void visit(CaseStatement n);
+
+   /**
+    * <PRE>
+    * nodeToken -> &lt;DFLT&gt;
+    * nodeToken1 -> ":"
+    * statement -> Statement()
+    * </PRE>
+    */
+   public void visit(DefaultStatement n);
 
    /**
     * <PRE>

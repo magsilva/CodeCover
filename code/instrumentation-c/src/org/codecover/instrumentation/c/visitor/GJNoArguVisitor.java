@@ -309,10 +309,29 @@ public interface GJNoArguVisitor<R> {
 
    /**
     * <PRE>
-    * nodeChoice -> ( &lt;IDENTIFIER&gt; ":" Statement() | &lt;CASE&gt; ConstantExpression() ":" Statement() | &lt;DFLT&gt; ":" Statement() )
+    * nodeChoice -> ( &lt;IDENTIFIER&gt; ":" Statement() | CaseStatement() | DefaultStatement() )
     * </PRE>
     */
    public R visit(LabeledStatement n);
+
+   /**
+    * <PRE>
+    * nodeToken -> &lt;CASE&gt;
+    * constantExpression -> ConstantExpression()
+    * nodeToken1 -> ":"
+    * statement -> Statement()
+    * </PRE>
+    */
+   public R visit(CaseStatement n);
+
+   /**
+    * <PRE>
+    * nodeToken -> &lt;DFLT&gt;
+    * nodeToken1 -> ":"
+    * statement -> Statement()
+    * </PRE>
+    */
+   public R visit(DefaultStatement n);
 
    /**
     * <PRE>

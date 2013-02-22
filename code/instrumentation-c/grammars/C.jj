@@ -401,8 +401,18 @@ void Statement() : {}
 void LabeledStatement() : {}
 {
 	( <IDENTIFIER> ":" Statement() |
-	  <CASE> ConstantExpression() ":" Statement() |
-	  <DFLT> ":" Statement() )
+	  CaseStatement() |
+	  DefaultStatement() )
+}
+
+void CaseStatement() : {}
+{
+    <CASE> ConstantExpression() ":" Statement()
+}
+
+void DefaultStatement() : {}
+{
+    <DFLT> ":" Statement()
 }
 
 void ExpressionStatement() : {}

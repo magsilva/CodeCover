@@ -1415,19 +1415,8 @@ LabeledStatement LabeledStatement() :
    NodeToken n4;
    Token n5;
    Statement n6;
-   NodeSequence n7;
-   NodeToken n8;
-   Token n9;
-   ConstantExpression n10;
-   NodeToken n11;
-   Token n12;
-   Statement n13;
-   NodeSequence n14;
-   NodeToken n15;
-   Token n16;
-   NodeToken n17;
-   Token n18;
-   Statement n19;
+   CaseStatement n7;
+   DefaultStatement n8;
 
    
 }
@@ -1443,30 +1432,54 @@ LabeledStatement LabeledStatement() :
          { n1.addNode(n6); }
          { n0 = new NodeChoice(n1, 0); }
       |
-         { n7 = new NodeSequence(4); }
-         n9=<CASE> { n8 = JTBToolkit.makeNodeToken(n9); }
-         { n7.addNode(n8); }
-         n10=ConstantExpression()
-         { n7.addNode(n10); }
-         n12=":" { n11 = JTBToolkit.makeNodeToken(n12); }
-         { n7.addNode(n11); }
-         n13=Statement()
-         { n7.addNode(n13); }
+         n7=CaseStatement()
          { n0 = new NodeChoice(n7, 1); }
       |
-         { n14 = new NodeSequence(3); }
-         n16=<DFLT> { n15 = JTBToolkit.makeNodeToken(n16); }
-         { n14.addNode(n15); }
-         n18=":" { n17 = JTBToolkit.makeNodeToken(n18); }
-         { n14.addNode(n17); }
-         n19=Statement()
-         { n14.addNode(n19); }
-         { n0 = new NodeChoice(n14, 2); }
+         n8=DefaultStatement()
+         { n0 = new NodeChoice(n8, 2); }
       )
       
    )
    
    { return new LabeledStatement(n0); }
+}
+
+CaseStatement CaseStatement() :
+{
+   NodeToken n0;
+   Token n1;
+   ConstantExpression n2;
+   NodeToken n3;
+   Token n4;
+   Statement n5;
+
+   
+}
+{
+   n1=<CASE> { n0 = JTBToolkit.makeNodeToken(n1); }
+   n2=ConstantExpression()
+   n4=":" { n3 = JTBToolkit.makeNodeToken(n4); }
+   n5=Statement()
+   
+   { return new CaseStatement(n0,n2,n3,n5); }
+}
+
+DefaultStatement DefaultStatement() :
+{
+   NodeToken n0;
+   Token n1;
+   NodeToken n2;
+   Token n3;
+   Statement n4;
+
+   
+}
+{
+   n1=<DFLT> { n0 = JTBToolkit.makeNodeToken(n1); }
+   n3=":" { n2 = JTBToolkit.makeNodeToken(n3); }
+   n4=Statement()
+   
+   { return new DefaultStatement(n0,n2,n4); }
 }
 
 ExpressionStatement ExpressionStatement() :

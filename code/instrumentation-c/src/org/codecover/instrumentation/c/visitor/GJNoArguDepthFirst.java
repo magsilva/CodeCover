@@ -513,12 +513,44 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
 
    /**
     * <PRE>
-    * nodeChoice -> ( &lt;IDENTIFIER&gt; ":" Statement() | &lt;CASE&gt; ConstantExpression() ":" Statement() | &lt;DFLT&gt; ":" Statement() )
+    * nodeChoice -> ( &lt;IDENTIFIER&gt; ":" Statement() | CaseStatement() | DefaultStatement() )
     * </PRE>
     */
    public R visit(LabeledStatement n) {
       R _ret=null;
       n.nodeChoice.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * nodeToken -> &lt;CASE&gt;
+    * constantExpression -> ConstantExpression()
+    * nodeToken1 -> ":"
+    * statement -> Statement()
+    * </PRE>
+    */
+   public R visit(CaseStatement n) {
+      R _ret=null;
+      n.nodeToken.accept(this);
+      n.constantExpression.accept(this);
+      n.nodeToken1.accept(this);
+      n.statement.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * nodeToken -> &lt;DFLT&gt;
+    * nodeToken1 -> ":"
+    * statement -> Statement()
+    * </PRE>
+    */
+   public R visit(DefaultStatement n) {
+      R _ret=null;
+      n.nodeToken.accept(this);
+      n.nodeToken1.accept(this);
+      n.statement.accept(this);
       return _ret;
    }
 
