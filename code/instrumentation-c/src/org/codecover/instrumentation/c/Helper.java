@@ -68,13 +68,14 @@ public class Helper {
 
         out.println("struct CodeCover_Condition {int num; struct CodeCover_ConditionCounterMap head;};");
 
+        // VC doesn't like empty arrays so add one in that case
         for(CounterManager cm : counterManagers) {
-            out.format("int %s[%d];\n", cm.stmtVarName(), cm.getStmtCnt());
-            out.format("int %s[%d];\n", cm.branchVarName(), cm.getBranchCnt());
-            out.format("int %s[%d];\n", cm.loopVarName(), cm.getloopCnt());
-            out.format("int %s[%d];\n", cm.loopTmpName(), cm.getloopTmpCnt());
-            out.format("%s %s[%d];\n", getCondTypeName(), cm.condVarName(), cm.getCondCnt());
-            out.format("int %s[%d];\n", cm.qmoVarName(), cm.getQmoCnt()*2);
+            out.format("int %s[%d];\n", cm.stmtVarName(), cm.getStmtCnt() == 0 ? 1 :cm.getStmtCnt());
+            out.format("int %s[%d];\n", cm.branchVarName(), cm.getBranchCnt() == 0 ? 1 :cm.getBranchCnt());
+            out.format("int %s[%d];\n", cm.loopVarName(), cm.getloopCnt() == 0 ? 1 :cm.getloopCnt());
+            out.format("int %s[%d];\n", cm.loopTmpName(), cm.getloopTmpCnt() == 0 ? 1 :cm.getloopTmpCnt());
+            out.format("%s %s[%d];\n", getCondTypeName(), cm.condVarName(), cm.getCondCnt() == 0 ? 1 :cm.getCondCnt());
+            out.format("int %s[%d];\n", cm.qmoVarName(), cm.getQmoCnt() == 0 ? 1 : cm.getQmoCnt()*2);
         }
 
         /*out.println("void CodeCover_reset() {");
