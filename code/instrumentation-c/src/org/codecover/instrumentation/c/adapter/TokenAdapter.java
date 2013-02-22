@@ -22,10 +22,11 @@ public class TokenAdapter extends PreprocessorListener implements TokenManager {
             if(i == -1) {
                 pp.addMacro(d);
             } else {
-                pp.addMacro(d.substring(0,i-1), d.substring(i));
+                pp.addMacro(d.substring(0,i), d.substring(i+1));
             }
-
         }
+
+        pp.addMacro("__STDC__");
 
         pp.setListener(this);
         //pp.addFeature(Feature.VERBOSE);
@@ -34,8 +35,8 @@ public class TokenAdapter extends PreprocessorListener implements TokenManager {
 
     @Override
     public void handleSourceChange(Source source, String event) {
-        //if(source != null)
-        //    System.err.println(source.toString() + ": " +  event);
+        if(source != null)
+            System.err.println(source.toString() + ": " +  event);
     }
 
     @Override
