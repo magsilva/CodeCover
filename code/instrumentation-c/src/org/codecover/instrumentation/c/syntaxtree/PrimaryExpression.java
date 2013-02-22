@@ -7,7 +7,10 @@ package org.codecover.instrumentation.c.syntaxtree;
 /**
  * Grammar production:
  * <PRE>
- * nodeChoice -> ( &lt;IDENTIFIER&gt; | Constant() | StringLiteral() | "(" Expression() ")" )
+ * nodeChoice -> &lt;IDENTIFIER&gt;
+ *       | Constant()
+ *       | StringLiteral()
+ *       | "(" Expression() ")"
  *       | GenericSelection()
  * </PRE>
  */

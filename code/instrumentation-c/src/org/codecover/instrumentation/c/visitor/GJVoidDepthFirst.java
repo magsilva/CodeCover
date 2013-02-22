@@ -82,7 +82,10 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
 
    /**
     * <PRE>
-    * nodeChoice -> ( &lt;IDENTIFIER&gt; | Constant() | StringLiteral() | "(" Expression() ")" )
+    * nodeChoice -> &lt;IDENTIFIER&gt;
+    *       | Constant()
+    *       | StringLiteral()
+    *       | "(" Expression() ")"
     *       | GenericSelection()
     * </PRE>
     */

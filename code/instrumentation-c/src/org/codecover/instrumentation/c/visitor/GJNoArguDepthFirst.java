@@ -98,7 +98,10 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
 
    /**
     * <PRE>
-    * nodeChoice -> ( &lt;IDENTIFIER&gt; | Constant() | StringLiteral() | "(" Expression() ")" )
+    * nodeChoice -> &lt;IDENTIFIER&gt;
+    *       | Constant()
+    *       | StringLiteral()
+    *       | "(" Expression() ")"
     *       | GenericSelection()
     * </PRE>
     */

@@ -203,49 +203,42 @@ StringLiteral StringLiteral() :
 PrimaryExpression PrimaryExpression() :
 {
    NodeChoice n0;
-   NodeChoice n1;
-   NodeToken n2;
-   Token n3;
-   Constant n4;
-   StringLiteral n5;
-   NodeSequence n6;
-   NodeToken n7;
-   Token n8;
-   Expression n9;
-   NodeToken n10;
-   Token n11;
-   GenericSelection n12;
+   NodeToken n1;
+   Token n2;
+   Constant n3;
+   StringLiteral n4;
+   NodeSequence n5;
+   NodeToken n6;
+   Token n7;
+   Expression n8;
+   NodeToken n9;
+   Token n10;
+   GenericSelection n11;
 
    
 }
 {
    (
-      (
-         (
-            n3=<IDENTIFIER> { n2 = JTBToolkit.makeNodeToken(n3); }
-            { n1 = new NodeChoice(n2, 0); }
-         |
-            n4=Constant()
-            { n1 = new NodeChoice(n4, 1); }
-         |
-            n5=StringLiteral()
-            { n1 = new NodeChoice(n5, 2); }
-         |
-            { n6 = new NodeSequence(3); }
-            n8="(" { n7 = JTBToolkit.makeNodeToken(n8); }
-            { n6.addNode(n7); }
-            n9=Expression()
-            { n6.addNode(n9); }
-            n11=")" { n10 = JTBToolkit.makeNodeToken(n11); }
-            { n6.addNode(n10); }
-            { n1 = new NodeChoice(n6, 3); }
-         )
-         
-      )
+      n2=<IDENTIFIER> { n1 = JTBToolkit.makeNodeToken(n2); }
       { n0 = new NodeChoice(n1, 0); }
    |
-      n12=GenericSelection()
-      { n0 = new NodeChoice(n12, 1); }
+      n3=Constant()
+      { n0 = new NodeChoice(n3, 1); }
+   |
+      n4=StringLiteral()
+      { n0 = new NodeChoice(n4, 2); }
+   |
+      { n5 = new NodeSequence(3); }
+      n7="(" { n6 = JTBToolkit.makeNodeToken(n7); }
+      { n5.addNode(n6); }
+      n8=Expression()
+      { n5.addNode(n8); }
+      n10=")" { n9 = JTBToolkit.makeNodeToken(n10); }
+      { n5.addNode(n9); }
+      { n0 = new NodeChoice(n5, 3); }
+   |
+      n11=GenericSelection()
+      { n0 = new NodeChoice(n11, 4); }
    )
    
    { return new PrimaryExpression(n0); }
@@ -1062,7 +1055,6 @@ AssignmentExpression AssignmentExpression() :
       { n1.addNode(n4); }
       { n0 = new NodeChoice(n1, 0); }
    |
-      LOOKAHEAD(3)
       n5=ConditionalExpression()
       { n0 = new NodeChoice(n5, 1); }
    )

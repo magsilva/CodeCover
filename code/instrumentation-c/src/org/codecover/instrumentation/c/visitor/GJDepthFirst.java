@@ -98,7 +98,10 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
 
    /**
     * <PRE>
-    * nodeChoice -> ( &lt;IDENTIFIER&gt; | Constant() | StringLiteral() | "(" Expression() ")" )
+    * nodeChoice -> &lt;IDENTIFIER&gt;
+    *       | Constant()
+    *       | StringLiteral()
+    *       | "(" Expression() ")"
     *       | GenericSelection()
     * </PRE>
     */

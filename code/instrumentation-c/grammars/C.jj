@@ -198,7 +198,7 @@ void PrimaryExpression() : {}
     <IDENTIFIER> | // That's OK
 	Constant() |
 	StringLiteral() |
-	"(" Expression() ")" ) |
+	"(" Expression() ")" |
 	GenericSelection()
 }
 
