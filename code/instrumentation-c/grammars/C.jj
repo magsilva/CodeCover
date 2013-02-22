@@ -33,6 +33,7 @@
 
   */
 options {
+    CACHE_TOKENS=true;
     STATIC=false;
     USER_TOKEN_MANAGER=true;
     TOKEN_EXTENDS="org.codecover.instrumentation.c.adapter.CCToken";

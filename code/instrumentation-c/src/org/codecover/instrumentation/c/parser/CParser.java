@@ -24,7 +24,7 @@ public class CParser implements CParserConstants {
    Token n2;
    NodeToken n3;
    Token n4;
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    switch (jj_nt.kind) {
     case NUMBER:
       n2 = jj_consume_token(NUMBER);
                     n1 = JTBToolkit.makeNodeToken(n2);
@@ -62,7 +62,7 @@ public class CParser implements CParserConstants {
       n2 = jj_consume_token(STRING_LITERAL);
                             n1 = JTBToolkit.makeNodeToken(n2);
         n0.addNode(n1);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case STRING_LITERAL:
         ;
         break;
@@ -89,7 +89,7 @@ public class CParser implements CParserConstants {
    NodeToken n9;
    Token n10;
    GenericSelection n11;
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    switch (jj_nt.kind) {
     case IDENTIFIER:
       n2 = jj_consume_token(IDENTIFIER);
                         n1 = JTBToolkit.makeNodeToken(n2);
@@ -164,7 +164,7 @@ public class CParser implements CParserConstants {
     n0 = GenericAssociation();
     label_2:
     while (true) {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case COMMA:
         ;
         break;
@@ -193,7 +193,7 @@ public class CParser implements CParserConstants {
    NodeToken n4;
    Token n5;
    AssignmentExpression n6;
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    switch (jj_nt.kind) {
     case DFAULT:
       n2 = jj_consume_token(DFAULT);
                        n1 = JTBToolkit.makeNodeToken(n2);
@@ -278,7 +278,7 @@ public class CParser implements CParserConstants {
         n1.addNode(n7);
       n9 = InitializerList();
         n1.addNode(n9);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case COMMA:
         n12 = jj_consume_token(COMMA);
                    n11 = JTBToolkit.makeNodeToken(n12);
@@ -294,7 +294,7 @@ public class CParser implements CParserConstants {
         n1.addNode(n13);
         n0 = new NodeChoice(n1, 0);
     } else {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case NUMBER:
       case CHARACTER_LITERAL:
       case STRING_LITERAL:
@@ -306,7 +306,7 @@ public class CParser implements CParserConstants {
         n15.addNode(n16);
         label_3:
         while (true) {
-          switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+          switch (jj_nt.kind) {
           case INC:
           case DEC:
           case RBL:
@@ -320,7 +320,7 @@ public class CParser implements CParserConstants {
             break label_3;
           }
            n28 = new NodeOptional();
-          switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+          switch (jj_nt.kind) {
           case SBL:
               n19 = new NodeSequence(3);
             n21 = jj_consume_token(SBL);
@@ -411,7 +411,7 @@ public class CParser implements CParserConstants {
     n0 = AssignmentExpression();
     label_4:
     while (true) {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case COMMA:
         ;
         break;
@@ -469,7 +469,7 @@ public class CParser implements CParserConstants {
       n1 = PostfixExpression();
         n0 = new NodeChoice(n1, 0);
     } else {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case INC:
         n2 = new NodeSequence(2);
         n4 = jj_consume_token(INC);
@@ -518,7 +518,7 @@ public class CParser implements CParserConstants {
               n17.addNode(n21);
               n16 = new NodeChoice(n17, 0);
         } else {
-          switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+          switch (jj_nt.kind) {
           case NUMBER:
           case CHARACTER_LITERAL:
           case STRING_LITERAL:
@@ -586,7 +586,7 @@ public class CParser implements CParserConstants {
    Token n10;
    NodeToken n11;
    Token n12;
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    switch (jj_nt.kind) {
     case AMP:
       n2 = jj_consume_token(AMP);
                   n1 = JTBToolkit.makeNodeToken(n2);
@@ -650,7 +650,7 @@ public class CParser implements CParserConstants {
            n1.addNode(n7);
            n0 = new NodeChoice(n1, 0);
     } else {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case NUMBER:
       case CHARACTER_LITERAL:
       case STRING_LITERAL:
@@ -693,12 +693,12 @@ public class CParser implements CParserConstants {
    Token n9;
    MultiplicativeExpression n10;
     n0 = CastExpression();
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    switch (jj_nt.kind) {
     case STAR:
     case SLASH:
     case MOD:
         n2 = new NodeSequence(2);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case STAR:
         n5 = jj_consume_token(STAR);
                      n4 = JTBToolkit.makeNodeToken(n5);
@@ -743,11 +743,11 @@ public class CParser implements CParserConstants {
    Token n7;
    AdditiveExpression n8;
     n0 = MultiplicativeExpression();
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    switch (jj_nt.kind) {
     case PLUS:
     case MINUS:
         n2 = new NodeSequence(2);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case PLUS:
         n5 = jj_consume_token(PLUS);
                      n4 = JTBToolkit.makeNodeToken(n5);
@@ -787,11 +787,11 @@ public class CParser implements CParserConstants {
    Token n7;
    ShiftExpression n8;
     n0 = AdditiveExpression();
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    switch (jj_nt.kind) {
     case LSH:
     case RSH:
         n2 = new NodeSequence(2);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case LSH:
         n5 = jj_consume_token(LSH);
                             n4 = JTBToolkit.makeNodeToken(n5);
@@ -835,13 +835,13 @@ public class CParser implements CParserConstants {
    Token n11;
    RelationalExpression n12;
     n0 = ShiftExpression();
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    switch (jj_nt.kind) {
     case LESS:
     case GREATER:
     case LE:
     case GE:
         n2 = new NodeSequence(2);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case LESS:
         n5 = jj_consume_token(LESS);
                      n4 = JTBToolkit.makeNodeToken(n5);
@@ -891,11 +891,11 @@ public class CParser implements CParserConstants {
    Token n7;
    EqualityExpression n8;
     n0 = RelationalExpression();
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    switch (jj_nt.kind) {
     case EQ:
     case NE:
         n2 = new NodeSequence(2);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case EQ:
         n5 = jj_consume_token(EQ);
                            n4 = JTBToolkit.makeNodeToken(n5);
@@ -932,7 +932,7 @@ public class CParser implements CParserConstants {
    Token n4;
    ANDExpression n5;
     n0 = EqualityExpression();
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    switch (jj_nt.kind) {
     case AMP:
         n2 = new NodeSequence(2);
       n4 = jj_consume_token(AMP);
@@ -958,7 +958,7 @@ public class CParser implements CParserConstants {
    Token n4;
    ExclusiveORExpression n5;
     n0 = ANDExpression();
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    switch (jj_nt.kind) {
     case CARE:
         n2 = new NodeSequence(2);
       n4 = jj_consume_token(CARE);
@@ -984,7 +984,7 @@ public class CParser implements CParserConstants {
    Token n4;
    InclusiveORExpression n5;
     n0 = ExclusiveORExpression();
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    switch (jj_nt.kind) {
     case PIPE:
         n2 = new NodeSequence(2);
       n4 = jj_consume_token(PIPE);
@@ -1010,7 +1010,7 @@ public class CParser implements CParserConstants {
    Token n4;
    LogicalANDExpression n5;
     n0 = InclusiveORExpression();
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    switch (jj_nt.kind) {
     case LAND:
         n2 = new NodeSequence(2);
       n4 = jj_consume_token(LAND);
@@ -1036,7 +1036,7 @@ public class CParser implements CParserConstants {
    Token n4;
    LogicalORExpression n5;
     n0 = LogicalANDExpression();
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    switch (jj_nt.kind) {
     case LOR:
         n2 = new NodeSequence(2);
       n4 = jj_consume_token(LOR);
@@ -1059,7 +1059,7 @@ public class CParser implements CParserConstants {
    NodeOptional n1 = new NodeOptional();
    ConditionalExpressionRightSide n2;
     n0 = LogicalORExpression();
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    switch (jj_nt.kind) {
     case QEM:
       n2 = ConditionalExpressionRightSide();
         n1.addNode(n2);
@@ -1106,7 +1106,7 @@ public class CParser implements CParserConstants {
         n1.addNode(n4);
         n0 = new NodeChoice(n1, 0);
     } else {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case NUMBER:
       case CHARACTER_LITERAL:
       case STRING_LITERAL:
@@ -1160,7 +1160,7 @@ public class CParser implements CParserConstants {
    Token n20;
    NodeToken n21;
    Token n22;
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    switch (jj_nt.kind) {
     case ASSIGNMENT:
       n2 = jj_consume_token(ASSIGNMENT);
                n1 = JTBToolkit.makeNodeToken(n2);
@@ -1235,7 +1235,7 @@ public class CParser implements CParserConstants {
     n0 = AssignmentExpression();
     label_5:
     while (true) {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case COMMA:
         ;
         break;
@@ -1276,7 +1276,7 @@ public class CParser implements CParserConstants {
            n1 = new NodeSequence(3);
       n2 = DeclarationSpecifiers();
            n1.addNode(n2);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case IDENTIFIER:
       case RBL:
       case STAR:
@@ -1293,7 +1293,7 @@ public class CParser implements CParserConstants {
            n1.addNode(n5);
            n0 = new NodeChoice(n1, 0);
     } else {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case STATICASSERT:
         n7 = Static_AssertDeclaration();
            n0 = new NodeChoice(n7, 1);
@@ -1330,7 +1330,7 @@ public class CParser implements CParserConstants {
    AlignmentSpecifier n18;
    NodeOptional n19 = new NodeOptional();
    DeclarationSpecifiers n20;
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    switch (jj_nt.kind) {
     case AUTO:
     case EXTERN:
     case REGISTER:
@@ -1364,7 +1364,7 @@ public class CParser implements CParserConstants {
         n5.addNode(n7);
         n0 = new NodeChoice(n5, 1);
       } else {
-        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        switch (jj_nt.kind) {
         case CONST:
         case RESTRICT:
         case VOLATILE:
@@ -1429,7 +1429,7 @@ public class CParser implements CParserConstants {
     n0 = InitDeclarator();
     label_6:
     while (true) {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case COMMA:
         ;
         break;
@@ -1462,7 +1462,7 @@ public class CParser implements CParserConstants {
    Token n4;
    Initializer n5;
     n0 = Declarator();
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    switch (jj_nt.kind) {
     case ASSIGNMENT:
         n2 = new NodeSequence(2);
       n4 = jj_consume_token(ASSIGNMENT);
@@ -1494,7 +1494,7 @@ public class CParser implements CParserConstants {
    Token n10;
    NodeToken n11;
    Token n12;
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    switch (jj_nt.kind) {
     case EXTERN:
       n2 = jj_consume_token(EXTERN);
                        n1 = JTBToolkit.makeNodeToken(n2);
@@ -1563,7 +1563,7 @@ public class CParser implements CParserConstants {
    StructOrUnionSpecifier n24;
    EnumSpecifier n25;
    TypedefName n26;
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    switch (jj_nt.kind) {
     case VOID:
       n2 = jj_consume_token(VOID);
                      n1 = JTBToolkit.makeNodeToken(n2);
@@ -1664,7 +1664,7 @@ public class CParser implements CParserConstants {
     n0 = StructOrUnion();
     if (jj_2_15(2)) {
            n2 = new NodeSequence(5);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case IDENTIFIER:
         n5 = jj_consume_token(IDENTIFIER);
                               n4 = JTBToolkit.makeNodeToken(n5);
@@ -1685,7 +1685,7 @@ public class CParser implements CParserConstants {
            n2.addNode(n9);
            n1 = new NodeChoice(n2, 0);
     } else {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case IDENTIFIER:
         n12 = jj_consume_token(IDENTIFIER);
                             n11 = JTBToolkit.makeNodeToken(n12);
@@ -1708,7 +1708,7 @@ public class CParser implements CParserConstants {
    Token n2;
    NodeToken n3;
    Token n4;
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    switch (jj_nt.kind) {
     case STRUCT:
       n2 = jj_consume_token(STRUCT);
                        n1 = JTBToolkit.makeNodeToken(n2);
@@ -1759,7 +1759,7 @@ public class CParser implements CParserConstants {
            n1 = new NodeSequence(3);
       n2 = SpecifierQualifierList();
            n1.addNode(n2);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case IDENTIFIER:
       case RBL:
       case STAR:
@@ -1777,7 +1777,7 @@ public class CParser implements CParserConstants {
            n1.addNode(n5);
            n0 = new NodeChoice(n1, 0);
     } else {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case STATICASSERT:
         n7 = Static_AssertDeclaration();
            n0 = new NodeChoice(n7, 1);
@@ -1815,7 +1815,7 @@ public class CParser implements CParserConstants {
         n1.addNode(n3);
         n0 = new NodeChoice(n1, 0);
     } else {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case CONST:
       case RESTRICT:
       case VOLATILE:
@@ -1852,7 +1852,7 @@ public class CParser implements CParserConstants {
     n0 = StructDeclarator();
     label_8:
     while (true) {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case COMMA:
         ;
         break;
@@ -1886,14 +1886,14 @@ public class CParser implements CParserConstants {
    NodeToken n9;
    Token n10;
    ConstantExpression n11;
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    switch (jj_nt.kind) {
     case IDENTIFIER:
     case RBL:
     case STAR:
         n1 = new NodeSequence(2);
       n2 = Declarator();
         n1.addNode(n2);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case COLON:
            n4 = new NodeSequence(2);
         n6 = jj_consume_token(COLON);
@@ -1950,7 +1950,7 @@ public class CParser implements CParserConstants {
                n0 = JTBToolkit.makeNodeToken(n1);
     if (jj_2_21(3)) {
            n3 = new NodeSequence(6);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case IDENTIFIER:
         n6 = jj_consume_token(IDENTIFIER);
                               n5 = JTBToolkit.makeNodeToken(n6);
@@ -1966,7 +1966,7 @@ public class CParser implements CParserConstants {
            n3.addNode(n7);
       n9 = EnumeratorList();
            n3.addNode(n9);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case COMMA:
         n12 = jj_consume_token(COMMA);
                       n11 = JTBToolkit.makeNodeToken(n12);
@@ -1982,7 +1982,7 @@ public class CParser implements CParserConstants {
            n3.addNode(n13);
            n2 = new NodeChoice(n3, 0);
     } else {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case IDENTIFIER:
         n16 = jj_consume_token(IDENTIFIER);
                             n15 = JTBToolkit.makeNodeToken(n16);
@@ -2034,7 +2034,7 @@ public class CParser implements CParserConstants {
    Token n4;
    ConstantExpression n5;
     n0 = EnumerationConstant();
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    switch (jj_nt.kind) {
     case ASSIGNMENT:
         n2 = new NodeSequence(2);
       n4 = jj_consume_token(ASSIGNMENT);
@@ -2087,7 +2087,7 @@ public class CParser implements CParserConstants {
    Token n6;
    NodeToken n7;
    Token n8;
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    switch (jj_nt.kind) {
     case CONST:
       n2 = jj_consume_token(CONST);
                       n1 = JTBToolkit.makeNodeToken(n2);
@@ -2123,7 +2123,7 @@ public class CParser implements CParserConstants {
    Token n2;
    NodeToken n3;
    Token n4;
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    switch (jj_nt.kind) {
     case INLINE:
       n2 = jj_consume_token(INLINE);
                        n1 = JTBToolkit.makeNodeToken(n2);
@@ -2161,7 +2161,7 @@ public class CParser implements CParserConstants {
       n5 = TypedefName();
            n4 = new NodeChoice(n5, 0);
     } else {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case NUMBER:
       case CHARACTER_LITERAL:
       case STRING_LITERAL:
@@ -2197,7 +2197,7 @@ public class CParser implements CParserConstants {
    NodeOptional n0 = new NodeOptional();
    Pointer n1;
    DirectDeclarator n2;
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    switch (jj_nt.kind) {
     case STAR:
       n1 = Pointer();
         n0.addNode(n1);
@@ -2264,7 +2264,7 @@ public class CParser implements CParserConstants {
    Token n49;
 
    Token t;
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    switch (jj_nt.kind) {
     case IDENTIFIER:
       t = n2 = jj_consume_token(IDENTIFIER);
                           n1 = JTBToolkit.makeNodeToken(n2);
@@ -2294,7 +2294,7 @@ public class CParser implements CParserConstants {
       typedefParsingStack.push(false);
     label_10:
     while (true) {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case RBL:
       case SBL:
         ;
@@ -2307,19 +2307,19 @@ public class CParser implements CParserConstants {
         n27 = new NodeOptional();
         n33 = new NodeOptional();
         n46 = new NodeOptional();
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case SBL:
            n11 = new NodeSequence(3);
         n13 = jj_consume_token(SBL);
                    n12 = JTBToolkit.makeNodeToken(n13);
            n11.addNode(n12);
-        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        switch (jj_nt.kind) {
         case STATIC:
                  n15 = new NodeSequence(3);
           n17 = jj_consume_token(STATIC);
                               n16 = JTBToolkit.makeNodeToken(n17);
                  n15.addNode(n16);
-          switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+          switch (jj_nt.kind) {
           case CONST:
           case RESTRICT:
           case VOLATILE:
@@ -2350,7 +2350,7 @@ public class CParser implements CParserConstants {
                  n14 = new NodeChoice(n21, 1);
           } else if (jj_2_24(2)) {
                  n26 = new NodeSequence(4);
-            switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+            switch (jj_nt.kind) {
             case CONST:
             case RESTRICT:
             case VOLATILE:
@@ -2371,7 +2371,7 @@ public class CParser implements CParserConstants {
                  n26.addNode(n31);
                  n14 = new NodeChoice(n26, 2);
           } else {
-            switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+            switch (jj_nt.kind) {
             case NUMBER:
             case CHARACTER_LITERAL:
             case STRING_LITERAL:
@@ -2418,13 +2418,13 @@ public class CParser implements CParserConstants {
            n37.addNode(n41);
            n10 = new NodeChoice(n37, 1);
         } else {
-          switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+          switch (jj_nt.kind) {
           case RBL:
            n43 = new NodeSequence(3);
             n45 = jj_consume_token(RBL);
                    n44 = JTBToolkit.makeNodeToken(n45);
            n43.addNode(n44);
-            switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+            switch (jj_nt.kind) {
             case IDENTIFIER:
               n47 = IdentifierList();
               n46.addNode(n47);
@@ -2463,7 +2463,7 @@ public class CParser implements CParserConstants {
    Pointer n5;
     n1 = jj_consume_token(STAR);
             n0 = JTBToolkit.makeNodeToken(n1);
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    switch (jj_nt.kind) {
     case CONST:
     case RESTRICT:
     case VOLATILE:
@@ -2475,7 +2475,7 @@ public class CParser implements CParserConstants {
       jj_la1[67] = jj_gen;
       ;
     }
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    switch (jj_nt.kind) {
     case STAR:
       n5 = Pointer();
         n4.addNode(n5);
@@ -2495,7 +2495,7 @@ public class CParser implements CParserConstants {
     while (true) {
       n1 = TypeQualifier();
         n0.addNode(n1);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case CONST:
       case RESTRICT:
       case VOLATILE:
@@ -2521,7 +2521,7 @@ public class CParser implements CParserConstants {
    NodeToken n5;
    Token n6;
     n0 = ParameterList();
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    switch (jj_nt.kind) {
     case COMMA:
         n2 = new NodeSequence(2);
       n4 = jj_consume_token(COMMA);
@@ -2579,7 +2579,7 @@ public class CParser implements CParserConstants {
       n2 = Declarator();
            n1 = new NodeChoice(n2, 0);
     } else {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case RBL:
       case SBL:
       case STAR:
@@ -2609,7 +2609,7 @@ public class CParser implements CParserConstants {
                      n0 = JTBToolkit.makeNodeToken(n1);
     label_13:
     while (true) {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case COMMA:
         ;
         break;
@@ -2636,7 +2636,7 @@ public class CParser implements CParserConstants {
    NodeOptional n1 = new NodeOptional();
    AbstractDeclarator n2;
     n0 = SpecifierQualifierList();
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    switch (jj_nt.kind) {
     case RBL:
     case SBL:
     case STAR:
@@ -2662,12 +2662,12 @@ public class CParser implements CParserConstants {
       n1 = Pointer();
            n0 = new NodeChoice(n1, 0);
     } else {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case RBL:
       case SBL:
       case STAR:
            n2 = new NodeSequence(2);
-        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        switch (jj_nt.kind) {
         case STAR:
           n4 = Pointer();
               n3.addNode(n4);
@@ -2773,7 +2773,7 @@ public class CParser implements CParserConstants {
            n1.addNode(n5);
            n0 = new NodeChoice(n1, 0);
     } else {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case RBL:
            n7 = new NodeSequence(3);
         n9 = jj_consume_token(RBL);
@@ -2796,13 +2796,13 @@ public class CParser implements CParserConstants {
         n16 = jj_consume_token(SBL);
                    n15 = JTBToolkit.makeNodeToken(n16);
            n14.addNode(n15);
-        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        switch (jj_nt.kind) {
         case STATIC:
                  n18 = new NodeSequence(3);
           n20 = jj_consume_token(STATIC);
                               n19 = JTBToolkit.makeNodeToken(n20);
                  n18.addNode(n19);
-          switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+          switch (jj_nt.kind) {
           case CONST:
           case RESTRICT:
           case VOLATILE:
@@ -2836,7 +2836,7 @@ public class CParser implements CParserConstants {
                          n29 = JTBToolkit.makeNodeToken(n30);
                  n17 = new NodeChoice(n29, 2);
           } else {
-            switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+            switch (jj_nt.kind) {
             case NUMBER:
             case CHARACTER_LITERAL:
             case STRING_LITERAL:
@@ -2858,7 +2858,7 @@ public class CParser implements CParserConstants {
             case AMP:
             case TILDE:
                  n31 = new NodeSequence(2);
-              switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+              switch (jj_nt.kind) {
               case CONST:
               case RESTRICT:
               case VOLATILE:
@@ -2896,7 +2896,7 @@ public class CParser implements CParserConstants {
     }
     label_14:
     while (true) {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case RBL:
       case SBL:
         ;
@@ -2908,7 +2908,7 @@ public class CParser implements CParserConstants {
         n42 = new NodeOptional();
         n53 = new NodeOptional();
         n64 = new NodeOptional();
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case RBL:
            n39 = new NodeSequence(3);
         n41 = jj_consume_token(RBL);
@@ -2931,13 +2931,13 @@ public class CParser implements CParserConstants {
         n48 = jj_consume_token(SBL);
                    n47 = JTBToolkit.makeNodeToken(n48);
            n46.addNode(n47);
-        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        switch (jj_nt.kind) {
         case STATIC:
                  n50 = new NodeSequence(3);
           n52 = jj_consume_token(STATIC);
                               n51 = JTBToolkit.makeNodeToken(n52);
                  n50.addNode(n51);
-          switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+          switch (jj_nt.kind) {
           case CONST:
           case RESTRICT:
           case VOLATILE:
@@ -2971,7 +2971,7 @@ public class CParser implements CParserConstants {
                          n61 = JTBToolkit.makeNodeToken(n62);
                  n49 = new NodeChoice(n61, 2);
           } else {
-            switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+            switch (jj_nt.kind) {
             case NUMBER:
             case CHARACTER_LITERAL:
             case STRING_LITERAL:
@@ -2993,7 +2993,7 @@ public class CParser implements CParserConstants {
             case AMP:
             case TILDE:
                  n63 = new NodeSequence(2);
-              switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+              switch (jj_nt.kind) {
               case CONST:
               case RESTRICT:
               case VOLATILE:
@@ -3056,7 +3056,7 @@ public class CParser implements CParserConstants {
    Token n8;
    NodeToken n9;
    Token n10;
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    switch (jj_nt.kind) {
     case NUMBER:
     case CHARACTER_LITERAL:
     case STRING_LITERAL:
@@ -3083,7 +3083,7 @@ public class CParser implements CParserConstants {
            n2.addNode(n3);
       n5 = InitializerList();
            n2.addNode(n5);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case COMMA:
         n8 = jj_consume_token(COMMA);
                      n7 = JTBToolkit.makeNodeToken(n8);
@@ -3117,7 +3117,7 @@ public class CParser implements CParserConstants {
    NodeToken n5;
    Token n6;
    Initializer n7;
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    switch (jj_nt.kind) {
     case SBL:
     case DOT:
       n1 = Designation();
@@ -3166,7 +3166,7 @@ public class CParser implements CParserConstants {
     while (true) {
       n1 = Designator();
         n0.addNode(n1);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case SBL:
       case DOT:
         ;
@@ -3194,7 +3194,7 @@ public class CParser implements CParserConstants {
    Token n9;
    NodeToken n10;
    Token n11;
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    switch (jj_nt.kind) {
     case SBL:
            n1 = new NodeSequence(3);
       n3 = jj_consume_token(SBL);
@@ -3272,7 +3272,7 @@ public class CParser implements CParserConstants {
       n1 = LabeledStatement();
            n0 = new NodeChoice(n1, 0);
     } else {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case CBL:
         n2 = CompoundStatement();
            n0 = new NodeChoice(n2, 1);
@@ -3344,7 +3344,7 @@ public class CParser implements CParserConstants {
    Statement n6;
    CaseStatement n7;
    DefaultStatement n8;
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    switch (jj_nt.kind) {
     case IDENTIFIER:
            n1 = new NodeSequence(3);
       n3 = jj_consume_token(IDENTIFIER);
@@ -3453,7 +3453,7 @@ public class CParser implements CParserConstants {
       n1 = Declaration();
         n0 = new NodeChoice(n1, 0);
     } else {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case NUMBER:
       case CHARACTER_LITERAL:
       case STRING_LITERAL:
@@ -3501,7 +3501,7 @@ public class CParser implements CParserConstants {
    Expression n1;
    NodeToken n2;
    Token n3;
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    switch (jj_nt.kind) {
     case NUMBER:
     case CHARACTER_LITERAL:
     case STRING_LITERAL:
@@ -3671,7 +3671,7 @@ public class CParser implements CParserConstants {
            n5 = new NodeSequence(3);
       n6 = Declaration();
            n5.addNode(n6);
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case NUMBER:
       case CHARACTER_LITERAL:
       case STRING_LITERAL:
@@ -3698,7 +3698,7 @@ public class CParser implements CParserConstants {
            n5.addNode(n7);
            n4 = new NodeChoice(n5, 0);
     } else {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      switch (jj_nt.kind) {
       case NUMBER:
       case CHARACTER_LITERAL:
       case STRING_LITERAL:
@@ -3717,7 +3717,7 @@ public class CParser implements CParserConstants {
       case TILDE:
       case SEMICOLON:
            n9 = new NodeSequence(3);
-        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        switch (jj_nt.kind) {
         case NUMBER:
         case CHARACTER_LITERAL:
         case STRING_LITERAL:
@@ -3745,7 +3745,7 @@ public class CParser implements CParserConstants {
         n13 = jj_consume_token(SEMICOLON);
                    n12 = JTBToolkit.makeNodeToken(n13);
            n9.addNode(n12);
-        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        switch (jj_nt.kind) {
         case NUMBER:
         case CHARACTER_LITERAL:
         case STRING_LITERAL:
@@ -3780,7 +3780,7 @@ public class CParser implements CParserConstants {
     }
     n17 = jj_consume_token(SEMICOLON);
              n16 = JTBToolkit.makeNodeToken(n17);
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    switch (jj_nt.kind) {
     case NUMBER:
     case CHARACTER_LITERAL:
     case STRING_LITERAL:
@@ -3831,7 +3831,7 @@ public class CParser implements CParserConstants {
    NodeToken n16;
    Token n17;
    ReturnStatement n18;
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    switch (jj_nt.kind) {
     case GOTO:
            n1 = new NodeSequence(3);
       n3 = jj_consume_token(GOTO);
@@ -3887,7 +3887,7 @@ public class CParser implements CParserConstants {
    Token n5;
     n1 = jj_consume_token(RETURN);
                  n0 = JTBToolkit.makeNodeToken(n1);
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    switch (jj_nt.kind) {
     case NUMBER:
     case CHARACTER_LITERAL:
     case STRING_LITERAL:
@@ -4330,12 +4330,6 @@ public class CParser implements CParserConstants {
     try { return !jj_3_48(); }
     catch(LookaheadSuccess ls) { return true; }
     finally { jj_save(47, xla); }
-  }
-
-  private boolean jj_3R_250() {
-    if (jj_scan_token(COMMA)) return true;
-    if (jj_scan_token(IDENTIFIER)) return true;
-    return false;
   }
 
   private boolean jj_3R_280() {
@@ -6870,13 +6864,18 @@ public class CParser implements CParserConstants {
     return false;
   }
 
+  private boolean jj_3R_250() {
+    if (jj_scan_token(COMMA)) return true;
+    if (jj_scan_token(IDENTIFIER)) return true;
+    return false;
+  }
+
   /** User defined Token Manager. */
   public TokenManager token_source;
   /** Current token. */
   public Token token;
   /** Next token. */
   public Token jj_nt;
-  private int jj_ntk;
   private Token jj_scanpos, jj_lastpos;
   private int jj_la;
   /** Whether we are looking ahead. */
@@ -6915,7 +6914,7 @@ public class CParser implements CParserConstants {
   public CParser(TokenManager tm) {
     token_source = tm;
     token = new Token();
-    jj_ntk = -1;
+    token.next = jj_nt = token_source.getNextToken();
     jj_gen = 0;
     for (int i = 0; i < 103; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
@@ -6925,17 +6924,16 @@ public class CParser implements CParserConstants {
   public void ReInit(TokenManager tm) {
     token_source = tm;
     token = new Token();
-    jj_ntk = -1;
+    token.next = jj_nt = token_source.getNextToken();
     jj_gen = 0;
     for (int i = 0; i < 103; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
   private Token jj_consume_token(int kind) throws ParseException {
-    Token oldToken;
-    if ((oldToken = token).next != null) token = token.next;
-    else token = token.next = token_source.getNextToken();
-    jj_ntk = -1;
+    Token oldToken = token;
+    if ((token = jj_nt).next != null) jj_nt = jj_nt.next;
+    else jj_nt = jj_nt.next = token_source.getNextToken();
     if (token.kind == kind) {
       jj_gen++;
       if (++jj_gc > 100) {
@@ -6950,6 +6948,7 @@ public class CParser implements CParserConstants {
       }
       return token;
     }
+    jj_nt = token;
     token = oldToken;
     jj_kind = kind;
     throw generateParseException();
@@ -6981,9 +6980,8 @@ public class CParser implements CParserConstants {
 
 /** Get the next Token. */
   final public Token getNextToken() {
-    if (token.next != null) token = token.next;
-    else token = token.next = token_source.getNextToken();
-    jj_ntk = -1;
+    if ((token = jj_nt).next != null) jj_nt = jj_nt.next;
+    else jj_nt = jj_nt.next = token_source.getNextToken();
     jj_gen++;
     return token;
   }
@@ -6996,13 +6994,6 @@ public class CParser implements CParserConstants {
       else t = t.next = token_source.getNextToken();
     }
     return t;
-  }
-
-  private int jj_ntk() {
-    if ((jj_nt=token.next) == null)
-      return (jj_ntk = (token.next=token_source.getNextToken()).kind);
-    else
-      return (jj_ntk = jj_nt.kind);
   }
 
   private java.util.List<int[]> jj_expentries = new java.util.ArrayList<int[]>();
