@@ -46,7 +46,8 @@ public abstract class Statement extends AbstractLocatableMetaDataObject {
         this.questionMarkOperators = questionMarkOperators == null ? new HashSet<QuestionMarkOperator>() : CollectionUtil.copy(questionMarkOperators);
         
         // the QMO are copied, now clean the QMO
-        questionMarkOperators.clear();
+        if(questionMarkOperators != null)
+            questionMarkOperators.clear();
     }
 
     /**
