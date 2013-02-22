@@ -117,10 +117,13 @@ public class MastVisitor extends DepthFirstVisitor {
 
     @Override
     public void visit(org.codecover.instrumentation.c.syntaxtree.Statement n) {
-        super.visit(n);
         // We don't need ids for all kinds of statements
+        // We want nice inscreasing IDs so we assign the ID before we visit the other nodes
         if(n.nodeChoice.which > 1) {
             n.stmtNum = cm.newStmtID();
+        }
+        super.visit(n);
+        if(n.nodeChoice.which > 1) {
             atticStatement(n, cm.stmtPrefix() + Integer.toString(n.stmtNum));
         }
     }
@@ -145,6 +148,14 @@ public class MastVisitor extends DepthFirstVisitor {
         super.visit(n);
         popHierachy(HierachyLevelTypes.getProgramType(builder), sourceFile.getFileName(),
                 BeginOffset.getStartOffset(n), lastEndOffset, -1, -1);
+    }
+
+    @Override
+    public void visit(IfStatement n) {
+        n.branchNum = cm.newBranchID();
+        // another ID for the else part
+        cm.newBranchID();
+        super.visit(n);
     }
 
     @Override
