@@ -68,7 +68,7 @@ public class DefaultConditionManipulator implements ConditionManipulator {
         int i = 0;
         for(InstrBasicBooleanTerm term : terms) {
             term.modifyImage(String.format(
-                    "(%1$s[%3$d] |= %2$d, (%5$s) && (%1$s[%5$d] |= %4$d))",
+                    "(%1$s[%3$d] |= %2$d, (%6$s) && (%1$s[%5$d] |= %4$d))",
                     helper, 1<<i%sizeofChar, i++ / sizeofChar, 1<<i%sizeofChar, i++ / sizeofChar,
                     term.termToString()));
         }
