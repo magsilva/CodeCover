@@ -2,7 +2,7 @@
   <configuration default="false" name="Instrument (complete)" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="org.codecover.batch.Batch" />
     <option name="VM_PARAMETERS" value="" />
-    <option name="PROGRAM_PARAMETERS" value="in --add-plugin-dir lib/plugins/ -l C -c c.xml -d out/ -r src/" />
+    <option name="PROGRAM_PARAMETERS" value="in --add-plugin-dir lib/plugins/ -l C -c c.xml -d out/ -r src/ -DIncludeDirs=/usr/lib/gcc/x86_64-linux-gnu/4.7/include:/usr/local/include:/usr/lib/gcc/x86_64-linux-gnu/4.7/include-fixed:/usr/include/x86_64-linux-gnu:/usr/include -DDefines=__x86_64__ -DTypes=__builtin_va_list" />
     <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$/../release" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
     <option name="ALTERNATIVE_JRE_PATH" value="" />
