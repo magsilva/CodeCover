@@ -1,5 +1,6 @@
 package org.codecover.instrumentation.c;
 
+import org.codecover.instrumentation.booleanterms.InstrBooleanTerm;
 import org.codecover.instrumentation.c.manipulators.BranchManipulator;
 import org.codecover.instrumentation.c.manipulators.ConditionManipulator;
 import org.codecover.instrumentation.c.manipulators.LoopManipulator;
@@ -7,6 +8,7 @@ import org.codecover.instrumentation.c.manipulators.StatementManipulator;
 import org.codecover.instrumentation.c.syntaxtree.*;
 import org.codecover.instrumentation.c.syntaxtree.Statement;
 
+import java.io.IOException;
 import java.io.Writer;
 
 public class InstrumentationVisitor extends SimpleTreeDumper {
@@ -34,6 +36,7 @@ public class InstrumentationVisitor extends SimpleTreeDumper {
         statementManipulator.writeForwardDeclaration(out);
         branchManipulator.writeForwardDeclaration(out);
         loopManipulator.writeForwardDeclaration(out);
+        conditionManipulator.writeForwardDeclaration(out);
         super.visit(n);
     }
 
@@ -65,9 +68,17 @@ public class InstrumentationVisitor extends SimpleTreeDumper {
 
     @Override
     public void visit(IfStatement n) {
+        // We need another block because the condition manipulator adds a tmp variable
+        out.println("{");
+        InstrBooleanTerm term = conditionManipulator.visit(out, n.expression);
+
         n.nodeToken.accept(this);
         n.nodeToken1.accept(this);
-        n.expression.accept(this);
+        try {
+            term.writeToTarget(out);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         n.nodeToken2.accept(this);
         out.println("{");
         branchManipulator.visit(out, n);
@@ -78,6 +89,7 @@ public class InstrumentationVisitor extends SimpleTreeDumper {
             // skip the "else" and visit the else body directly
             ((NodeSequence)n.nodeOptional.node).elementAt(1).accept(this);
         }
+        out.println("}");
         out.println("}");
     }
 

@@ -10,10 +10,13 @@ public class CounterManager {
     private final String loopTmpName;
     final private String loopVarName;
     final private String loopPrefix;
+    private final String condVarName;
+    private final String condPrefix;
 
     private int stmtCounter;
     private int branchCounter;
     private int loopCounter;
+    private int condCounter;
 
     /**
      * @param id must be a positive integer
@@ -29,6 +32,8 @@ public class CounterManager {
         loopPrefix = "L" + id + "-";
         loopVarName = "CodeCover_L" + id;
         loopTmpName = "CodeCover_LTMP" + id;
+        condPrefix = "C" + id + "-";
+        condVarName = "CodeCover_C" + id;
     }
 
     public String id() {
@@ -105,5 +110,21 @@ public class CounterManager {
 
     public int getloopCnt() {
         return loopCounter*3;
+    }
+
+    public String condVarName() {
+        return condVarName;
+    }
+
+    public String condPrefix() {
+        return condPrefix;
+    }
+
+    public int condID() {
+        return condCounter++;
+    }
+
+    public int condCnt() {
+        return condCounter;
     }
 }
