@@ -1,6 +1,7 @@
 package org.codecover.instrumentation.c;
 
 import org.codecover.instrumentation.HierarchyLevelContainer;
+import org.codecover.instrumentation.c.adapter.CCNode;
 import org.codecover.instrumentation.c.counter.CounterManager;
 import org.codecover.instrumentation.c.syntaxtree.*;
 import org.codecover.instrumentation.c.syntaxtree.Statement;
@@ -160,7 +161,7 @@ public class MastVisitor extends DepthFirstVisitor {
         statementStack.peek().add(conditionalStatement);
     }
 
-    public void createLoop(RootTerm rootTerm, int start, int end, int keywordStart, int keywordEnd, int id, boolean optionalBodyExecution) {
+    public void createLoop(RootTerm rootTerm, int start, int end, int keywordStart, int keywordEnd, int stmtId, int loopId, boolean optionalBodyExecution) {
         Set<RootTerm> setRootTerms;
         if (rootTerm == null) {
             setRootTerms = Collections.emptySet();
@@ -171,13 +172,13 @@ public class MastVisitor extends DepthFirstVisitor {
 
         LoopingStatement stmt = builder.createLoopingStatement(
                 createLocationList(start, end),
-                createCoverableItem(cm.stmtID(id)),
+                createCoverableItem(cm.stmtID(stmtId)),
                 setRootTerms,
                 popStatementLevel(),
                 builder.createLocation(sourceFile, keywordStart, keywordEnd),
-                createCoverableItem(cm.loopID(id++)),
-                createCoverableItem(cm.loopID(id++)),
-                createCoverableItem(cm.loopID(id++)),
+                createCoverableItem(cm.loopID(loopId++)),
+                createCoverableItem(cm.loopID(loopId++)),
+                createCoverableItem(cm.loopID(loopId++)),
                 optionalBodyExecution,
                 null
         );
@@ -353,6 +354,8 @@ public class MastVisitor extends DepthFirstVisitor {
 
         n.condID = cm.newCondID();
         n.loopID = cm.newloopID();
+        // Stmt ID from the parent Statement
+        n.stmtID = ((CCNode) n.getParent().getParent()).stmtID;
 
         RootTerm rootTerm = builder.createRootTerm(n.terms.toBooleanTerm(builder, sourceFile),
                 createCoverableItem(cm.condID(n.condID)));
@@ -360,7 +363,7 @@ public class MastVisitor extends DepthFirstVisitor {
         createLoop(rootTerm,
                 n.nodeToken.beginOffset, lastEndOffset,
                 n.nodeToken.beginOffset, n.nodeToken.endOffset,
-                n.loopID, true);
+                n.stmtID, n.loopID, true);
     }
 
     @Override
@@ -377,6 +380,8 @@ public class MastVisitor extends DepthFirstVisitor {
 
         n.loopID = cm.newloopID();
         n.condID = cm.newCondID();
+        // Stmt ID from the parent Statement
+        n.stmtID = ((CCNode) n.getParent().getParent()).stmtID;
 
         RootTerm rootTerm = builder.createRootTerm(n.terms.toBooleanTerm(builder, sourceFile),
                 createCoverableItem(cm.condID(n.condID)));
@@ -384,7 +389,7 @@ public class MastVisitor extends DepthFirstVisitor {
         createLoop(rootTerm,
                 n.nodeToken.beginOffset, n.nodeToken4.endOffset,
                 n.nodeToken.beginOffset, n.nodeToken.endOffset,
-                n.loopID, false);
+                n.stmtID, n.loopID, false);
     }
 
     @Override
@@ -400,11 +405,13 @@ public class MastVisitor extends DepthFirstVisitor {
 
         n.loopID = cm.newloopID();
         n.condID = cm.newCondID();
+        // Stmt ID from the parent Statement
+        n.stmtID = ((CCNode) n.getParent().getParent()).stmtID;
 
         createLoop(null,
                 n.nodeToken.beginOffset, lastEndOffset,
                 n.nodeToken.beginOffset, n.nodeToken.endOffset,
-                n.loopID, true);
+                n.stmtID, n.loopID, true);
     }
 
     @Override

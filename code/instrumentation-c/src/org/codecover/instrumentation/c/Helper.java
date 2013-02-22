@@ -49,7 +49,7 @@ public class Helper {
             out.format("int %s[%d];\n", cm.stmtVarName(), cm.getStmtCnt());
             out.format("int %s[%d];\n", cm.branchVarName(), cm.getBranchCnt());
             out.format("int %s[%d];\n", cm.loopVarName(), cm.getloopCnt());
-            out.format("int %s[%d];\n", cm.loopTmpName(), cm.getloopTmpCnt());
+            out.format("int %s[%d];\n", cm.loopTmpName(), cm.getloopTmpCnt()*3);
             out.format("%s %s[%d];\n", getCondTypeName(), cm.condVarName(), cm.getCondCnt());
             out.format("int %s[%d];\n", cm.qmoVarName(), cm.getQmoCnt()*2);
         }

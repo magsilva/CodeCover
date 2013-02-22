@@ -482,107 +482,100 @@ ArgumentExpressionList ArgumentExpressionList() :
 UnaryExpression UnaryExpression() :
 {
    NodeChoice n0;
-   NodeChoice n1;
-   PostfixExpression n2;
-   NodeSequence n3;
-   NodeToken n4;
-   Token n5;
-   UnaryExpression n6;
-   NodeSequence n7;
-   NodeToken n8;
-   Token n9;
-   UnaryExpression n10;
-   NodeSequence n11;
-   UnaryOperator n12;
-   CastExpression n13;
-   NodeSequence n14;
-   NodeToken n15;
-   Token n16;
-   NodeChoice n17;
-   NodeSequence n18;
-   NodeToken n19;
-   Token n20;
-   TypeName n21;
-   NodeToken n22;
-   Token n23;
-   UnaryExpression n24;
-   NodeSequence n25;
-   NodeToken n26;
-   Token n27;
-   NodeToken n28;
-   Token n29;
-   TypeName n30;
-   NodeToken n31;
-   Token n32;
+   PostfixExpression n1;
+   NodeSequence n2;
+   NodeToken n3;
+   Token n4;
+   UnaryExpression n5;
+   NodeSequence n6;
+   NodeToken n7;
+   Token n8;
+   UnaryExpression n9;
+   NodeSequence n10;
+   UnaryOperator n11;
+   CastExpression n12;
+   NodeSequence n13;
+   NodeToken n14;
+   Token n15;
+   NodeChoice n16;
+   NodeSequence n17;
+   NodeToken n18;
+   Token n19;
+   TypeName n20;
+   NodeToken n21;
+   Token n22;
+   UnaryExpression n23;
+   NodeSequence n24;
+   NodeToken n25;
+   Token n26;
+   NodeToken n27;
+   Token n28;
+   TypeName n29;
+   NodeToken n30;
+   Token n31;
 
    
 }
 {
    (
+      LOOKAHEAD(3)
+      n1=PostfixExpression()
+      { n0 = new NodeChoice(n1, 0); }
+   |
+      { n2 = new NodeSequence(2); }
+      n4="++" { n3 = JTBToolkit.makeNodeToken(n4); }
+      { n2.addNode(n3); }
+      n5=UnaryExpression()
+      { n2.addNode(n5); }
+      { n0 = new NodeChoice(n2, 1); }
+   |
+      { n6 = new NodeSequence(2); }
+      n8="--" { n7 = JTBToolkit.makeNodeToken(n8); }
+      { n6.addNode(n7); }
+      n9=UnaryExpression()
+      { n6.addNode(n9); }
+      { n0 = new NodeChoice(n6, 2); }
+   |
+      { n10 = new NodeSequence(2); }
+      n11=UnaryOperator()
+      { n10.addNode(n11); }
+      n12=CastExpression()
+      { n10.addNode(n12); }
+      { n0 = new NodeChoice(n10, 3); }
+   |
+      { n13 = new NodeSequence(2); }
+      n15=<SIZEOF> { n14 = JTBToolkit.makeNodeToken(n15); }
+      { n13.addNode(n14); }
       (
          (
             LOOKAHEAD(3)
-            n2=PostfixExpression()
-            { n1 = new NodeChoice(n2, 0); }
+            { n17 = new NodeSequence(4); }
+            n19="(" { n18 = JTBToolkit.makeNodeToken(n19); }
+            { n17.addNode(n18); }
+            n20=TypeName()
+            { n17.addNode(n20); }
+            n22=")" { n21 = JTBToolkit.makeNodeToken(n22); }
+            { n17.addNode(n21); }
+            { n16 = new NodeChoice(n17, 0); }
          |
-            { n3 = new NodeSequence(2); }
-            n5="++" { n4 = JTBToolkit.makeNodeToken(n5); }
-            { n3.addNode(n4); }
-            n6=UnaryExpression()
-            { n3.addNode(n6); }
-            { n1 = new NodeChoice(n3, 1); }
-         |
-            { n7 = new NodeSequence(2); }
-            n9="--" { n8 = JTBToolkit.makeNodeToken(n9); }
-            { n7.addNode(n8); }
-            n10=UnaryExpression()
-            { n7.addNode(n10); }
-            { n1 = new NodeChoice(n7, 2); }
-         |
-            { n11 = new NodeSequence(2); }
-            n12=UnaryOperator()
-            { n11.addNode(n12); }
-            n13=CastExpression()
-            { n11.addNode(n13); }
-            { n1 = new NodeChoice(n11, 3); }
-         |
-            { n14 = new NodeSequence(2); }
-            n16=<SIZEOF> { n15 = JTBToolkit.makeNodeToken(n16); }
-            { n14.addNode(n15); }
-            (
-               (
-                  LOOKAHEAD(3)
-                  { n18 = new NodeSequence(4); }
-                  n20="(" { n19 = JTBToolkit.makeNodeToken(n20); }
-                  { n18.addNode(n19); }
-                  n21=TypeName()
-                  { n18.addNode(n21); }
-                  n23=")" { n22 = JTBToolkit.makeNodeToken(n23); }
-                  { n18.addNode(n22); }
-                  { n17 = new NodeChoice(n18, 0); }
-               |
-                  n24=UnaryExpression()
-                  { n17 = new NodeChoice(n24, 1); }
-               )
-               
-            )
-            { n14.addNode(n17); }
-            { n1 = new NodeChoice(n14, 4); }
+            n23=UnaryExpression()
+            { n16 = new NodeChoice(n23, 1); }
          )
          
       )
-      { n0 = new NodeChoice(n1, 0); }
+      { n13.addNode(n16); }
+      { n0 = new NodeChoice(n13, 4); }
    |
-      { n25 = new NodeSequence(4); }
-      n27=<ALIGNOF> { n26 = JTBToolkit.makeNodeToken(n27); }
-      { n25.addNode(n26); }
-      n29="(" { n28 = JTBToolkit.makeNodeToken(n29); }
-      { n25.addNode(n28); }
-      n30=TypeName()
-      { n25.addNode(n30); }
-      n32=")" { n31 = JTBToolkit.makeNodeToken(n32); }
-      { n25.addNode(n31); }
-      { n0 = new NodeChoice(n25, 1); }
+      { n24 = new NodeSequence(4); }
+      n26=<ALIGNOF> { n25 = JTBToolkit.makeNodeToken(n26); }
+      { n24.addNode(n25); }
+      n28="(" { n27 = JTBToolkit.makeNodeToken(n28); }
+      { n24.addNode(n27); }
+      n29=TypeName()
+      { n24.addNode(n29); }
+      n31=")" { n30 = JTBToolkit.makeNodeToken(n31); }
+      { n24.addNode(n30); }
+      { n0 = new NodeChoice(n24, 5); }
    )
    
    { return new UnaryExpression(n0); }

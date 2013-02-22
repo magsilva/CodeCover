@@ -20,25 +20,25 @@ public class DefaultLoopManipulator implements LoopManipulator {
 
     @Override
     public void visitBefore(PrintWriter out, CCNode n) {
-        out.format("%s[%d]=0;\n", cm.loopTmpName(), n.loopID);
+        out.format("%s[%d]=0;\n", cm.loopTmpName(), n.loopID/3);
     }
 
     @Override
     public void visit(PrintWriter out, CCNode n) {
-        out.format("%s[%d]++;\n", cm.loopTmpName(), n.loopID);
+        out.format("%s[%d]++;\n", cm.loopTmpName(), n.loopID/3);
     }
 
     @Override
     public void visitAfter(PrintWriter out, CCNode n) {
-        out.format("switch(%s[%d]) {\n", cm.loopTmpName(), n.loopID);
-        out.println("case 0:");
-        out.format("%s[%d]++;\n", cm.loopVarName(), n.loopID);
+        out.format("switch(%s[%d]) {\n", cm.loopTmpName(), n.loopID/3);
+        out.print("case 0: ");
+        out.format("%s[%d]++;", cm.loopVarName(), n.loopID);
         out.println("break;");
-        out.println("case 1:");
-        out.format("%s[%d]++;\n", cm.loopVarName(), n.loopID + 1);
+        out.print("case 1: ");
+        out.format("%s[%d]++;", cm.loopVarName(), n.loopID + 1);
         out.println("break;");
-        out.println("default:");
-        out.format("%s[%d]++;\n", cm.loopVarName(), n.loopID + 2);
+        out.print("default: ");
+        out.format("%s[%d]++;", cm.loopVarName(), n.loopID + 2);
         out.println("break;");
         out.println("}");
     }

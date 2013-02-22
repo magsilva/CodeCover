@@ -106,7 +106,11 @@ public interface Visitor {
 
    /**
     * <PRE>
-    * nodeChoice -> ( PostfixExpression() | "++" UnaryExpression() | "--" UnaryExpression() | UnaryOperator() CastExpression() | &lt;SIZEOF&gt; ( "(" TypeName() ")" | UnaryExpression() ) )
+    * nodeChoice -> PostfixExpression()
+    *       | "++" UnaryExpression()
+    *       | "--" UnaryExpression()
+    *       | UnaryOperator() CastExpression()
+    *       | &lt;SIZEOF&gt; ( "(" TypeName() ")" | UnaryExpression() )
     *       | &lt;ALIGNOF&gt; "(" TypeName() ")"
     * </PRE>
     */

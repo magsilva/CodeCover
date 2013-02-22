@@ -158,7 +158,11 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
 
    /**
     * <PRE>
-    * nodeChoice -> ( PostfixExpression() | "++" UnaryExpression() | "--" UnaryExpression() | UnaryOperator() CastExpression() | &lt;SIZEOF&gt; ( "(" TypeName() ")" | UnaryExpression() ) )
+    * nodeChoice -> PostfixExpression()
+    *       | "++" UnaryExpression()
+    *       | "--" UnaryExpression()
+    *       | UnaryOperator() CastExpression()
+    *       | &lt;SIZEOF&gt; ( "(" TypeName() ")" | UnaryExpression() )
     *       | &lt;ALIGNOF&gt; "(" TypeName() ")"
     * </PRE>
     */

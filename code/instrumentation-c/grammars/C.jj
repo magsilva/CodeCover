@@ -242,12 +242,12 @@ void ArgumentExpressionList() : {}
 // 6.5.3
 void UnaryExpression() : {}
 {
-	( LOOKAHEAD(3) PostfixExpression() |
-	  "++" UnaryExpression() |
-	  "--" UnaryExpression() |
-	  UnaryOperator() CastExpression() |
-	  <SIZEOF> ( LOOKAHEAD(3) "(" TypeName() ")" | UnaryExpression() ) ) |
-	  <ALIGNOF> "(" TypeName() ")"
+	LOOKAHEAD(3) PostfixExpression() |
+	"++" UnaryExpression() |
+	"--" UnaryExpression() |
+	UnaryOperator() CastExpression() |
+    <SIZEOF> ( LOOKAHEAD(3) "(" TypeName() ")" | UnaryExpression() ) |
+    <ALIGNOF> "(" TypeName() ")"
 }
 
 // 6.5.3
