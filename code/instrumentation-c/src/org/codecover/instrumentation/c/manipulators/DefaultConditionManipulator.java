@@ -17,8 +17,6 @@ public class DefaultConditionManipulator implements ConditionManipulator {
 
     int sizeofChar = 8;
 
-    CExpressionParser expressionParser = new CExpressionParser();
-
     public DefaultConditionManipulator(CounterManager cm) {
         this.cm = cm;
     }

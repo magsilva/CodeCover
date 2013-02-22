@@ -22,6 +22,8 @@ public class MastVisitor extends DepthFirstVisitor {
 
     private CounterManager cm;
 
+    private final CExpressionParser expressionParser = new CExpressionParser();
+
     public MastVisitor(MASTBuilder builder, SourceFile sourceFile, HierarchyLevelContainer rootContainer, CounterManager cm) {
         this.builder = builder;
         this.sourceFile = sourceFile;
@@ -227,7 +229,7 @@ public class MastVisitor extends DepthFirstVisitor {
 
         n.nodeToken.accept(this);
         n.nodeToken1.accept(this);
-        n.terms = new CExpressionParser().visit(n.expression);
+        n.terms = expressionParser.visit(n.expression);
         RootTerm rootTerm = builder.createRootTerm(n.terms.toBooleanTerm(builder, sourceFile),
                 createCoverableItem(cm.condID(n.condID)));
         // TODO nicht parsen?

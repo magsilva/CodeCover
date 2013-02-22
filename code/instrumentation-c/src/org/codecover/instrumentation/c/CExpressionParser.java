@@ -1,6 +1,5 @@
 package org.codecover.instrumentation.c;
 
-import org.codecover.instrumentation.booleanterms.InstrBasicBooleanTerm;
 import org.codecover.instrumentation.booleanterms.InstrBooleanTerm;
 import org.codecover.instrumentation.booleanterms.InstrOperatorTerm;
 import org.codecover.instrumentation.c.syntaxtree.*;
@@ -8,10 +7,6 @@ import org.codecover.instrumentation.c.visitor.GJNoArguDepthFirst;
 import org.codecover.instrumentation.c.visitor.GJNoArguVisitor;
 
 public class CExpressionParser extends GJNoArguDepthFirst<InstrBooleanTerm> implements GJNoArguVisitor<InstrBooleanTerm> {
-    public InstrBooleanTerm parse(Expression n) {
-        return n.accept(this);
-    }
-
     @Override
     public InstrBooleanTerm visit(Expression n) {
         // No comma operator

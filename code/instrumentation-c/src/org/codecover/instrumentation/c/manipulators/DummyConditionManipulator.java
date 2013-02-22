@@ -7,8 +7,6 @@ import org.codecover.instrumentation.c.adapter.CCNode;
 import java.io.PrintWriter;
 
 public class DummyConditionManipulator implements ConditionManipulator {
-    CExpressionParser expressionParser = new CExpressionParser();
-
     @Override
     public void writeForwardDeclaration(PrintWriter out) {
     }
