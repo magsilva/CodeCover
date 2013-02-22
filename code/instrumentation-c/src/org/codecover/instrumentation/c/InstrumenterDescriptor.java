@@ -70,8 +70,8 @@ public class InstrumenterDescriptor extends org.codecover.instrumentation.Instru
 
         private static final String DIRECTIVE_DESCRIPTION =
                 "Use this directive to add include paths. " +
-                        "Specify them separated by a colon - e.g. " +
-                        KEY + "=DIR:DIR";
+                        "Specify them separated by a semicolon - e.g. " +
+                        KEY + "=DIR;DIR";
 
         static final IncludeDirs INSTANCE = new IncludeDirs();
 
@@ -81,7 +81,7 @@ public class InstrumenterDescriptor extends org.codecover.instrumentation.Instru
 
         @Override
         public Object parseValue(String value) throws IllegalArgumentException {
-            return value.split(":");
+            return value.split(";");
         }
 
         @Override
