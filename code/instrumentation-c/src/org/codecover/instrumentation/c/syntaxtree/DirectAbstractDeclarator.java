@@ -7,8 +7,8 @@ package org.codecover.instrumentation.c.syntaxtree;
 /**
  * Grammar production:
  * <PRE>
- * nodeChoice -> ( "(" AbstractDeclarator() ")" | "[" [ ConstantExpression() ] "]" | "(" [ ParameterTypeList() ] ")" )
- * nodeListOptional -> ( "[" [ ConstantExpression() ] "]" | "(" [ ParameterTypeList() ] ")" )*
+ * nodeChoice -> ( "(" AbstractDeclarator() ")" | "(" [ ParameterTypeList() ] ")" | "[" ( &lt;STATIC&gt; [ TypeQualifierList() ] AssignmentExpression() | TypeQualifierList() &lt;STATIC&gt; AssignmentExpression() | "*" | [ TypeQualifierList() ] AssignmentExpression() ) "]" )
+ * nodeListOptional -> ( "(" [ ParameterTypeList() ] ")" | "[" ( &lt;STATIC&gt; [ TypeQualifierList() ] AssignmentExpression() | TypeQualifierList() &lt;STATIC&gt; AssignmentExpression() | "*" | [ TypeQualifierList() ] AssignmentExpression() ) "]" )*
  * </PRE>
  */
 public class DirectAbstractDeclarator extends org.codecover.instrumentation.c.adapter.CCNode implements Node {

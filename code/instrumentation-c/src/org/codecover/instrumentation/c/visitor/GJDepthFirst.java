@@ -683,7 +683,7 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
    /**
     * <PRE>
     * nodeChoice -> ( t=&lt;IDENTIFIER&gt; | "(" Declarator() ")" )
-    * nodeListOptional -> ( "[" [ ConstantExpression() ] "]" | "(" ParameterTypeList() ")" | "(" [ IdentifierList() ] ")" )*
+    * nodeListOptional -> ( "[" ( &lt;STATIC&gt; [ TypeQualifierList() ] AssignmentExpression() | TypeQualifierList() &lt;STATIC&gt; AssignmentExpression() | [ TypeQualifierList() ] "*" "]" | [ ConstantExpression() ] ) "]" | "(" ParameterTypeList() ")" | "(" [ IdentifierList() ] ")" )*
     * </PRE>
     */
    public R visit(DirectDeclarator n, A argu) {
@@ -797,8 +797,8 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
 
    /**
     * <PRE>
-    * nodeChoice -> ( "(" AbstractDeclarator() ")" | "[" [ ConstantExpression() ] "]" | "(" [ ParameterTypeList() ] ")" )
-    * nodeListOptional -> ( "[" [ ConstantExpression() ] "]" | "(" [ ParameterTypeList() ] ")" )*
+    * nodeChoice -> ( "(" AbstractDeclarator() ")" | "(" [ ParameterTypeList() ] ")" | "[" ( &lt;STATIC&gt; [ TypeQualifierList() ] AssignmentExpression() | TypeQualifierList() &lt;STATIC&gt; AssignmentExpression() | "*" | [ TypeQualifierList() ] AssignmentExpression() ) "]" )
+    * nodeListOptional -> ( "(" [ ParameterTypeList() ] ")" | "[" ( &lt;STATIC&gt; [ TypeQualifierList() ] AssignmentExpression() | TypeQualifierList() &lt;STATIC&gt; AssignmentExpression() | "*" | [ TypeQualifierList() ] AssignmentExpression() ) "]" )*
     * </PRE>
     */
    public R visit(DirectAbstractDeclarator n, A argu) {

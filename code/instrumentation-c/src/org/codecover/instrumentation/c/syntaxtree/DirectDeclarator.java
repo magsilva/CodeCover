@@ -8,7 +8,7 @@ package org.codecover.instrumentation.c.syntaxtree;
  * Grammar production:
  * <PRE>
  * nodeChoice -> ( t=&lt;IDENTIFIER&gt; | "(" Declarator() ")" )
- * nodeListOptional -> ( "[" [ ConstantExpression() ] "]" | "(" ParameterTypeList() ")" | "(" [ IdentifierList() ] ")" )*
+ * nodeListOptional -> ( "[" ( &lt;STATIC&gt; [ TypeQualifierList() ] AssignmentExpression() | TypeQualifierList() &lt;STATIC&gt; AssignmentExpression() | [ TypeQualifierList() ] "*" "]" | [ ConstantExpression() ] ) "]" | "(" ParameterTypeList() ")" | "(" [ IdentifierList() ] ")" )*
  * </PRE>
  */
 public class DirectDeclarator extends org.codecover.instrumentation.c.adapter.CCNode implements Node {

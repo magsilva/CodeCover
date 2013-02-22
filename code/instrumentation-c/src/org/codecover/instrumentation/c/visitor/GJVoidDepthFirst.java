@@ -577,7 +577,7 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
    /**
     * <PRE>
     * nodeChoice -> ( t=&lt;IDENTIFIER&gt; | "(" Declarator() ")" )
-    * nodeListOptional -> ( "[" [ ConstantExpression() ] "]" | "(" ParameterTypeList() ")" | "(" [ IdentifierList() ] ")" )*
+    * nodeListOptional -> ( "[" ( &lt;STATIC&gt; [ TypeQualifierList() ] AssignmentExpression() | TypeQualifierList() &lt;STATIC&gt; AssignmentExpression() | [ TypeQualifierList() ] "*" "]" | [ ConstantExpression() ] ) "]" | "(" ParameterTypeList() ")" | "(" [ IdentifierList() ] ")" )*
     * </PRE>
     */
    public void visit(DirectDeclarator n, A argu) {
@@ -673,8 +673,8 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
 
    /**
     * <PRE>
-    * nodeChoice -> ( "(" AbstractDeclarator() ")" | "[" [ ConstantExpression() ] "]" | "(" [ ParameterTypeList() ] ")" )
-    * nodeListOptional -> ( "[" [ ConstantExpression() ] "]" | "(" [ ParameterTypeList() ] ")" )*
+    * nodeChoice -> ( "(" AbstractDeclarator() ")" | "(" [ ParameterTypeList() ] ")" | "[" ( &lt;STATIC&gt; [ TypeQualifierList() ] AssignmentExpression() | TypeQualifierList() &lt;STATIC&gt; AssignmentExpression() | "*" | [ TypeQualifierList() ] AssignmentExpression() ) "]" )
+    * nodeListOptional -> ( "(" [ ParameterTypeList() ] ")" | "[" ( &lt;STATIC&gt; [ TypeQualifierList() ] AssignmentExpression() | TypeQualifierList() &lt;STATIC&gt; AssignmentExpression() | "*" | [ TypeQualifierList() ] AssignmentExpression() ) "]" )*
     * </PRE>
     */
    public void visit(DirectAbstractDeclarator n, A argu) {
