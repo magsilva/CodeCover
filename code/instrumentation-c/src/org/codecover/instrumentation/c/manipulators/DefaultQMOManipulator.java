@@ -19,11 +19,15 @@ public class DefaultQMOManipulator implements QMOManipulator {
 
     @Override
     public void visitFirst(PrintWriter out, CCNode n) {
+        if(n.qmoID == -1)
+            return;
         out.format("%s[%d]++,", cm.qmoVarName(), n.qmoID * 2);
     }
 
     @Override
     public void visitSecond(PrintWriter out, CCNode n) {
+        if(n.qmoID == -1)
+            return;
         out.format("%s[%d]++,", cm.qmoVarName(), n.qmoID * 2 + 1);
     }
 }

@@ -6,7 +6,6 @@ import org.codecover.instrumentation.c.counter.CounterManager;
 import org.codecover.instrumentation.c.syntaxtree.*;
 import org.codecover.instrumentation.c.syntaxtree.Statement;
 import org.codecover.instrumentation.c.visitor.DepthFirstVisitor;
-import org.codecover.instrumentation.exceptions.ParseException;
 import org.codecover.model.MASTBuilder;
 import org.codecover.model.mast.*;
 
@@ -229,8 +228,9 @@ public class MastVisitor extends DepthFirstVisitor {
             for(QuestionMarkOperator op : qmoSet) {
                 loc += op.getLocation().toString() + ", ";
             }
-            throw new RuntimeException("Instrumenting conditional expressions in declarations " +
+            System.out.println("Instrumenting conditional expressions in declarations " +
                     "without a following statement is not supported (" + loc + ")");
+            qmoSet.clear();
         }
     }
 
@@ -416,6 +416,10 @@ public class MastVisitor extends DepthFirstVisitor {
 
     @Override
     public void visit(ConditionalExpression n) {
+        if(inConstantExpression) {
+            super.visit(n);
+            return;
+        }
         n.logicalORExpression.accept(this);
 
         if(n.nodeOptional.present()) {
@@ -439,6 +443,15 @@ public class MastVisitor extends DepthFirstVisitor {
                     createCoverableItem(cm.qmoID(r.qmoID)), exp1, exp2);
             qmoSet.add(qmo);
         }
+    }
+
+    boolean inConstantExpression = false;
+
+    @Override
+    public void visit(ConstantExpression n) {
+        inConstantExpression = true;
+        n.conditionalExpression.accept(this);
+        inConstantExpression = false;
     }
 
     @Override
