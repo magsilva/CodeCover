@@ -1,5 +1,6 @@
 package org.codecover.instrumentation.c.manipulators;
 
+import org.codecover.instrumentation.c.adapter.CCNode;
 import org.codecover.instrumentation.c.counter.CounterManager;
 import org.codecover.instrumentation.c.syntaxtree.*;
 
@@ -14,26 +15,30 @@ public class DefaultStatementManipulator implements StatementManipulator {
 
     @Override
     public void writeForwardDeclaration(PrintWriter out) {
-        out.format("extern int %s[];\n", cm.stmtCntName());
+        out.format("extern int %s[];\n", cm.stmtVarName());
+    }
+
+    private void instrument(PrintWriter out, CCNode n) {
+        out.format("%s[%d]++;\n", cm.stmtVarName(), n.stmtNum);
     }
 
     @Override
     public void visit(PrintWriter out, ExpressionStatement n) {
-        out.format("%s[%d]++;\n", cm.stmtCntName(), cm.newStmtID());
+        instrument(out, (CCNode) n.getParent().getParent());
     }
 
     @Override
     public void visit(PrintWriter out, JumpStatement n) {
-        out.format("%s[%d]++;\n", cm.stmtCntName(), cm.newStmtID());
+        instrument(out, (CCNode) n.getParent().getParent());
     }
 
     @Override
     public void visit(PrintWriter out, SelectionStatement n) {
-        out.format("%s[%d]++;\n", cm.stmtCntName(), cm.newStmtID());
+        instrument(out, (CCNode) n.getParent().getParent());
     }
 
     @Override
     public void visit(PrintWriter out, IterationStatement n) {
-        out.format("%s[%d]++;\n", cm.stmtCntName(), cm.newStmtID());
+        instrument(out, (CCNode) n.getParent().getParent());
     }
 }

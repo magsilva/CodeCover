@@ -4,7 +4,6 @@ import org.codecover.instrumentation.HierarchyLevelContainer;
 import org.codecover.instrumentation.c.counter.CounterManager;
 import org.codecover.instrumentation.c.syntaxtree.*;
 import org.codecover.instrumentation.c.visitor.DepthFirstVisitor;
-import org.codecover.instrumentation.c.BeginOffset;
 import org.codecover.model.MASTBuilder;
 import org.codecover.model.mast.*;
 import org.codecover.model.mast.Statement;
@@ -116,7 +115,11 @@ public class MastVisitor extends DepthFirstVisitor {
     @Override
     public void visit(org.codecover.instrumentation.c.syntaxtree.Statement n) {
         super.visit(n);
-        atticStatement(n, cm.stmtCntName() + Integer.toString(cm.newStmtID()));
+        // We don't need ids for all kinds of statements
+        if(n.nodeChoice.which == 1 || n.nodeChoice.which >= 3) {
+            n.stmtNum = cm.newStmtID();
+            atticStatement(n, cm.stmtPrefix() + Integer.toString(n.stmtNum));
+        }
     }
 
     @Override
