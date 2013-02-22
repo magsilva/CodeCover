@@ -6,6 +6,7 @@ import org.codecover.instrumentation.booleanterms.InstrBracketTerm;
 import org.codecover.instrumentation.booleanterms.InstrOperatorTerm;
 import org.codecover.instrumentation.c.CBooleanExpressions;
 import org.codecover.instrumentation.c.CExpressionParser;
+import org.codecover.instrumentation.c.adapter.CCNode;
 import org.codecover.instrumentation.c.counter.CounterManager;
 import org.codecover.instrumentation.c.syntaxtree.Expression;
 
@@ -31,14 +32,13 @@ public class DefaultConditionManipulator implements ConditionManipulator {
     }
 
     @Override
-    public InstrBooleanTerm visit(PrintWriter out, Expression exp) {
-        InstrBooleanTerm root = expressionParser.visit(exp);
+    public InstrBooleanTerm visit(PrintWriter out, CCNode n) {
+        InstrBooleanTerm root = n.terms;
 
         ArrayList<InstrBasicBooleanTerm> basicTerms = new ArrayList<InstrBasicBooleanTerm>();
         root.getAllBasicBooleanTerms(basicTerms);
 
-        int ID = 0;
-        String helper = cm.condVarName()  + "tmp" + ID;
+        String helper = cm.condVarName()  + "tmp" + n.condID;
 
         int numBytes = (basicTerms.size()*2 / 8 + 1);
 
@@ -51,7 +51,7 @@ public class DefaultConditionManipulator implements ConditionManipulator {
         visitBasicTerms(helper, basicTerms);
 
         // We need 2 variables per term
-        return addIncrementation(root, helper, cm.condVarName() + "[" + ID + "]", basicTerms.size() * 2);
+        return addIncrementation(root, helper, cm.condVarName() + "[" + n.condID + "]", basicTerms.size() * 2);
     }
 
     private InstrBooleanTerm addIncrementation(InstrBooleanTerm root,

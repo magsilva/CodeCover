@@ -1,6 +1,7 @@
 package org.codecover.instrumentation.c;
 
 import org.codecover.instrumentation.HierarchyLevelContainer;
+import org.codecover.instrumentation.booleanterms.InstrBooleanTerm;
 import org.codecover.instrumentation.c.counter.CounterManager;
 import org.codecover.instrumentation.c.syntaxtree.*;
 import org.codecover.instrumentation.c.syntaxtree.Statement;
@@ -219,12 +220,17 @@ public class MastVisitor extends DepthFirstVisitor {
     @Override
     public void visit(IfStatement n) {
         List<Branch> branchList = new ArrayList<Branch>(2);
+        n.condID = cm.newCondID();
         n.branchID = cm.newBranchID();
         // another ID for the else part
         cm.newBranchID();
 
         n.nodeToken.accept(this);
         n.nodeToken1.accept(this);
+        n.terms = new CExpressionParser().visit(n.expression);
+        RootTerm rootTerm = builder.createRootTerm(n.terms.toBooleanTerm(builder, sourceFile),
+                createCoverableItem(cm.condID(n.condID)));
+        // TODO nicht parsen?
         n.expression.accept(this);
         n.nodeToken2.accept(this);
 
@@ -250,7 +256,7 @@ public class MastVisitor extends DepthFirstVisitor {
         createConditionalStatement(
                 cm.stmtID(((Statement)n.getParent().getParent()).stmtID),
                 n.nodeToken.beginOffset, lastEndOffset,
-                null, branchList,
+                rootTerm, branchList,
                 n.nodeToken.beginOffset, n.nodeToken.endOffset
                 );
     }

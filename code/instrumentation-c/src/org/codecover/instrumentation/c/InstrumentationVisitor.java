@@ -70,7 +70,7 @@ public class InstrumentationVisitor extends SimpleTreeDumper {
     public void visit(IfStatement n) {
         // We need another block because the condition manipulator adds a tmp variable
         out.println("{");
-        InstrBooleanTerm term = conditionManipulator.visit(out, n.expression);
+        InstrBooleanTerm term = conditionManipulator.visit(out, n);
 
         n.nodeToken.accept(this);
         n.nodeToken1.accept(this);

@@ -2,7 +2,7 @@ package org.codecover.instrumentation.c.manipulators;
 
 import org.codecover.instrumentation.booleanterms.InstrBooleanTerm;
 import org.codecover.instrumentation.c.CExpressionParser;
-import org.codecover.instrumentation.c.syntaxtree.Expression;
+import org.codecover.instrumentation.c.adapter.CCNode;
 
 import java.io.PrintWriter;
 
@@ -14,7 +14,7 @@ public class DummyConditionManipulator implements ConditionManipulator {
     }
 
     @Override
-    public InstrBooleanTerm visit(PrintWriter out, Expression exp) {
-        return expressionParser.visit(exp);
+    public InstrBooleanTerm visit(PrintWriter out, CCNode n) {
+        return n.terms;
     }
 }

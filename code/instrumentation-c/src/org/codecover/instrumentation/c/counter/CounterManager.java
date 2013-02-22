@@ -120,11 +120,15 @@ public class CounterManager {
         return condPrefix;
     }
 
-    public int condID() {
+    public int newCondID() {
         return condCounter++;
     }
 
     public int condCnt() {
         return condCounter;
+    }
+
+    public String condID(int i) {
+        return condPrefix + Integer.toString(i);
     }
 }
