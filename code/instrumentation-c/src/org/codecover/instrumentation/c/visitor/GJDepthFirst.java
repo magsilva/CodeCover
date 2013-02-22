@@ -351,13 +351,30 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
    /**
     * <PRE>
     * logicalORExpression -> LogicalORExpression()
-    * nodeOptional -> [ "?" Expression() ":" ConditionalExpression() ]
+    * nodeOptional -> [ ConditionalExpressionRightSide() ]
     * </PRE>
     */
    public R visit(ConditionalExpression n, A argu) {
       R _ret=null;
       n.logicalORExpression.accept(this, argu);
       n.nodeOptional.accept(this, argu);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * nodeToken -> "?"
+    * expression -> Expression()
+    * nodeToken1 -> ":"
+    * conditionalExpression -> ConditionalExpression()
+    * </PRE>
+    */
+   public R visit(ConditionalExpressionRightSide n, A argu) {
+      R _ret=null;
+      n.nodeToken.accept(this, argu);
+      n.expression.accept(this, argu);
+      n.nodeToken1.accept(this, argu);
+      n.conditionalExpression.accept(this, argu);
       return _ret;
    }
 

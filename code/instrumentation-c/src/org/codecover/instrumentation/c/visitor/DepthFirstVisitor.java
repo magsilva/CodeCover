@@ -287,12 +287,27 @@ public class DepthFirstVisitor implements Visitor {
    /**
     * <PRE>
     * logicalORExpression -> LogicalORExpression()
-    * nodeOptional -> [ "?" Expression() ":" ConditionalExpression() ]
+    * nodeOptional -> [ ConditionalExpressionRightSide() ]
     * </PRE>
     */
    public void visit(ConditionalExpression n) {
       n.logicalORExpression.accept(this);
       n.nodeOptional.accept(this);
+   }
+
+   /**
+    * <PRE>
+    * nodeToken -> "?"
+    * expression -> Expression()
+    * nodeToken1 -> ":"
+    * conditionalExpression -> ConditionalExpression()
+    * </PRE>
+    */
+   public void visit(ConditionalExpressionRightSide n) {
+      n.nodeToken.accept(this);
+      n.expression.accept(this);
+      n.nodeToken1.accept(this);
+      n.conditionalExpression.accept(this);
    }
 
    /**

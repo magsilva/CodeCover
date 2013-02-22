@@ -51,6 +51,7 @@ public class Helper {
             out.format("int %s[%d];\n", cm.loopVarName(), cm.getloopCnt());
             out.format("int %s[%d];\n", cm.loopTmpName(), cm.getloopTmpCnt());
             out.format("%s %s[%d];\n", getCondTypeName(), cm.condVarName(), cm.getCondCnt());
+            out.format("int %s[%d];\n", cm.qmoVarName(), cm.getQmoCnt()*2);
         }
 
         /*out.println("void CodeCover_reset() {");
@@ -114,6 +115,10 @@ public class Helper {
             out.format("fprintf(f, \"%s%%i-\", i);\n", cm.condPrefix());
             out.format("print_bits(f, counter->values, %s[i].num);\n", cm.condVarName());
             out.println("fprintf(f, \" %i\\n\", counter->counter);}");
+            out.println("}");
+            out.format("for(i=0; i<%d; ++i) {\n", cm.getQmoCnt());
+            out.format("fprintf(f, \"%s%%i-0 %%i\\n\", i, %s[i*2]);\n", cm.qmoPrefix(), cm.qmoVarName());
+            out.format("fprintf(f, \"%s%%i-1 %%i\\n\", i, %s[i*2+1]);\n", cm.qmoPrefix(), cm.qmoVarName());
             out.println("}");
         }
         out.println("fprintf(f, \"END_TEST_CASE \\\"Single Test Case\\\"\\n\");");

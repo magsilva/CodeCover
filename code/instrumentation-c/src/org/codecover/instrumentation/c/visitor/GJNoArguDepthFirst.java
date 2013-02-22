@@ -351,13 +351,30 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
    /**
     * <PRE>
     * logicalORExpression -> LogicalORExpression()
-    * nodeOptional -> [ "?" Expression() ":" ConditionalExpression() ]
+    * nodeOptional -> [ ConditionalExpressionRightSide() ]
     * </PRE>
     */
    public R visit(ConditionalExpression n) {
       R _ret=null;
       n.logicalORExpression.accept(this);
       n.nodeOptional.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * nodeToken -> "?"
+    * expression -> Expression()
+    * nodeToken1 -> ":"
+    * conditionalExpression -> ConditionalExpression()
+    * </PRE>
+    */
+   public R visit(ConditionalExpressionRightSide n) {
+      R _ret=null;
+      n.nodeToken.accept(this);
+      n.expression.accept(this);
+      n.nodeToken1.accept(this);
+      n.conditionalExpression.accept(this);
       return _ret;
    }
 

@@ -209,10 +209,20 @@ public interface GJNoArguVisitor<R> {
    /**
     * <PRE>
     * logicalORExpression -> LogicalORExpression()
-    * nodeOptional -> [ "?" Expression() ":" ConditionalExpression() ]
+    * nodeOptional -> [ ConditionalExpressionRightSide() ]
     * </PRE>
     */
    public R visit(ConditionalExpression n);
+
+   /**
+    * <PRE>
+    * nodeToken -> "?"
+    * expression -> Expression()
+    * nodeToken1 -> ":"
+    * conditionalExpression -> ConditionalExpression()
+    * </PRE>
+    */
+   public R visit(ConditionalExpressionRightSide n);
 
    /**
     * <PRE>

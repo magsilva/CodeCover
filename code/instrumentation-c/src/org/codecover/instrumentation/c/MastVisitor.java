@@ -5,6 +5,7 @@ import org.codecover.instrumentation.c.counter.CounterManager;
 import org.codecover.instrumentation.c.syntaxtree.*;
 import org.codecover.instrumentation.c.syntaxtree.Statement;
 import org.codecover.instrumentation.c.visitor.DepthFirstVisitor;
+import org.codecover.instrumentation.exceptions.ParseException;
 import org.codecover.model.MASTBuilder;
 import org.codecover.model.mast.*;
 
@@ -13,6 +14,7 @@ import java.util.*;
 public class MastVisitor extends DepthFirstVisitor {
     private Stack<List<org.codecover.model.mast.Statement>> statementStack = new Stack<List<org.codecover.model.mast.Statement>>();
     private Stack<List<HierarchyLevel>> hierarchyStack = new Stack<List<HierarchyLevel>>();
+    private Set<QuestionMarkOperator> qmoSet = new HashSet<QuestionMarkOperator>();
 
     private MASTBuilder builder;
     private SourceFile sourceFile;
@@ -56,17 +58,13 @@ public class MastVisitor extends DepthFirstVisitor {
         return Collections.singletonList(statementSequence);
     }
 
-    private Location createLocation(int startOffset, int endOffset) {
-        return builder.createLocation(sourceFile, startOffset, endOffset);
-    }
-
     private LocationList createLocationList(int startOffset, int endOffset) {
         if (startOffset == -1 && endOffset == -1) {
             return builder.createEmptyLocationList();
         }
 
         if (startOffset != -1 && endOffset != -1) {
-            Location location = createLocation(startOffset, endOffset);
+            Location location = builder.createLocation(sourceFile, startOffset, endOffset);
             List<Location> listOfLocations = Collections.singletonList(location);
             return builder.createLocationList(listOfLocations);
         }
@@ -113,7 +111,7 @@ public class MastVisitor extends DepthFirstVisitor {
         org.codecover.model.mast.Statement newStatement = builder
                 .createBasicStatement(locationList,
                         createCoverableItem(id),
-                        Collections.<RootTerm> emptySet(), null);
+                        Collections.<RootTerm> emptySet(), qmoSet);
         this.statementStack.peek().add(newStatement);
     }
 
@@ -143,7 +141,7 @@ public class MastVisitor extends DepthFirstVisitor {
                                             int keywordStartOffset,
                                             int keywordEndOffset) {
         LocationList locationList = createLocationList(startOffset, endOffset);
-        Location keywordLocation = createLocation(keywordStartOffset, keywordEndOffset);
+        Location keywordLocation = builder.createLocation(sourceFile, keywordStartOffset, keywordEndOffset);
 
         Set<RootTerm> setRootTerms;
         if (rootTerm == null) {
@@ -158,7 +156,7 @@ public class MastVisitor extends DepthFirstVisitor {
                 createCoverableItem(statementID),
                 setRootTerms,
                 branchList,
-                keywordLocation, null);
+                keywordLocation, qmoSet);
         statementStack.peek().add(conditionalStatement);
     }
 
@@ -176,7 +174,7 @@ public class MastVisitor extends DepthFirstVisitor {
                 createCoverableItem(cm.stmtID(id)),
                 setRootTerms,
                 popStatementLevel(),
-                createLocation(keywordStart, keywordEnd),
+                builder.createLocation(sourceFile, keywordStart, keywordEnd),
                 createCoverableItem(cm.loopID(id++)),
                 createCoverableItem(cm.loopID(id++)),
                 createCoverableItem(cm.loopID(id++)),
@@ -224,6 +222,15 @@ public class MastVisitor extends DepthFirstVisitor {
         super.visit(n);
         popHierachy(HierachyLevelTypes.getSourceFileType(builder), sourceFile.getFileName(),
                 BeginOffset.getStartOffset(n), lastEndOffset, -1, -1);
+        // TODO find fix
+        if(!qmoSet.isEmpty()) {
+            String loc = "";
+            for(QuestionMarkOperator op : qmoSet) {
+                loc += op.getLocation().toString() + ", ";
+            }
+            throw new RuntimeException("Instrumenting conditional expressions in declarations " +
+                    "without a following statement is not supported (" + loc + ")");
+        }
     }
 
     @Override
@@ -398,6 +405,34 @@ public class MastVisitor extends DepthFirstVisitor {
                 n.nodeToken.beginOffset, lastEndOffset,
                 n.nodeToken.beginOffset, n.nodeToken.endOffset,
                 n.loopID, true);
+    }
+
+    @Override
+    public void visit(ConditionalExpression n) {
+        n.logicalORExpression.accept(this);
+
+        if(n.nodeOptional.present()) {
+            ConditionalExpressionRightSide r = (ConditionalExpressionRightSide) n.nodeOptional.node;
+            r.qmoID = cm.newQmoID();
+            r.nodeToken.accept(this);
+            int exp1begin = BeginOffset.getStartOffset(r.expression);
+            r.expression.accept(this);
+            QuestionMarkOperatorExpression exp1 = new QuestionMarkOperatorExpression(
+                    createLocationList(exp1begin, lastEndOffset),
+                    createCoverableItem(cm.qmoID(r.qmoID) + "-0"));
+            r.nodeToken1.accept(this);
+            int exp2begin = BeginOffset.getStartOffset(r.conditionalExpression);
+            r.conditionalExpression.accept(this);
+            QuestionMarkOperatorExpression exp2 = new QuestionMarkOperatorExpression(
+                    createLocationList(exp2begin, lastEndOffset),
+                    createCoverableItem(cm.qmoID(r.qmoID) + "-1"));
+
+
+            QuestionMarkOperator qmo = new QuestionMarkOperator(
+                    createLocationList(r.nodeToken.beginOffset, r.nodeToken.endOffset),
+                    createCoverableItem(cm.qmoID(r.qmoID)), exp1, exp2);
+            qmoSet.add(qmo);
+        }
     }
 
     @Override

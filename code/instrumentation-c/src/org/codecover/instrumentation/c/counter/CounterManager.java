@@ -11,11 +11,14 @@ public class CounterManager {
     final private String loopPrefix;
     private final String condVarName;
     private final String condPrefix;
+    private final String qmoVarName;
+    private final String qmoPrefix;
 
     private int stmtCounter;
     private int branchCounter;
     private int loopCounter;
     private int condCounter;
+    private int qmoCounter;
 
     /**
      * @param id must be a positive integer
@@ -32,6 +35,8 @@ public class CounterManager {
         loopTmpName = "CodeCover_LTMP" + id;
         condPrefix = "C";
         condVarName = "CodeCover_C" + id;
+        qmoPrefix = "Q";
+        qmoVarName = "CodeCover_Q" + id;
     }
 
     public String getFileName() {
@@ -124,5 +129,25 @@ public class CounterManager {
 
     public String condID(int i) {
         return condPrefix + Integer.toString(i);
+    }
+
+    public String qmoVarName() {
+        return qmoVarName;
+    }
+
+    public String qmoPrefix() {
+        return qmoPrefix;
+    }
+
+    public String qmoID(int i) {
+        return qmoPrefix + Integer.toString(i);
+    }
+
+    public int newQmoID() {
+        return qmoCounter++;
+    }
+
+    public int getQmoCnt() {
+        return qmoCounter;
     }
 }

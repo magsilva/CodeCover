@@ -209,10 +209,20 @@ public interface Visitor {
    /**
     * <PRE>
     * logicalORExpression -> LogicalORExpression()
-    * nodeOptional -> [ "?" Expression() ":" ConditionalExpression() ]
+    * nodeOptional -> [ ConditionalExpressionRightSide() ]
     * </PRE>
     */
    public void visit(ConditionalExpression n);
+
+   /**
+    * <PRE>
+    * nodeToken -> "?"
+    * expression -> Expression()
+    * nodeToken1 -> ":"
+    * conditionalExpression -> ConditionalExpression()
+    * </PRE>
+    */
+   public void visit(ConditionalExpressionRightSide n);
 
    /**
     * <PRE>

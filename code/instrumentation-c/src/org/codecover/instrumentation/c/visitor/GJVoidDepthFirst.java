@@ -297,12 +297,27 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
    /**
     * <PRE>
     * logicalORExpression -> LogicalORExpression()
-    * nodeOptional -> [ "?" Expression() ":" ConditionalExpression() ]
+    * nodeOptional -> [ ConditionalExpressionRightSide() ]
     * </PRE>
     */
    public void visit(ConditionalExpression n, A argu) {
       n.logicalORExpression.accept(this, argu);
       n.nodeOptional.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * nodeToken -> "?"
+    * expression -> Expression()
+    * nodeToken1 -> ":"
+    * conditionalExpression -> ConditionalExpression()
+    * </PRE>
+    */
+   public void visit(ConditionalExpressionRightSide n, A argu) {
+      n.nodeToken.accept(this, argu);
+      n.expression.accept(this, argu);
+      n.nodeToken1.accept(this, argu);
+      n.conditionalExpression.accept(this, argu);
    }
 
    /**

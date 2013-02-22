@@ -9,6 +9,7 @@ public class CCNode {
     public int branchID;
     public int loopID;
     public int condID;
+    public int qmoID;
 
     public InstrBooleanTerm terms;
 }

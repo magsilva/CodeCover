@@ -326,7 +326,13 @@ void LogicalORExpression() : {}
 // 6.5.15
 void ConditionalExpression() : {}
 {
-	LogicalORExpression() [ "?" Expression() ":" ConditionalExpression() ]
+	LogicalORExpression() [ ConditionalExpressionRightSide() ]
+}
+
+// 6.5.15
+void ConditionalExpressionRightSide() : {}
+{
+    "?" Expression() ":" ConditionalExpression()
 }
 
 // 6.5.16

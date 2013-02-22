@@ -1000,32 +1000,38 @@ ConditionalExpression ConditionalExpression() :
 {
    LogicalORExpression n0;
    NodeOptional n1 = new NodeOptional();
-   NodeSequence n2;
-   NodeToken n3;
-   Token n4;
-   Expression n5;
-   NodeToken n6;
-   Token n7;
-   ConditionalExpression n8;
+   ConditionalExpressionRightSide n2;
 
    
 }
 {
    n0=LogicalORExpression()
    (
-      { n2 = new NodeSequence(4); }
-      n4="?" { n3 = JTBToolkit.makeNodeToken(n4); }
-      { n2.addNode(n3); }
-      n5=Expression()
-      { n2.addNode(n5); }
-      n7=":" { n6 = JTBToolkit.makeNodeToken(n7); }
-      { n2.addNode(n6); }
-      n8=ConditionalExpression()
-      { n2.addNode(n8); }
+      n2=ConditionalExpressionRightSide()
       { n1.addNode(n2); }
    )?
    
    { return new ConditionalExpression(n0,n1); }
+}
+
+ConditionalExpressionRightSide ConditionalExpressionRightSide() :
+{
+   NodeToken n0;
+   Token n1;
+   Expression n2;
+   NodeToken n3;
+   Token n4;
+   ConditionalExpression n5;
+
+   
+}
+{
+   n1="?" { n0 = JTBToolkit.makeNodeToken(n1); }
+   n2=Expression()
+   n4=":" { n3 = JTBToolkit.makeNodeToken(n4); }
+   n5=ConditionalExpression()
+   
+   { return new ConditionalExpressionRightSide(n0,n2,n3,n5); }
 }
 
 AssignmentExpression AssignmentExpression() :

@@ -38,23 +38,26 @@ public class CExpressionParser extends GJNoArguDepthFirst<InstrBooleanTerm> impl
     public InstrBooleanTerm visit(ConditionalExpression n) {
         // Actually an conditional expression
         if(n.nodeOptional.present()) {
-            NodeSequence seq = (NodeSequence) n.nodeOptional.node;
-            NodeToken firstOp = (NodeToken) seq.nodes.get(0);
-            NodeToken secOp = (NodeToken) seq.nodes.get(2);
+            ConditionalExpressionRightSide r = (ConditionalExpressionRightSide) n.nodeOptional.node;
 
             ArrayList<InstrBooleanTerm> operands = new ArrayList<InstrBooleanTerm>(3);
 
             operands.add(n.logicalORExpression.accept(this));
-            operands.add(seq.elementAt(1).accept(this));
-            operands.add(seq.elementAt(3).accept(this));
+            operands.add(r.expression.accept(this));
+            operands.add(r.conditionalExpression.accept(this));
 
             return new InstrOperatorTerm(
                     CBooleanExpressions.conditionalOperator, operands,
-                    new int[]{firstOp.beginOffset, firstOp.endOffset,
-                            secOp.beginOffset, secOp.endOffset});
+                    new int[]{r.nodeToken.beginOffset, r.nodeToken.endOffset,
+                            r.nodeToken1.beginOffset, r.nodeToken1.endOffset});
         } else {
             return n.logicalORExpression.accept(this);
         }
+    }
+
+    @Override
+    public InstrBooleanTerm visit(ConditionalExpressionRightSide n) {
+        return super.visit(n);
     }
 
     @Override

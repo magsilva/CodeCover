@@ -195,9 +195,26 @@ public class InstrumentationVisitor extends DepthFirstVisitor {
         loopManipulator.visitAfter(out, n);
     }
 
+    @Override
+    public void visit(ConditionalExpressionRightSide n) {
+        n.nodeToken.accept(this);
+        out.print("(");
+        qmoManipulator.visitFirst(out, n);
+        out.print("(");
+        n.expression.accept(this);
+        out.print("))");
+        n.nodeToken1.accept(this);
+        out.print("(");
+        qmoManipulator.visitSecond(out, n);
+        out.print("(");
+        n.conditionalExpression.accept(this);
+        out.print("))");
+    }
+
     /**
      * Dumps the current NodeToken to the output stream
      */
+    @Override
     public void visit(NodeToken n) {
         out.append(n.tokenImage);
 

@@ -8,7 +8,7 @@ package org.codecover.instrumentation.c.syntaxtree;
  * Grammar production:
  * <PRE>
  * logicalORExpression -> LogicalORExpression()
- * nodeOptional -> [ "?" Expression() ":" ConditionalExpression() ]
+ * nodeOptional -> [ ConditionalExpressionRightSide() ]
  * </PRE>
  */
 public class ConditionalExpression extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
