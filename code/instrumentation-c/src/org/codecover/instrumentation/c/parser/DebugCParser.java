@@ -38,7 +38,6 @@ public class DebugCParser implements CParserConstants {
         n0 = new NodeChoice(n3, 1);
         break;
       default:
-        jj_la1[0] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -79,7 +78,6 @@ public class DebugCParser implements CParserConstants {
           ;
           break;
         default:
-          jj_la1[1] = jj_gen;
           break label_1;
         }
       }
@@ -138,7 +136,6 @@ public class DebugCParser implements CParserConstants {
         n0 = new NodeChoice(n11, 4);
         break;
       default:
-        jj_la1[2] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -196,7 +193,6 @@ public class DebugCParser implements CParserConstants {
           ;
           break;
         default:
-          jj_la1[3] = jj_gen;
           break label_2;
         }
         n2 = new NodeSequence(2);
@@ -232,7 +228,6 @@ public class DebugCParser implements CParserConstants {
            n0 = new NodeChoice(n1, 0);
         break;
       default:
-        jj_la1[4] = jj_gen;
         if (jj_2_1(1)) {
           n3 = TypeName();
            n0 = new NodeChoice(n3, 1);
@@ -322,7 +317,6 @@ public class DebugCParser implements CParserConstants {
            n10.addNode(n11);
           break;
         default:
-          jj_la1[5] = jj_gen;
           ;
         }
         n1.addNode(n10);
@@ -353,7 +347,6 @@ public class DebugCParser implements CParserConstants {
               ;
               break;
             default:
-              jj_la1[6] = jj_gen;
               break label_3;
             }
            n28 = new NodeOptional();
@@ -418,7 +411,6 @@ public class DebugCParser implements CParserConstants {
               n18 = new NodeChoice(n44, 5);
               break;
             default:
-              jj_la1[7] = jj_gen;
               jj_consume_token(-1);
               throw new ParseException();
             }
@@ -429,7 +421,6 @@ public class DebugCParser implements CParserConstants {
         n0 = new NodeChoice(n15, 1);
           break;
         default:
-          jj_la1[8] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -458,7 +449,6 @@ public class DebugCParser implements CParserConstants {
           ;
           break;
         default:
-          jj_la1[9] = jj_gen;
           break label_4;
         }
         n2 = new NodeSequence(2);
@@ -586,7 +576,6 @@ public class DebugCParser implements CParserConstants {
               n16 = new NodeChoice(n23, 1);
               break;
             default:
-              jj_la1[10] = jj_gen;
               jj_consume_token(-1);
               throw new ParseException();
             }
@@ -610,7 +599,6 @@ public class DebugCParser implements CParserConstants {
         n0 = new NodeChoice(n24, 5);
           break;
         default:
-          jj_la1[11] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -670,7 +658,6 @@ public class DebugCParser implements CParserConstants {
            n0 = new NodeChoice(n11, 5);
         break;
       default:
-        jj_la1[12] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -728,7 +715,6 @@ public class DebugCParser implements CParserConstants {
            n0 = new NodeChoice(n8, 1);
           break;
         default:
-          jj_la1[13] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -777,7 +763,6 @@ public class DebugCParser implements CParserConstants {
               n3 = new NodeChoice(n8, 2);
           break;
         default:
-          jj_la1[14] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -787,7 +772,6 @@ public class DebugCParser implements CParserConstants {
         n1.addNode(n2);
         break;
       default:
-        jj_la1[15] = jj_gen;
         ;
       }
      {if (true) return new MultiplicativeExpression(n0,n1);}
@@ -826,7 +810,6 @@ public class DebugCParser implements CParserConstants {
               n3 = new NodeChoice(n6, 1);
           break;
         default:
-          jj_la1[16] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -836,7 +819,6 @@ public class DebugCParser implements CParserConstants {
         n1.addNode(n2);
         break;
       default:
-        jj_la1[17] = jj_gen;
         ;
       }
      {if (true) return new AdditiveExpression(n0,n1);}
@@ -875,7 +857,6 @@ public class DebugCParser implements CParserConstants {
               n3 = new NodeChoice(n6, 1);
           break;
         default:
-          jj_la1[18] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -885,7 +866,6 @@ public class DebugCParser implements CParserConstants {
         n1.addNode(n2);
         break;
       default:
-        jj_la1[19] = jj_gen;
         ;
       }
      {if (true) return new ShiftExpression(n0,n1);}
@@ -940,7 +920,6 @@ public class DebugCParser implements CParserConstants {
               n3 = new NodeChoice(n10, 3);
           break;
         default:
-          jj_la1[20] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -950,7 +929,6 @@ public class DebugCParser implements CParserConstants {
         n1.addNode(n2);
         break;
       default:
-        jj_la1[21] = jj_gen;
         ;
       }
      {if (true) return new RelationalExpression(n0,n1);}
@@ -989,7 +967,6 @@ public class DebugCParser implements CParserConstants {
               n3 = new NodeChoice(n6, 1);
           break;
         default:
-          jj_la1[22] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -999,7 +976,6 @@ public class DebugCParser implements CParserConstants {
         n1.addNode(n2);
         break;
       default:
-        jj_la1[23] = jj_gen;
         ;
       }
      {if (true) return new EqualityExpression(n0,n1);}
@@ -1030,7 +1006,6 @@ public class DebugCParser implements CParserConstants {
         n1.addNode(n2);
         break;
       default:
-        jj_la1[24] = jj_gen;
         ;
       }
      {if (true) return new ANDExpression(n0,n1);}
@@ -1061,7 +1036,6 @@ public class DebugCParser implements CParserConstants {
         n1.addNode(n2);
         break;
       default:
-        jj_la1[25] = jj_gen;
         ;
       }
      {if (true) return new ExclusiveORExpression(n0,n1);}
@@ -1092,7 +1066,6 @@ public class DebugCParser implements CParserConstants {
         n1.addNode(n2);
         break;
       default:
-        jj_la1[26] = jj_gen;
         ;
       }
      {if (true) return new InclusiveORExpression(n0,n1);}
@@ -1123,7 +1096,6 @@ public class DebugCParser implements CParserConstants {
         n1.addNode(n2);
         break;
       default:
-        jj_la1[27] = jj_gen;
         ;
       }
      {if (true) return new LogicalANDExpression(n0,n1);}
@@ -1154,7 +1126,6 @@ public class DebugCParser implements CParserConstants {
         n1.addNode(n2);
         break;
       default:
-        jj_la1[28] = jj_gen;
         ;
       }
      {if (true) return new LogicalORExpression(n0,n1);}
@@ -1177,7 +1148,6 @@ public class DebugCParser implements CParserConstants {
         n1.addNode(n2);
         break;
       default:
-        jj_la1[29] = jj_gen;
         ;
       }
      {if (true) return new ConditionalExpression(n0,n1);}
@@ -1249,7 +1219,6 @@ public class DebugCParser implements CParserConstants {
         n0 = new NodeChoice(n5, 1);
           break;
         default:
-          jj_la1[30] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -1344,7 +1313,6 @@ public class DebugCParser implements CParserConstants {
         n0 = new NodeChoice(n21, 10);
         break;
       default:
-        jj_la1[31] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -1372,7 +1340,6 @@ public class DebugCParser implements CParserConstants {
           ;
           break;
         default:
-          jj_la1[32] = jj_gen;
           break label_5;
         }
         n2 = new NodeSequence(2);
@@ -1426,7 +1393,6 @@ public class DebugCParser implements CParserConstants {
               n3.addNode(n4);
           break;
         default:
-          jj_la1[33] = jj_gen;
           ;
         }
            n1.addNode(n3);
@@ -1441,7 +1407,6 @@ public class DebugCParser implements CParserConstants {
            n0 = new NodeChoice(n7, 1);
           break;
         default:
-          jj_la1[34] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -1497,7 +1462,6 @@ public class DebugCParser implements CParserConstants {
         n0 = new NodeChoice(n1, 0);
         break;
       default:
-        jj_la1[35] = jj_gen;
         if (jj_2_14(2)) {
         n5 = new NodeSequence(3);
           n6 = TypeSpecifier();
@@ -1556,7 +1520,6 @@ public class DebugCParser implements CParserConstants {
         n0 = new NodeChoice(n17, 4);
             break;
           default:
-            jj_la1[36] = jj_gen;
             jj_consume_token(-1);
             throw new ParseException();
           }
@@ -1586,7 +1549,6 @@ public class DebugCParser implements CParserConstants {
           ;
           break;
         default:
-          jj_la1[37] = jj_gen;
           break label_6;
         }
         n2 = new NodeSequence(2);
@@ -1630,7 +1592,6 @@ public class DebugCParser implements CParserConstants {
         n1.addNode(n2);
         break;
       default:
-        jj_la1[38] = jj_gen;
         ;
       }
      {if (true) return new InitDeclarator(n0,n1);}
@@ -1689,7 +1650,6 @@ public class DebugCParser implements CParserConstants {
            n0 = new NodeChoice(n11, 5);
         break;
       default:
-        jj_la1[39] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -1800,7 +1760,6 @@ public class DebugCParser implements CParserConstants {
            n0 = new NodeChoice(n25, 13);
         break;
       default:
-        jj_la1[40] = jj_gen;
         if (isType(getToken(1).image)) {
           n26 = TypedefName();
            n0 = new NodeChoice(n26, 14);
@@ -1843,7 +1802,6 @@ public class DebugCParser implements CParserConstants {
               n3.addNode(n4);
           break;
         default:
-          jj_la1[41] = jj_gen;
           ;
         }
            n2.addNode(n3);
@@ -1864,7 +1822,6 @@ public class DebugCParser implements CParserConstants {
            n1 = new NodeChoice(n11, 1);
           break;
         default:
-          jj_la1[42] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -1897,7 +1854,6 @@ public class DebugCParser implements CParserConstants {
            n0 = new NodeChoice(n3, 1);
         break;
       default:
-        jj_la1[43] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -1955,7 +1911,6 @@ public class DebugCParser implements CParserConstants {
               n3.addNode(n4);
           break;
         default:
-          jj_la1[44] = jj_gen;
           ;
         }
            n1.addNode(n3);
@@ -1970,7 +1925,6 @@ public class DebugCParser implements CParserConstants {
            n0 = new NodeChoice(n7, 1);
           break;
         default:
-          jj_la1[45] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -2025,7 +1979,6 @@ public class DebugCParser implements CParserConstants {
         n0 = new NodeChoice(n5, 1);
           break;
         default:
-          jj_la1[46] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -2054,7 +2007,6 @@ public class DebugCParser implements CParserConstants {
           ;
           break;
         default:
-          jj_la1[47] = jj_gen;
           break label_8;
         }
         n2 = new NodeSequence(2);
@@ -2106,7 +2058,6 @@ public class DebugCParser implements CParserConstants {
            n3.addNode(n4);
           break;
         default:
-          jj_la1[48] = jj_gen;
           ;
         }
         n1.addNode(n3);
@@ -2122,7 +2073,6 @@ public class DebugCParser implements CParserConstants {
         n0 = new NodeChoice(n8, 1);
         break;
       default:
-        jj_la1[49] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -2164,7 +2114,6 @@ public class DebugCParser implements CParserConstants {
               n4.addNode(n5);
           break;
         default:
-          jj_la1[50] = jj_gen;
           ;
         }
            n3.addNode(n4);
@@ -2180,7 +2129,6 @@ public class DebugCParser implements CParserConstants {
               n10.addNode(n11);
           break;
         default:
-          jj_la1[51] = jj_gen;
           ;
         }
            n3.addNode(n10);
@@ -2196,7 +2144,6 @@ public class DebugCParser implements CParserConstants {
            n2 = new NodeChoice(n15, 1);
           break;
         default:
-          jj_la1[52] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -2262,7 +2209,6 @@ public class DebugCParser implements CParserConstants {
         n1.addNode(n2);
         break;
       default:
-        jj_la1[53] = jj_gen;
         ;
       }
      {if (true) return new Enumerator(n0,n1);}
@@ -2336,7 +2282,6 @@ public class DebugCParser implements CParserConstants {
            n0 = new NodeChoice(n7, 3);
         break;
       default:
-        jj_la1[54] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -2367,7 +2312,6 @@ public class DebugCParser implements CParserConstants {
            n0 = new NodeChoice(n3, 1);
         break;
       default:
-        jj_la1[55] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -2419,7 +2363,6 @@ public class DebugCParser implements CParserConstants {
            n4 = new NodeChoice(n6, 1);
           break;
         default:
-          jj_la1[56] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -2445,7 +2388,6 @@ public class DebugCParser implements CParserConstants {
         n0.addNode(n1);
         break;
       default:
-        jj_la1[57] = jj_gen;
         ;
       }
       n2 = DirectDeclarator();
@@ -2534,7 +2476,6 @@ public class DebugCParser implements CParserConstants {
            n0 = new NodeChoice(n3, 1);
         break;
       default:
-        jj_la1[58] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -2547,7 +2488,6 @@ public class DebugCParser implements CParserConstants {
           ;
           break;
         default:
-          jj_la1[59] = jj_gen;
           break label_10;
         }
         n18 = new NodeOptional();
@@ -2575,7 +2515,6 @@ public class DebugCParser implements CParserConstants {
                     n18.addNode(n19);
               break;
             default:
-              jj_la1[60] = jj_gen;
               ;
             }
                  n15.addNode(n18);
@@ -2584,7 +2523,6 @@ public class DebugCParser implements CParserConstants {
                  n14 = new NodeChoice(n15, 0);
             break;
           default:
-            jj_la1[63] = jj_gen;
             if (jj_2_23(2147483647)) {
                  n21 = new NodeSequence(4);
               n22 = TypeQualifierList();
@@ -2606,7 +2544,6 @@ public class DebugCParser implements CParserConstants {
                     n27.addNode(n28);
                 break;
               default:
-                jj_la1[61] = jj_gen;
                 ;
               }
                  n26.addNode(n27);
@@ -2639,7 +2576,6 @@ public class DebugCParser implements CParserConstants {
                     n33.addNode(n34);
                 break;
               default:
-                jj_la1[62] = jj_gen;
                 ;
               }
                  n14 = new NodeChoice(n33, 3);
@@ -2652,7 +2588,6 @@ public class DebugCParser implements CParserConstants {
            n10 = new NodeChoice(n11, 0);
           break;
         default:
-          jj_la1[65] = jj_gen;
           if (jj_2_25(3)) {
            n37 = new NodeSequence(4);
             n39 = jj_consume_token(RBL);
@@ -2677,7 +2612,6 @@ public class DebugCParser implements CParserConstants {
               n46.addNode(n47);
                 break;
               default:
-                jj_la1[64] = jj_gen;
                 ;
               }
            n43.addNode(n46);
@@ -2687,7 +2621,6 @@ public class DebugCParser implements CParserConstants {
            n10 = new NodeChoice(n43, 2);
               break;
             default:
-              jj_la1[66] = jj_gen;
               jj_consume_token(-1);
               throw new ParseException();
             }
@@ -2724,7 +2657,6 @@ public class DebugCParser implements CParserConstants {
         n2.addNode(n3);
         break;
       default:
-        jj_la1[67] = jj_gen;
         ;
       }
       switch (jj_nt.kind) {
@@ -2733,7 +2665,6 @@ public class DebugCParser implements CParserConstants {
         n4.addNode(n5);
         break;
       default:
-        jj_la1[68] = jj_gen;
         ;
       }
      {if (true) return new Pointer(n0,n2,n4);}
@@ -2760,7 +2691,6 @@ public class DebugCParser implements CParserConstants {
           ;
           break;
         default:
-          jj_la1[69] = jj_gen;
           break label_11;
         }
       }
@@ -2795,7 +2725,6 @@ public class DebugCParser implements CParserConstants {
         n1.addNode(n2);
         break;
       default:
-        jj_la1[70] = jj_gen;
         ;
       }
      {if (true) return new ParameterTypeList(n0,n1);}
@@ -2859,7 +2788,6 @@ public class DebugCParser implements CParserConstants {
               n3.addNode(n4);
           break;
         default:
-          jj_la1[71] = jj_gen;
           ;
         }
            n1 = new NodeChoice(n3, 1);
@@ -2891,7 +2819,6 @@ public class DebugCParser implements CParserConstants {
           ;
           break;
         default:
-          jj_la1[72] = jj_gen;
           break label_13;
         }
         n3 = new NodeSequence(2);
@@ -2926,7 +2853,6 @@ public class DebugCParser implements CParserConstants {
         n1.addNode(n2);
         break;
       default:
-        jj_la1[73] = jj_gen;
         ;
       }
      {if (true) return new TypeName(n0,n1);}
@@ -2960,7 +2886,6 @@ public class DebugCParser implements CParserConstants {
               n3.addNode(n4);
             break;
           default:
-            jj_la1[74] = jj_gen;
             ;
           }
            n2.addNode(n3);
@@ -2969,7 +2894,6 @@ public class DebugCParser implements CParserConstants {
            n0 = new NodeChoice(n2, 1);
           break;
         default:
-          jj_la1[75] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -3103,7 +3027,6 @@ public class DebugCParser implements CParserConstants {
                     n21.addNode(n22);
               break;
             default:
-              jj_la1[76] = jj_gen;
               ;
             }
                  n18.addNode(n21);
@@ -3112,7 +3035,6 @@ public class DebugCParser implements CParserConstants {
                  n17 = new NodeChoice(n18, 0);
             break;
           default:
-            jj_la1[78] = jj_gen;
             if (jj_2_30(2147483647)) {
                  n24 = new NodeSequence(4);
               n25 = TypeQualifierList();
@@ -3159,7 +3081,6 @@ public class DebugCParser implements CParserConstants {
                     n32.addNode(n33);
                   break;
                 default:
-                  jj_la1[77] = jj_gen;
                   ;
                 }
                  n31.addNode(n32);
@@ -3168,7 +3089,6 @@ public class DebugCParser implements CParserConstants {
                  n17 = new NodeChoice(n31, 3);
                 break;
               default:
-                jj_la1[79] = jj_gen;
                 jj_consume_token(-1);
                 throw new ParseException();
               }
@@ -3181,7 +3101,6 @@ public class DebugCParser implements CParserConstants {
            n0 = new NodeChoice(n14, 2);
           break;
         default:
-          jj_la1[80] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -3194,7 +3113,6 @@ public class DebugCParser implements CParserConstants {
           ;
           break;
         default:
-          jj_la1[81] = jj_gen;
           break label_14;
         }
         n42 = new NodeOptional();
@@ -3238,7 +3156,6 @@ public class DebugCParser implements CParserConstants {
                     n53.addNode(n54);
               break;
             default:
-              jj_la1[82] = jj_gen;
               ;
             }
                  n50.addNode(n53);
@@ -3247,7 +3164,6 @@ public class DebugCParser implements CParserConstants {
                  n49 = new NodeChoice(n50, 0);
             break;
           default:
-            jj_la1[84] = jj_gen;
             if (jj_2_34(2147483647)) {
                  n56 = new NodeSequence(4);
               n57 = TypeQualifierList();
@@ -3294,7 +3210,6 @@ public class DebugCParser implements CParserConstants {
                     n64.addNode(n65);
                   break;
                 default:
-                  jj_la1[83] = jj_gen;
                   ;
                 }
                  n63.addNode(n64);
@@ -3303,7 +3218,6 @@ public class DebugCParser implements CParserConstants {
                  n49 = new NodeChoice(n63, 3);
                 break;
               default:
-                jj_la1[85] = jj_gen;
                 jj_consume_token(-1);
                 throw new ParseException();
               }
@@ -3316,7 +3230,6 @@ public class DebugCParser implements CParserConstants {
            n38 = new NodeChoice(n46, 1);
           break;
         default:
-          jj_la1[86] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -3392,7 +3305,6 @@ public class DebugCParser implements CParserConstants {
               n6.addNode(n7);
           break;
         default:
-          jj_la1[87] = jj_gen;
           ;
         }
            n2.addNode(n6);
@@ -3402,7 +3314,6 @@ public class DebugCParser implements CParserConstants {
            n0 = new NodeChoice(n2, 1);
         break;
       default:
-        jj_la1[88] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -3431,7 +3342,6 @@ public class DebugCParser implements CParserConstants {
         n0.addNode(n1);
         break;
       default:
-        jj_la1[89] = jj_gen;
         ;
       }
       n2 = Initializer();
@@ -3489,7 +3399,6 @@ public class DebugCParser implements CParserConstants {
           ;
           break;
         default:
-          jj_la1[90] = jj_gen;
           break label_16;
         }
       }
@@ -3540,7 +3449,6 @@ public class DebugCParser implements CParserConstants {
            n0 = new NodeChoice(n7, 1);
         break;
       default:
-        jj_la1[91] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -3657,7 +3565,6 @@ public class DebugCParser implements CParserConstants {
            n0 = new NodeChoice(n9, 8);
           break;
         default:
-          jj_la1[92] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -3703,7 +3610,6 @@ public class DebugCParser implements CParserConstants {
            n0 = new NodeChoice(n8, 2);
         break;
       default:
-        jj_la1[93] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -3849,7 +3755,6 @@ public class DebugCParser implements CParserConstants {
         n0 = new NodeChoice(n2, 1);
           break;
         default:
-          jj_la1[94] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -3889,7 +3794,6 @@ public class DebugCParser implements CParserConstants {
         n0.addNode(n1);
         break;
       default:
-        jj_la1[95] = jj_gen;
         ;
       }
       n3 = jj_consume_token(SEMICOLON);
@@ -4084,7 +3988,6 @@ public class DebugCParser implements CParserConstants {
               n7.addNode(n8);
           break;
         default:
-          jj_la1[96] = jj_gen;
           ;
         }
            n5.addNode(n7);
@@ -4130,7 +4033,6 @@ public class DebugCParser implements CParserConstants {
               n10.addNode(n11);
             break;
           default:
-            jj_la1[97] = jj_gen;
             ;
           }
            n9.addNode(n10);
@@ -4158,14 +4060,12 @@ public class DebugCParser implements CParserConstants {
               n14.addNode(n15);
             break;
           default:
-            jj_la1[98] = jj_gen;
             ;
           }
            n9.addNode(n14);
            n4 = new NodeChoice(n9, 1);
           break;
         default:
-          jj_la1[99] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -4193,7 +4093,6 @@ public class DebugCParser implements CParserConstants {
         n18.addNode(n19);
         break;
       default:
-        jj_la1[100] = jj_gen;
         ;
       }
       n21 = jj_consume_token(RBR);
@@ -4267,7 +4166,6 @@ public class DebugCParser implements CParserConstants {
            n0 = new NodeChoice(n18, 3);
         break;
       default:
-        jj_la1[101] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -4310,7 +4208,6 @@ public class DebugCParser implements CParserConstants {
         n2.addNode(n3);
         break;
       default:
-        jj_la1[102] = jj_gen;
         ;
       }
       n5 = jj_consume_token(SEMICOLON);
@@ -4425,344 +4322,288 @@ public class DebugCParser implements CParserConstants {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_1(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(0, xla); }
   }
 
   private boolean jj_2_2(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_2(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(1, xla); }
   }
 
   private boolean jj_2_3(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_3(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(2, xla); }
   }
 
   private boolean jj_2_4(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_4(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(3, xla); }
   }
 
   private boolean jj_2_5(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_5(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(4, xla); }
   }
 
   private boolean jj_2_6(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_6(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(5, xla); }
   }
 
   private boolean jj_2_7(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_7(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(6, xla); }
   }
 
   private boolean jj_2_8(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_8(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(7, xla); }
   }
 
   private boolean jj_2_9(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_9(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(8, xla); }
   }
 
   private boolean jj_2_10(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_10(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(9, xla); }
   }
 
   private boolean jj_2_11(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_11(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(10, xla); }
   }
 
   private boolean jj_2_12(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_12(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(11, xla); }
   }
 
   private boolean jj_2_13(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_13(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(12, xla); }
   }
 
   private boolean jj_2_14(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_14(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(13, xla); }
   }
 
   private boolean jj_2_15(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_15(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(14, xla); }
   }
 
   private boolean jj_2_16(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_16(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(15, xla); }
   }
 
   private boolean jj_2_17(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_17(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(16, xla); }
   }
 
   private boolean jj_2_18(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_18(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(17, xla); }
   }
 
   private boolean jj_2_19(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_19(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(18, xla); }
   }
 
   private boolean jj_2_20(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_20(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(19, xla); }
   }
 
   private boolean jj_2_21(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_21(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(20, xla); }
   }
 
   private boolean jj_2_22(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_22(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(21, xla); }
   }
 
   private boolean jj_2_23(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_23(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(22, xla); }
   }
 
   private boolean jj_2_24(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_24(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(23, xla); }
   }
 
   private boolean jj_2_25(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_25(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(24, xla); }
   }
 
   private boolean jj_2_26(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_26(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(25, xla); }
   }
 
   private boolean jj_2_27(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_27(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(26, xla); }
   }
 
   private boolean jj_2_28(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_28(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(27, xla); }
   }
 
   private boolean jj_2_29(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_29(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(28, xla); }
   }
 
   private boolean jj_2_30(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_30(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(29, xla); }
   }
 
   private boolean jj_2_31(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_31(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(30, xla); }
   }
 
   private boolean jj_2_32(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_32(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(31, xla); }
   }
 
   private boolean jj_2_33(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_33(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(32, xla); }
   }
 
   private boolean jj_2_34(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_34(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(33, xla); }
   }
 
   private boolean jj_2_35(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_35(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(34, xla); }
   }
 
   private boolean jj_2_36(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_36(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(35, xla); }
   }
 
   private boolean jj_2_37(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_37(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(36, xla); }
   }
 
   private boolean jj_2_38(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_38(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(37, xla); }
   }
 
   private boolean jj_2_39(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_39(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(38, xla); }
   }
 
   private boolean jj_2_40(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_40(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(39, xla); }
   }
 
   private boolean jj_2_41(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_41(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(40, xla); }
   }
 
   private boolean jj_2_42(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_42(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(41, xla); }
   }
 
   private boolean jj_2_43(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_43(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(42, xla); }
   }
 
   private boolean jj_2_44(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_44(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(43, xla); }
   }
 
   private boolean jj_2_45(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_45(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(44, xla); }
   }
 
   private boolean jj_2_46(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_46(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(45, xla); }
   }
 
   private boolean jj_2_47(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_47(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(46, xla); }
   }
 
   private boolean jj_2_48(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     try { return !jj_3_48(); }
     catch(LookaheadSuccess ls) { return true; }
-    finally { jj_save(47, xla); }
-  }
-
-  private boolean jj_3R_280() {
-    if (jj_3R_288()) return true;
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_289()) jj_scanpos = xsp;
-    return false;
   }
 
   private boolean jj_3R_29() {
@@ -7295,6 +7136,14 @@ public class DebugCParser implements CParserConstants {
     return false;
   }
 
+  private boolean jj_3R_280() {
+    if (jj_3R_288()) return true;
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_289()) jj_scanpos = xsp;
+    return false;
+  }
+
   /** User defined Token Manager. */
   public TokenManager token_source;
   /** Current token. */
@@ -7306,33 +7155,6 @@ public class DebugCParser implements CParserConstants {
   /** Whether we are looking ahead. */
   private boolean jj_lookingAhead = false;
   private boolean jj_semLA;
-  private int jj_gen;
-  final private int[] jj_la1 = new int[103];
-  static private int[] jj_la1_0;
-  static private int[] jj_la1_1;
-  static private int[] jj_la1_2;
-  static private int[] jj_la1_3;
-  static {
-      jj_la1_init_0();
-      jj_la1_init_1();
-      jj_la1_init_2();
-      jj_la1_init_3();
-   }
-   private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x102,0x200,0x302,0x0,0x20000,0x0,0x0,0x0,0x302,0x0,0x702,0x400,0x0,0x702,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x702,0x0,0x0,0x0,0x0,0x40400800,0x88008000,0x0,0x0,0x40400800,0x30a84000,0x0,0x0,0x0,0x0,0x0,0x80008000,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x80008000,0x8000000,0x702,0x0,0x0,0x0,0x80008000,0x80008000,0x702,0x0,0x0,0x0,0x0,0x80008000,0x0,0x80008000,0x0,0x0,0x0,0x0,0x0,0x0,0x80008000,0x80008000,0x0,0x80008702,0x0,0x0,0x80008000,0x80008000,0x0,0x80008702,0x0,0x0,0x702,0x0,0x0,0x0,0x7051702,0x22000,0x7073702,0x702,0x702,0x702,0x702,0x702,0x702,0x2011000,0x702,};
-   }
-   private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x0,0x0,0x20420000,0x0,0x0,0x0,0x26000000,0x26000000,0x20420000,0x0,0x26420008,0x6000008,0x0,0x26420008,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x8000000,0x10000000,0x0,0x26420008,0x0,0x0,0x20400000,0x100000,0x200090,0x86800,0x0,0x0,0x200090,0x1c726,0x400000,0x400000,0x120,0x20400000,0x100000,0x4800,0x0,0x0,0x20400000,0x400000,0x0,0x400000,0x0,0x4800,0x80000,0x26420008,0x0,0x20400000,0x20000000,0x4800,0x4800,0x26420008,0x10,0x400000,0x0,0x20000000,0x4800,0x0,0x4800,0x0,0x20000000,0x0,0x20000000,0x0,0x20000000,0x4800,0x4800,0x10,0x26424808,0x20000000,0x20000000,0x4800,0x4800,0x10,0x26424808,0x20000000,0x0,0xa6420008,0x0,0x0,0x0,0xa6421049,0x400000,0xa6421049,0x26420008,0x26420008,0x26420008,0x26420008,0x26420008,0x26420008,0x1,0x26420008,};
-   }
-   private static void jj_la1_init_2() {
-      jj_la1_2 = new int[] {0x0,0x0,0x0,0x4000,0x0,0x4000,0x240002,0x240002,0x0,0x4000,0xbc8,0xbc8,0xbc8,0xbc8,0x38,0x38,0xc0,0xc0,0xc00000,0xc00000,0x3180000,0x3180000,0xc000000,0xc000000,0x200,0x1000,0x2000,0x0,0x0,0x400,0xbc8,0xf0020000,0x4000,0x8,0x0,0x0,0x0,0x4000,0x20000,0x0,0x0,0x0,0x0,0x0,0x10008,0x0,0x0,0x4000,0x10000,0x10008,0x0,0x4000,0x0,0x20000,0x0,0x0,0xbc8,0x8,0x0,0x2,0x0,0x0,0xbc8,0x0,0x0,0x2,0x0,0x0,0x8,0x0,0x4000,0xa,0x4000,0xa,0x8,0xa,0x0,0x0,0x0,0xbc8,0x2,0x2,0x0,0x0,0x0,0xbc8,0x2,0x4000,0xbc8,0x40002,0x40002,0x40002,0x8bc8,0x0,0x8bc8,0xbc8,0xbc8,0xbc8,0xbc8,0x8bc8,0xbc8,0x0,0xbc8,};
-   }
-   private static void jj_la1_init_3() {
-      jj_la1_3 = new int[] {0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x3f,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,};
-   }
-  final private JJCalls[] jj_2_rtns = new JJCalls[48];
-  private boolean jj_rescan = false;
-  private int jj_gc = 0;
 
 
   /** Constructor with user supplied Token Manager. */
@@ -7340,9 +7162,6 @@ public class DebugCParser implements CParserConstants {
     token_source = tm;
     token = new Token();
     token.next = jj_nt = token_source.getNextToken();
-    jj_gen = 0;
-    for (int i = 0; i < 103; i++) jj_la1[i] = -1;
-    for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
   /** Reinitialise. */
@@ -7350,9 +7169,6 @@ public class DebugCParser implements CParserConstants {
     token_source = tm;
     token = new Token();
     token.next = jj_nt = token_source.getNextToken();
-    jj_gen = 0;
-    for (int i = 0; i < 103; i++) jj_la1[i] = -1;
-    for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
   private Token jj_consume_token(int kind) throws ParseException {
@@ -7360,23 +7176,11 @@ public class DebugCParser implements CParserConstants {
     if ((token = jj_nt).next != null) jj_nt = jj_nt.next;
     else jj_nt = jj_nt.next = token_source.getNextToken();
     if (token.kind == kind) {
-      jj_gen++;
-      if (++jj_gc > 100) {
-        jj_gc = 0;
-        for (int i = 0; i < jj_2_rtns.length; i++) {
-          JJCalls c = jj_2_rtns[i];
-          while (c != null) {
-            if (c.gen < jj_gen) c.first = null;
-            c = c.next;
-          }
-        }
-      }
       trace_token(token, "");
       return token;
     }
     jj_nt = token;
     token = oldToken;
-    jj_kind = kind;
     throw generateParseException();
   }
 
@@ -7393,11 +7197,6 @@ public class DebugCParser implements CParserConstants {
     } else {
       jj_scanpos = jj_scanpos.next;
     }
-    if (jj_rescan) {
-      int i = 0; Token tok = token;
-      while (tok != null && tok != jj_scanpos) { i++; tok = tok.next; }
-      if (tok != null) jj_add_error_token(kind, i);
-    }
     if (jj_scanpos.kind != kind) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) throw jj_ls;
     return false;
@@ -7408,7 +7207,6 @@ public class DebugCParser implements CParserConstants {
   final public Token getNextToken() {
     if ((token = jj_nt).next != null) jj_nt = jj_nt.next;
     else jj_nt = jj_nt.next = token_source.getNextToken();
-    jj_gen++;
       trace_token(token, " (in getNextToken)");
     return token;
   }
@@ -7423,78 +7221,12 @@ public class DebugCParser implements CParserConstants {
     return t;
   }
 
-  private java.util.List<int[]> jj_expentries = new java.util.ArrayList<int[]>();
-  private int[] jj_expentry;
-  private int jj_kind = -1;
-  private int[] jj_lasttokens = new int[100];
-  private int jj_endpos;
-
-  private void jj_add_error_token(int kind, int pos) {
-    if (pos >= 100) return;
-    if (pos == jj_endpos + 1) {
-      jj_lasttokens[jj_endpos++] = kind;
-    } else if (jj_endpos != 0) {
-      jj_expentry = new int[jj_endpos];
-      for (int i = 0; i < jj_endpos; i++) {
-        jj_expentry[i] = jj_lasttokens[i];
-      }
-      jj_entries_loop: for (java.util.Iterator<?> it = jj_expentries.iterator(); it.hasNext();) {
-        int[] oldentry = (int[])(it.next());
-        if (oldentry.length == jj_expentry.length) {
-          for (int i = 0; i < jj_expentry.length; i++) {
-            if (oldentry[i] != jj_expentry[i]) {
-              continue jj_entries_loop;
-            }
-          }
-          jj_expentries.add(jj_expentry);
-          break jj_entries_loop;
-        }
-      }
-      if (pos != 0) jj_lasttokens[(jj_endpos = pos) - 1] = kind;
-    }
-  }
-
   /** Generate ParseException. */
   public ParseException generateParseException() {
-    jj_expentries.clear();
-    boolean[] la1tokens = new boolean[103];
-    if (jj_kind >= 0) {
-      la1tokens[jj_kind] = true;
-      jj_kind = -1;
-    }
-    for (int i = 0; i < 103; i++) {
-      if (jj_la1[i] == jj_gen) {
-        for (int j = 0; j < 32; j++) {
-          if ((jj_la1_0[i] & (1<<j)) != 0) {
-            la1tokens[j] = true;
-          }
-          if ((jj_la1_1[i] & (1<<j)) != 0) {
-            la1tokens[32+j] = true;
-          }
-          if ((jj_la1_2[i] & (1<<j)) != 0) {
-            la1tokens[64+j] = true;
-          }
-          if ((jj_la1_3[i] & (1<<j)) != 0) {
-            la1tokens[96+j] = true;
-          }
-        }
-      }
-    }
-    for (int i = 0; i < 103; i++) {
-      if (la1tokens[i]) {
-        jj_expentry = new int[1];
-        jj_expentry[0] = i;
-        jj_expentries.add(jj_expentry);
-      }
-    }
-    jj_endpos = 0;
-    jj_rescan_token();
-    jj_add_error_token(0, 0);
-    int[][] exptokseq = new int[jj_expentries.size()][];
-    for (int i = 0; i < jj_expentries.size(); i++) {
-      exptokseq[i] = jj_expentries.get(i);
-    }
-    return new ParseException(token, exptokseq, tokenImage);
+    Token errortok = token.next;
+    int line = errortok.beginLine, column = errortok.beginColumn;
+    String mess = (errortok.kind == 0) ? tokenImage[0] : errortok.image;
+    return new ParseException("Parse error at line " + line + ", column " + column + ".  Encountered: " + mess);
   }
 
   private int trace_indent = 0;
@@ -7546,88 +7278,6 @@ public class DebugCParser implements CParserConstants {
       }
       System.out.println(" at line " + t1.beginLine + " column " + t1.beginColumn + ">; Expected token: <" + tokenImage[t2] + ">");
     }
-  }
-
-  private void jj_rescan_token() {
-    jj_rescan = true;
-    for (int i = 0; i < 48; i++) {
-    try {
-      JJCalls p = jj_2_rtns[i];
-      do {
-        if (p.gen > jj_gen) {
-          jj_la = p.arg; jj_lastpos = jj_scanpos = p.first;
-          switch (i) {
-            case 0: jj_3_1(); break;
-            case 1: jj_3_2(); break;
-            case 2: jj_3_3(); break;
-            case 3: jj_3_4(); break;
-            case 4: jj_3_5(); break;
-            case 5: jj_3_6(); break;
-            case 6: jj_3_7(); break;
-            case 7: jj_3_8(); break;
-            case 8: jj_3_9(); break;
-            case 9: jj_3_10(); break;
-            case 10: jj_3_11(); break;
-            case 11: jj_3_12(); break;
-            case 12: jj_3_13(); break;
-            case 13: jj_3_14(); break;
-            case 14: jj_3_15(); break;
-            case 15: jj_3_16(); break;
-            case 16: jj_3_17(); break;
-            case 17: jj_3_18(); break;
-            case 18: jj_3_19(); break;
-            case 19: jj_3_20(); break;
-            case 20: jj_3_21(); break;
-            case 21: jj_3_22(); break;
-            case 22: jj_3_23(); break;
-            case 23: jj_3_24(); break;
-            case 24: jj_3_25(); break;
-            case 25: jj_3_26(); break;
-            case 26: jj_3_27(); break;
-            case 27: jj_3_28(); break;
-            case 28: jj_3_29(); break;
-            case 29: jj_3_30(); break;
-            case 30: jj_3_31(); break;
-            case 31: jj_3_32(); break;
-            case 32: jj_3_33(); break;
-            case 33: jj_3_34(); break;
-            case 34: jj_3_35(); break;
-            case 35: jj_3_36(); break;
-            case 36: jj_3_37(); break;
-            case 37: jj_3_38(); break;
-            case 38: jj_3_39(); break;
-            case 39: jj_3_40(); break;
-            case 40: jj_3_41(); break;
-            case 41: jj_3_42(); break;
-            case 42: jj_3_43(); break;
-            case 43: jj_3_44(); break;
-            case 44: jj_3_45(); break;
-            case 45: jj_3_46(); break;
-            case 46: jj_3_47(); break;
-            case 47: jj_3_48(); break;
-          }
-        }
-        p = p.next;
-      } while (p != null);
-      } catch(LookaheadSuccess ls) { }
-    }
-    jj_rescan = false;
-  }
-
-  private void jj_save(int index, int xla) {
-    JJCalls p = jj_2_rtns[index];
-    while (p.gen > jj_gen) {
-      if (p.next == null) { p = p.next = new JJCalls(); break; }
-      p = p.next;
-    }
-    p.gen = jj_gen + xla - jj_la; p.first = token; p.arg = xla;
-  }
-
-  static final class JJCalls {
-    int gen;
-    Token first;
-    int arg;
-    JJCalls next;
   }
 
 }

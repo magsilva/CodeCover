@@ -6,6 +6,7 @@ options {
    CACHE_TOKENS = true;
    STATIC = false;
    USER_TOKEN_MANAGER = true;
+   ERROR_REPORTING = false;
    TOKEN_EXTENDS = "org.codecover.instrumentation.c.adapter.CCToken";
 }
 
