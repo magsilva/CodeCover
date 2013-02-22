@@ -7,27 +7,33 @@ package org.codecover.instrumentation.c.syntaxtree;
 /**
  * Grammar production:
  * <PRE>
- * nodeToken -> &lt;ELSE&gt;
- * statement -> Statement()
+ * nodeToken -> &lt;RETURN&gt;
+ * nodeOptional -> [ Expression() ]
+ * nodeToken1 -> ";"
  * </PRE>
  */
-public class ElseStatement extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
+public class ReturnStatement extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
    private Node parent;
    public NodeToken nodeToken;
-   public Statement statement;
+   public NodeOptional nodeOptional;
+   public NodeToken nodeToken1;
 
-   public ElseStatement(NodeToken n0, Statement n1) {
+   public ReturnStatement(NodeToken n0, NodeOptional n1, NodeToken n2) {
       nodeToken = n0;
       if ( nodeToken != null ) nodeToken.setParent(this);
-      statement = n1;
-      if ( statement != null ) statement.setParent(this);
+      nodeOptional = n1;
+      if ( nodeOptional != null ) nodeOptional.setParent(this);
+      nodeToken1 = n2;
+      if ( nodeToken1 != null ) nodeToken1.setParent(this);
    }
 
-   public ElseStatement(Statement n0) {
-      nodeToken = new NodeToken("else");
+   public ReturnStatement(NodeOptional n0) {
+      nodeToken = new NodeToken("return");
       if ( nodeToken != null ) nodeToken.setParent(this);
-      statement = n0;
-      if ( statement != null ) statement.setParent(this);
+      nodeOptional = n0;
+      if ( nodeOptional != null ) nodeOptional.setParent(this);
+      nodeToken1 = new NodeToken(";");
+      if ( nodeToken1 != null ) nodeToken1.setParent(this);
    }
 
    public void accept(org.codecover.instrumentation.c.visitor.Visitor v) {

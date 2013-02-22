@@ -388,10 +388,13 @@ void TypedefName() : {}
 void Statement() : {}
 {
 	( LOOKAHEAD(2) LabeledStatement() |
-	  ExpressionStatement() |
 	  CompoundStatement() |
-	  SelectionStatement() |
-	  IterationStatement() |
+	  ExpressionStatement() |
+	  IfStatement() |
+	  SwitchStatement() |
+	  WhileStatement() |
+	  DoStatement() |
+	  ForStatement() |
 	  JumpStatement() )
 }
 
@@ -419,22 +422,34 @@ void StatementList() : {}
 	(Statement())+
 }
 
-void SelectionStatement() : {}
+void IfStatement() : {}
 {
-	( ( <IF> "(" Expression() ")" Statement() [ LOOKAHEAD(2) ElseStatement() ] ) |
-	  <SWITCH> "(" Expression() ")" Statement() )
+    <IF> "(" Expression() ")" Statement() [ LOOKAHEAD(2) ElseStatement() ]
+}
+
+void SwitchStatement() : {}
+{
+    <SWITCH> "(" Expression() ")" Statement()
 }
 
 void ElseStatement() : {}
 {
-    ( <ELSE> Statement() )
+    <ELSE> Statement()
 }
 
-void IterationStatement() : {}
+void WhileStatement() : {}
 {
-	( <WHILE> "(" Expression() ")" Statement() |
-	  <DO> Statement() <WHILE> "(" Expression() ")" ";" |
-	  <FOR> "(" [ Expression() ] ";" [ Expression() ] ";" [ Expression() ] ")" Statement() )
+    <WHILE> "(" Expression() ")" Statement()
+}
+
+void DoStatement() : {}
+{
+    <DO> Statement() <WHILE> "(" Expression() ")" ";"
+}
+
+void ForStatement() : {}
+{
+    <FOR> "(" [ Expression() ] ";" [ Expression() ] ";" [ Expression() ] ")" Statement()
 }
 
 void JumpStatement() : {}
@@ -442,7 +457,12 @@ void JumpStatement() : {}
 	( <GOTO> <IDENTIFIER> ";" |
 	  <CONTINUE> ";" |
 	  <BREAK> ";" |
-	  <RETURN> [ Expression() ] ";" )
+	  ReturnStatement() )
+}
+
+void ReturnStatement() : {}
+{
+    <RETURN> [ Expression() ] ";"
 }
 
 void Expression() : {}

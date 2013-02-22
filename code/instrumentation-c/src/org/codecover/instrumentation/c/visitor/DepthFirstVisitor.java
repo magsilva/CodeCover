@@ -412,7 +412,7 @@ public class DepthFirstVisitor implements Visitor {
 
    /**
     * <PRE>
-    * nodeChoice -> ( LabeledStatement() | ExpressionStatement() | CompoundStatement() | SelectionStatement() | IterationStatement() | JumpStatement() )
+    * nodeChoice -> ( LabeledStatement() | CompoundStatement() | ExpressionStatement() | IfStatement() | SwitchStatement() | WhileStatement() | DoStatement() | ForStatement() | JumpStatement() )
     * </PRE>
     */
    public void visit(Statement n) {
@@ -465,38 +465,134 @@ public class DepthFirstVisitor implements Visitor {
 
    /**
     * <PRE>
-    * nodeChoice -> ( ( &lt;IF&gt; "(" Expression() ")" Statement() [ ElseStatement() ] ) | &lt;SWITCH&gt; "(" Expression() ")" Statement() )
+    * nodeToken -> &lt;IF&gt;
+    * nodeToken1 -> "("
+    * expression -> Expression()
+    * nodeToken2 -> ")"
+    * statement -> Statement()
+    * nodeOptional -> [ ElseStatement() ]
     * </PRE>
     */
-   public void visit(SelectionStatement n) {
-      n.nodeChoice.accept(this);
+   public void visit(IfStatement n) {
+      n.nodeToken.accept(this);
+      n.nodeToken1.accept(this);
+      n.expression.accept(this);
+      n.nodeToken2.accept(this);
+      n.statement.accept(this);
+      n.nodeOptional.accept(this);
    }
 
    /**
     * <PRE>
-    * nodeSequence -> ( &lt;ELSE&gt; Statement() )
+    * nodeToken -> &lt;SWITCH&gt;
+    * nodeToken1 -> "("
+    * expression -> Expression()
+    * nodeToken2 -> ")"
+    * statement -> Statement()
+    * </PRE>
+    */
+   public void visit(SwitchStatement n) {
+      n.nodeToken.accept(this);
+      n.nodeToken1.accept(this);
+      n.expression.accept(this);
+      n.nodeToken2.accept(this);
+      n.statement.accept(this);
+   }
+
+   /**
+    * <PRE>
+    * nodeToken -> &lt;ELSE&gt;
+    * statement -> Statement()
     * </PRE>
     */
    public void visit(ElseStatement n) {
-      n.nodeSequence.accept(this);
+      n.nodeToken.accept(this);
+      n.statement.accept(this);
    }
 
    /**
     * <PRE>
-    * nodeChoice -> ( &lt;WHILE&gt; "(" Expression() ")" Statement() | &lt;DO&gt; Statement() &lt;WHILE&gt; "(" Expression() ")" ";" | &lt;FOR&gt; "(" [ Expression() ] ";" [ Expression() ] ";" [ Expression() ] ")" Statement() )
+    * nodeToken -> &lt;WHILE&gt;
+    * nodeToken1 -> "("
+    * expression -> Expression()
+    * nodeToken2 -> ")"
+    * statement -> Statement()
     * </PRE>
     */
-   public void visit(IterationStatement n) {
-      n.nodeChoice.accept(this);
+   public void visit(WhileStatement n) {
+      n.nodeToken.accept(this);
+      n.nodeToken1.accept(this);
+      n.expression.accept(this);
+      n.nodeToken2.accept(this);
+      n.statement.accept(this);
    }
 
    /**
     * <PRE>
-    * nodeChoice -> ( &lt;GOTO&gt; &lt;IDENTIFIER&gt; ";" | &lt;CONTINUE&gt; ";" | &lt;BREAK&gt; ";" | &lt;RETURN&gt; [ Expression() ] ";" )
+    * nodeToken -> &lt;DO&gt;
+    * statement -> Statement()
+    * nodeToken1 -> &lt;WHILE&gt;
+    * nodeToken2 -> "("
+    * expression -> Expression()
+    * nodeToken3 -> ")"
+    * nodeToken4 -> ";"
+    * </PRE>
+    */
+   public void visit(DoStatement n) {
+      n.nodeToken.accept(this);
+      n.statement.accept(this);
+      n.nodeToken1.accept(this);
+      n.nodeToken2.accept(this);
+      n.expression.accept(this);
+      n.nodeToken3.accept(this);
+      n.nodeToken4.accept(this);
+   }
+
+   /**
+    * <PRE>
+    * nodeToken -> &lt;FOR&gt;
+    * nodeToken1 -> "("
+    * nodeOptional -> [ Expression() ]
+    * nodeToken2 -> ";"
+    * nodeOptional1 -> [ Expression() ]
+    * nodeToken3 -> ";"
+    * nodeOptional2 -> [ Expression() ]
+    * nodeToken4 -> ")"
+    * statement -> Statement()
+    * </PRE>
+    */
+   public void visit(ForStatement n) {
+      n.nodeToken.accept(this);
+      n.nodeToken1.accept(this);
+      n.nodeOptional.accept(this);
+      n.nodeToken2.accept(this);
+      n.nodeOptional1.accept(this);
+      n.nodeToken3.accept(this);
+      n.nodeOptional2.accept(this);
+      n.nodeToken4.accept(this);
+      n.statement.accept(this);
+   }
+
+   /**
+    * <PRE>
+    * nodeChoice -> ( &lt;GOTO&gt; &lt;IDENTIFIER&gt; ";" | &lt;CONTINUE&gt; ";" | &lt;BREAK&gt; ";" | ReturnStatement() )
     * </PRE>
     */
    public void visit(JumpStatement n) {
       n.nodeChoice.accept(this);
+   }
+
+   /**
+    * <PRE>
+    * nodeToken -> &lt;RETURN&gt;
+    * nodeOptional -> [ Expression() ]
+    * nodeToken1 -> ";"
+    * </PRE>
+    */
+   public void visit(ReturnStatement n) {
+      n.nodeToken.accept(this);
+      n.nodeOptional.accept(this);
+      n.nodeToken1.accept(this);
    }
 
    /**

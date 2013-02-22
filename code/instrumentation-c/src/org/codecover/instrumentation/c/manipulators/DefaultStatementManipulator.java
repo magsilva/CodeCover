@@ -1,6 +1,5 @@
 package org.codecover.instrumentation.c.manipulators;
 
-import org.codecover.instrumentation.c.adapter.CCNode;
 import org.codecover.instrumentation.c.counter.CounterManager;
 import org.codecover.instrumentation.c.syntaxtree.*;
 
@@ -19,7 +18,7 @@ public class DefaultStatementManipulator implements StatementManipulator {
     }
 
     @Override
-    public void visit(PrintWriter out, CCNode n) {
+    public void visit(PrintWriter out, Statement n) {
         out.format("%s[%d]++;\n", cm.stmtVarName(), n.stmtNum);
     }
 }

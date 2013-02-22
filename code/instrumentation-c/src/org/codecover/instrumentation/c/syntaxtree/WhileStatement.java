@@ -7,26 +7,44 @@ package org.codecover.instrumentation.c.syntaxtree;
 /**
  * Grammar production:
  * <PRE>
- * nodeToken -> &lt;ELSE&gt;
+ * nodeToken -> &lt;WHILE&gt;
+ * nodeToken1 -> "("
+ * expression -> Expression()
+ * nodeToken2 -> ")"
  * statement -> Statement()
  * </PRE>
  */
-public class ElseStatement extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
+public class WhileStatement extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
    private Node parent;
    public NodeToken nodeToken;
+   public NodeToken nodeToken1;
+   public Expression expression;
+   public NodeToken nodeToken2;
    public Statement statement;
 
-   public ElseStatement(NodeToken n0, Statement n1) {
+   public WhileStatement(NodeToken n0, NodeToken n1, Expression n2, NodeToken n3, Statement n4) {
       nodeToken = n0;
       if ( nodeToken != null ) nodeToken.setParent(this);
-      statement = n1;
+      nodeToken1 = n1;
+      if ( nodeToken1 != null ) nodeToken1.setParent(this);
+      expression = n2;
+      if ( expression != null ) expression.setParent(this);
+      nodeToken2 = n3;
+      if ( nodeToken2 != null ) nodeToken2.setParent(this);
+      statement = n4;
       if ( statement != null ) statement.setParent(this);
    }
 
-   public ElseStatement(Statement n0) {
-      nodeToken = new NodeToken("else");
+   public WhileStatement(Expression n0, Statement n1) {
+      nodeToken = new NodeToken("while");
       if ( nodeToken != null ) nodeToken.setParent(this);
-      statement = n0;
+      nodeToken1 = new NodeToken("(");
+      if ( nodeToken1 != null ) nodeToken1.setParent(this);
+      expression = n0;
+      if ( expression != null ) expression.setParent(this);
+      nodeToken2 = new NodeToken(")");
+      if ( nodeToken2 != null ) nodeToken2.setParent(this);
+      statement = n1;
       if ( statement != null ) statement.setParent(this);
    }
 

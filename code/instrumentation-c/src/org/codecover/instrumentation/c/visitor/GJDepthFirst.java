@@ -502,7 +502,7 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
 
    /**
     * <PRE>
-    * nodeChoice -> ( LabeledStatement() | ExpressionStatement() | CompoundStatement() | SelectionStatement() | IterationStatement() | JumpStatement() )
+    * nodeChoice -> ( LabeledStatement() | CompoundStatement() | ExpressionStatement() | IfStatement() | SwitchStatement() | WhileStatement() | DoStatement() | ForStatement() | JumpStatement() )
     * </PRE>
     */
    public R visit(Statement n, A argu) {
@@ -565,45 +565,149 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
 
    /**
     * <PRE>
-    * nodeChoice -> ( ( &lt;IF&gt; "(" Expression() ")" Statement() [ ElseStatement() ] ) | &lt;SWITCH&gt; "(" Expression() ")" Statement() )
+    * nodeToken -> &lt;IF&gt;
+    * nodeToken1 -> "("
+    * expression -> Expression()
+    * nodeToken2 -> ")"
+    * statement -> Statement()
+    * nodeOptional -> [ ElseStatement() ]
     * </PRE>
     */
-   public R visit(SelectionStatement n, A argu) {
+   public R visit(IfStatement n, A argu) {
       R _ret=null;
-      n.nodeChoice.accept(this, argu);
+      n.nodeToken.accept(this, argu);
+      n.nodeToken1.accept(this, argu);
+      n.expression.accept(this, argu);
+      n.nodeToken2.accept(this, argu);
+      n.statement.accept(this, argu);
+      n.nodeOptional.accept(this, argu);
       return _ret;
    }
 
    /**
     * <PRE>
-    * nodeSequence -> ( &lt;ELSE&gt; Statement() )
+    * nodeToken -> &lt;SWITCH&gt;
+    * nodeToken1 -> "("
+    * expression -> Expression()
+    * nodeToken2 -> ")"
+    * statement -> Statement()
+    * </PRE>
+    */
+   public R visit(SwitchStatement n, A argu) {
+      R _ret=null;
+      n.nodeToken.accept(this, argu);
+      n.nodeToken1.accept(this, argu);
+      n.expression.accept(this, argu);
+      n.nodeToken2.accept(this, argu);
+      n.statement.accept(this, argu);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * nodeToken -> &lt;ELSE&gt;
+    * statement -> Statement()
     * </PRE>
     */
    public R visit(ElseStatement n, A argu) {
       R _ret=null;
-      n.nodeSequence.accept(this, argu);
+      n.nodeToken.accept(this, argu);
+      n.statement.accept(this, argu);
       return _ret;
    }
 
    /**
     * <PRE>
-    * nodeChoice -> ( &lt;WHILE&gt; "(" Expression() ")" Statement() | &lt;DO&gt; Statement() &lt;WHILE&gt; "(" Expression() ")" ";" | &lt;FOR&gt; "(" [ Expression() ] ";" [ Expression() ] ";" [ Expression() ] ")" Statement() )
+    * nodeToken -> &lt;WHILE&gt;
+    * nodeToken1 -> "("
+    * expression -> Expression()
+    * nodeToken2 -> ")"
+    * statement -> Statement()
     * </PRE>
     */
-   public R visit(IterationStatement n, A argu) {
+   public R visit(WhileStatement n, A argu) {
       R _ret=null;
-      n.nodeChoice.accept(this, argu);
+      n.nodeToken.accept(this, argu);
+      n.nodeToken1.accept(this, argu);
+      n.expression.accept(this, argu);
+      n.nodeToken2.accept(this, argu);
+      n.statement.accept(this, argu);
       return _ret;
    }
 
    /**
     * <PRE>
-    * nodeChoice -> ( &lt;GOTO&gt; &lt;IDENTIFIER&gt; ";" | &lt;CONTINUE&gt; ";" | &lt;BREAK&gt; ";" | &lt;RETURN&gt; [ Expression() ] ";" )
+    * nodeToken -> &lt;DO&gt;
+    * statement -> Statement()
+    * nodeToken1 -> &lt;WHILE&gt;
+    * nodeToken2 -> "("
+    * expression -> Expression()
+    * nodeToken3 -> ")"
+    * nodeToken4 -> ";"
+    * </PRE>
+    */
+   public R visit(DoStatement n, A argu) {
+      R _ret=null;
+      n.nodeToken.accept(this, argu);
+      n.statement.accept(this, argu);
+      n.nodeToken1.accept(this, argu);
+      n.nodeToken2.accept(this, argu);
+      n.expression.accept(this, argu);
+      n.nodeToken3.accept(this, argu);
+      n.nodeToken4.accept(this, argu);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * nodeToken -> &lt;FOR&gt;
+    * nodeToken1 -> "("
+    * nodeOptional -> [ Expression() ]
+    * nodeToken2 -> ";"
+    * nodeOptional1 -> [ Expression() ]
+    * nodeToken3 -> ";"
+    * nodeOptional2 -> [ Expression() ]
+    * nodeToken4 -> ")"
+    * statement -> Statement()
+    * </PRE>
+    */
+   public R visit(ForStatement n, A argu) {
+      R _ret=null;
+      n.nodeToken.accept(this, argu);
+      n.nodeToken1.accept(this, argu);
+      n.nodeOptional.accept(this, argu);
+      n.nodeToken2.accept(this, argu);
+      n.nodeOptional1.accept(this, argu);
+      n.nodeToken3.accept(this, argu);
+      n.nodeOptional2.accept(this, argu);
+      n.nodeToken4.accept(this, argu);
+      n.statement.accept(this, argu);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * nodeChoice -> ( &lt;GOTO&gt; &lt;IDENTIFIER&gt; ";" | &lt;CONTINUE&gt; ";" | &lt;BREAK&gt; ";" | ReturnStatement() )
     * </PRE>
     */
    public R visit(JumpStatement n, A argu) {
       R _ret=null;
       n.nodeChoice.accept(this, argu);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * nodeToken -> &lt;RETURN&gt;
+    * nodeOptional -> [ Expression() ]
+    * nodeToken1 -> ";"
+    * </PRE>
+    */
+   public R visit(ReturnStatement n, A argu) {
+      R _ret=null;
+      n.nodeToken.accept(this, argu);
+      n.nodeOptional.accept(this, argu);
+      n.nodeToken1.accept(this, argu);
       return _ret;
    }
 
