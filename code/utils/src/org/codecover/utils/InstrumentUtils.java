@@ -98,8 +98,6 @@ public final class InstrumentUtils {
         public void saveSessionContainer(TestSessionContainer testSessionContainer);
     }
 
-    private static final Pattern DIRECTIVE_PATTERN = Pattern.compile("([^\\s=]+)=([^\\s]*)");
-
     public static void instrument(Logger logger, PluginManager pluginManager,
             ProgressHandler progressHandler, boolean pretend,
             String pRootDirectory, String pDestination,
@@ -257,13 +255,13 @@ public final class InstrumentUtils {
         Map<String, Object> instrumenterDirectives = descriptor.getDefaultDirectiveValues();
         Map<String, InstrumenterDirective> registeredDirectives = descriptor.getRegisteredDirectives();
         for (String thisDirective : pDirectives) {
-            Matcher matcher = DIRECTIVE_PATTERN.matcher(thisDirective);
-            if (!matcher.matches()) {
+            int index = thisDirective.indexOf('=');
+            if (index == -1) {
                 logger.fatal("Wrong directive format: " + thisDirective);
             }
 
-            String directiveKey = matcher.group(1);
-            String directiveValue = StringUtil.parseNonQuotedStringLiteral(matcher.group(2));
+            String directiveKey = thisDirective.substring(0, index);
+            String directiveValue = StringUtil.parseNonQuotedStringLiteral(thisDirective.substring(index+1));
 
             // is the key a valid directive
             InstrumenterDirective directive = registeredDirectives.get(directiveKey);
