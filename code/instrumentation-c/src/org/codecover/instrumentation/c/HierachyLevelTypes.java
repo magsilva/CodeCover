@@ -25,10 +25,10 @@ public class HierachyLevelTypes {
     }
 
     public static HierarchyLevelType getFunctionType(MASTBuilder builder) {
-        if (sourceFile == null) {
-            return sourceFile = builder.createHierarchyLevelType("Function",
+        if (function == null) {
+            return function = builder.createHierarchyLevelType("Function",
                     "function");
         }
-        return sourceFile;
+        return function;
     }
 }

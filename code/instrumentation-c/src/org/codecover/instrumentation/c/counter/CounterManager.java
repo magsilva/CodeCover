@@ -40,6 +40,10 @@ public class CounterManager {
         return stmtPrefix;
     }
 
+    public String stmtID(int i) {
+        return stmtPrefix + Integer.toString(i);
+    }
+
     public int newStmtID() {
         return stmtCounter++;
     }
@@ -54,6 +58,10 @@ public class CounterManager {
 
     public String branchPrefix() {
         return branchPrefix;
+    }
+
+    public String branchID(int i) {
+        return branchPrefix + Integer.toString(i);
     }
 
     public int newBranchID() {

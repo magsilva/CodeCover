@@ -3,15 +3,15 @@ package org.codecover.instrumentation.c;
 import org.codecover.instrumentation.HierarchyLevelContainer;
 import org.codecover.instrumentation.c.counter.CounterManager;
 import org.codecover.instrumentation.c.syntaxtree.*;
+import org.codecover.instrumentation.c.syntaxtree.Statement;
 import org.codecover.instrumentation.c.visitor.DepthFirstVisitor;
 import org.codecover.model.MASTBuilder;
 import org.codecover.model.mast.*;
-import org.codecover.model.mast.Statement;
 
 import java.util.*;
 
 public class MastVisitor extends DepthFirstVisitor {
-    private Stack<List<Statement>> statementStack = new Stack<List<Statement>>();
+    private Stack<List<org.codecover.model.mast.Statement>> statementStack = new Stack<List<org.codecover.model.mast.Statement>>();
     private Stack<List<HierarchyLevel>> hierarchyStack = new Stack<List<HierarchyLevel>>();
 
     private MASTBuilder builder;
@@ -29,7 +29,7 @@ public class MastVisitor extends DepthFirstVisitor {
     }
 
     private void pushStatementLevel() {
-        statementStack.push(new ArrayList<Statement>());
+        statementStack.push(new ArrayList<org.codecover.model.mast.Statement>());
     }
 
     private StatementSequence popStatementLevel() {
@@ -115,16 +115,63 @@ public class MastVisitor extends DepthFirstVisitor {
         this.statementStack.peek().add(newStatement);
     }
 
+    private Branch createBranch(String branchID,
+                                                 int startOffset,
+                                                 int endOffset,
+                                                 int decisionStartOffset,
+                                                 int decisionEndOffset,
+                                                 boolean implicit) {
+        LocationList locationList = createLocationList(startOffset, endOffset);
+        LocationList locationListDecision = createLocationList(decisionStartOffset,
+                decisionEndOffset);
+        StatementSequence statementSequence = popStatementLevel();
+
+        return this.builder.createBranch(locationList,
+                createCoverableItem(branchID),
+                implicit,
+                locationListDecision,
+                statementSequence);
+    }
+
+    private void createConditionalStatement(String statementID,
+                                            int startOffset,
+                                            int endOffset,
+                                            RootTerm rootTerm,
+                                            List<Branch> branchList,
+                                            int keywordStartOffset,
+                                            int keywordEndOffset) {
+        LocationList locationList = createLocationList(startOffset, endOffset);
+        Location keywordLocation = createLocation(keywordStartOffset, keywordEndOffset);
+        Set<RootTerm> setRootTerms;
+
+        if (rootTerm == null) {
+            setRootTerms = Collections.emptySet();
+        } else {
+            setRootTerms = new HashSet<RootTerm>();
+            setRootTerms.add(rootTerm);
+        }
+
+        ConditionalStatement conditionalStatement = this.builder.createConditionalStatement(
+                locationList,
+                createCoverableItem(statementID),
+                setRootTerms,
+                branchList,
+                keywordLocation, null);
+        statementStack.peek().add(conditionalStatement);
+    }
+
     @Override
     public void visit(org.codecover.instrumentation.c.syntaxtree.Statement n) {
         // We don't need ids for all kinds of statements
         // We want nice inscreasing IDs so we assign the ID before we visit the other nodes
-        if(n.nodeChoice.which > 1) {
+        boolean instrument = n.nodeChoice.choice instanceof ExpressionStatement ||
+                n.nodeChoice.choice instanceof JumpStatement;
+        if(instrument) {
             n.stmtNum = cm.newStmtID();
         }
         super.visit(n);
-        if(n.nodeChoice.which > 1) {
-            atticStatement(n, cm.stmtPrefix() + Integer.toString(n.stmtNum));
+        if(instrument) {
+            atticStatement(n, cm.stmtID(n.stmtNum));
         }
     }
 
@@ -146,16 +193,47 @@ public class MastVisitor extends DepthFirstVisitor {
     public void visit(TranslationUnit n) {
         pushHierarchy();
         super.visit(n);
-        popHierachy(HierachyLevelTypes.getProgramType(builder), sourceFile.getFileName(),
+        popHierachy(HierachyLevelTypes.getSourceFileType(builder), sourceFile.getFileName(),
                 BeginOffset.getStartOffset(n), lastEndOffset, -1, -1);
     }
 
     @Override
     public void visit(IfStatement n) {
+        List<Branch> branchList = new Vector<Branch>(2);
         n.branchNum = cm.newBranchID();
         // another ID for the else part
         cm.newBranchID();
-        super.visit(n);
+
+        n.nodeToken.accept(this);
+        n.nodeToken1.accept(this);
+        n.expression.accept(this);
+        n.nodeToken2.accept(this);
+
+        pushStatementLevel();
+        n.statement.accept(this);
+        branchList.add(createBranch(cm.branchID(n.branchNum),
+                BeginOffset.getStartOffset(n.statement), lastEndOffset, -1, -1, false));
+
+        pushStatementLevel();
+
+        if(n.nodeOptional.present()) {
+            n.nodeOptional.accept(this);
+            NodeToken elseNode = (NodeToken) ((NodeSequence)n.nodeOptional.node).elementAt(0);
+            branchList.add(createBranch(cm.branchID(n.branchNum+1),
+                    BeginOffset.getStartOffset(n.nodeOptional), lastEndOffset,
+                    elseNode.beginOffset, elseNode.endOffset,
+                    false));
+        } else {
+            branchList.add(createBranch(cm.branchID(n.branchNum+1),
+                    -1,-1, -1,-1, true));
+        }
+
+        createConditionalStatement(
+                cm.stmtID(((Statement)n.getParent().getParent()).stmtNum),
+                n.nodeToken.beginOffset, lastEndOffset,
+                null, branchList,
+                n.nodeToken.beginOffset, n.nodeToken.endOffset
+                );
     }
 
     @Override

@@ -48,7 +48,8 @@ public class InstrumentationVisitor extends SimpleTreeDumper {
 
     @Override
     public void visit(Statement n) {
-        if(n.nodeChoice.which > 1)
+        if(n.nodeChoice.choice instanceof ExpressionStatement ||
+                n.nodeChoice.choice instanceof JumpStatement)
             statementManipulator.visit(out, n);
         super.visit(n);
     }
