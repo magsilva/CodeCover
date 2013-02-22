@@ -44,9 +44,8 @@ public final class SourceFile {
     }
 
     /**
-     * @return the fileName
+     * @return the fileName, without the path
      */
-    //FIXME: specify if this contains a path, if so which format that has
     public String getFileName() {
         return this.fileName;
     }
