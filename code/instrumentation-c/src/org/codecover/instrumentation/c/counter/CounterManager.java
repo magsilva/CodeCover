@@ -1,7 +1,6 @@
 package org.codecover.instrumentation.c.counter;
 
 public class CounterManager {
-    final private String id;
     final private String fileName;
     final private String stmtVarName;
     final private String stmtPrefix;
@@ -23,21 +22,16 @@ public class CounterManager {
      * @param fileName
      */
     public CounterManager(String id, String fileName) {
-        this.id = id;
         this.fileName = fileName;
-        stmtPrefix = "S" + id + "-";
+        stmtPrefix = "S";
         stmtVarName = "CodeCover_S" + id;
-        branchPrefix = "B" + id + "-";
+        branchPrefix = "B";
         branchVarName = "CodeCover_B" + id;
-        loopPrefix = "L" + id + "-";
+        loopPrefix = "L";
         loopVarName = "CodeCover_L" + id;
         loopTmpName = "CodeCover_LTMP" + id;
-        condPrefix = "C" + id + "-";
+        condPrefix = "C";
         condVarName = "CodeCover_C" + id;
-    }
-
-    public String id() {
-        return id;
     }
 
     public String getFileName() {
