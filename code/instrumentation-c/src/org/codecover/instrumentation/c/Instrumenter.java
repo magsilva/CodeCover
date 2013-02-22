@@ -46,13 +46,13 @@ public class Instrumenter extends org.codecover.instrumentation.Instrumenter {
             String[] includeDirs = (String[])instrumenterDirectives.get(InstrumenterDescriptor.IncludeDirs.KEY);
             String[] defines = (String[])instrumenterDirectives.get(InstrumenterDescriptor.Defines.KEY);
             if ((Boolean)instrumenterDirectives.get(InstrumenterDescriptor.Debug.KEY)) {
-                DebugCParser cParser = new DebugCParser(new TokenAdapter(currentSourceFile, Arrays.asList(includeDirs), Arrays.asList(defines)));
+                DebugCParser cParser = new DebugCParser(new TokenAdapter(currentSourceFile, Arrays.asList(includeDirs), Arrays.asList(defines), true));
                 for(String type : (String[])instrumenterDirectives.get(InstrumenterDescriptor.Types.KEY)) {
                     cParser.addType(type);
                 }
                 translationUnit = cParser.TranslationUnit();
             } else {
-                CParser cParser = new CParser(new TokenAdapter(currentSourceFile, Arrays.asList(includeDirs), Arrays.asList(defines)));
+                CParser cParser = new CParser(new TokenAdapter(currentSourceFile, Arrays.asList(includeDirs), Arrays.asList(defines), false));
                 for(String type : (String[])instrumenterDirectives.get(InstrumenterDescriptor.Types.KEY)) {
                     cParser.addType(type);
                 }

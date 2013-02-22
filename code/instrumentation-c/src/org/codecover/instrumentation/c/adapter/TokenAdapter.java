@@ -12,8 +12,9 @@ import java.util.List;
 
 public class TokenAdapter extends PreprocessorListener implements TokenManager {
     CCPreprocessor pp;
+    boolean debug;
 
-    public TokenAdapter(File source, List<String> includeDirs, List<String> defines) throws IOException, LexerException {
+    public TokenAdapter(File source, List<String> includeDirs, List<String> defines, boolean debug) throws IOException, LexerException {
         pp = new CCPreprocessor(source);
         pp.setQuoteIncludePath(includeDirs);
         pp.setSystemIncludePath(includeDirs);
@@ -35,8 +36,8 @@ public class TokenAdapter extends PreprocessorListener implements TokenManager {
 
     @Override
     public void handleSourceChange(Source source, String event) {
-        if(source != null)
-           ;// System.err.println(source.toString() + ": " +  event);
+        if(debug && source != null)
+            System.err.println(source.toString() + ": " +  event);
     }
 
     @Override
