@@ -218,72 +218,50 @@ public class TokenAdapter implements TokenManager {
     }
 
     private static int convertIdentifier(String image) {
-        if("int".equals(image)) {
-            return CParserConstants.INT;
-        } if("void".equals(image)) {
-            return CParserConstants.VOID;
-        } if("return".equals(image)) {
-            return CParserConstants.RETURN;
-        } if("typedef".equals(image)) {
-            return CParserConstants.TYPEDEF;
-        } if("double".equals(image)) {
-            return CParserConstants.DOUBLE;
-        } if("char".equals(image)) {
-            return CParserConstants.CHAR;
-        } if("for".equals(image)) {
-            return CParserConstants.FOR;
-        } if("while".equals(image)) {
-            return CParserConstants.WHILE;
-        } if("do".equals(image)) {
-            return CParserConstants.DO;
-        } if("goto".equals(image)) {
-            return CParserConstants.GOTO;
-        } if("if".equals(image)) {
-            return CParserConstants.IF;
-        } if("else".equals(image)) {
-            return CParserConstants.ELSE;
-        } if("break".equals(image)) {
-            return CParserConstants.BREAK;
-        } if("switch".equals(image)) {
-            return CParserConstants.SWITCH;
-        } if("case".equals(image)) {
-            return CParserConstants.CASE;
-        } if("default".equals(image)) {
-            return CParserConstants.DFLT;
-        } if("float".equals(image)) {
-            return CParserConstants.FLOAT;
-        } if("const".equals(image)) {
-            return CParserConstants.CONST;
-        } if("volatile".equals(image)) {
-            return CParserConstants.VOLATILE;
-        } if("continue".equals(image)) {
-            return CParserConstants.CONTINUE;
-        } if("register".equals(image)) {
-            return CParserConstants.REGISTER;
-        } if("signed".equals(image)) {
-            return CParserConstants.SIGNED;
-        } if("unsigned".equals(image)) {
-            return CParserConstants.UNSIGNED;
-        } if("sizeof".equals(image)) {
-            return CParserConstants.SIZEOF;
-        } if("extern".equals(image)) {
-            return CParserConstants.EXTERN;
-        } if("static".equals(image)) {
-            return CParserConstants.STATIC;
-        } if("struct".equals(image)) {
-            return CParserConstants.STRUCT;
-        } if("union".equals(image)) {
-            return CParserConstants.UNION;
-        } if("long".equals(image)) {
-            return CParserConstants.LONG;
-        } if("short".equals(image)) {
-            return CParserConstants.SHORT;
-        } if("enum".equals(image)) {
-            return CParserConstants.ENUM;
-        } if("auto".equals(image)) {
-            return CParserConstants.AUTO;
-        } else {
-            return CParserConstants.IDENTIFIER;
+        if("alignof".equals(image)) { return CParserConstants.ALIGNOF; }
+        if("auto".equals(image)) { return CParserConstants.AUTO; }
+        if("break".equals(image)) { return CParserConstants.BREAK; }
+        if("case".equals(image)) { return CParserConstants.CASE; }
+        if("char".equals(image)) { return CParserConstants.CHAR; }
+        if("const".equals(image)) { return CParserConstants.CONST; }
+        if("continue".equals(image)) { return CParserConstants.CONTINUE; }
+        if("default".equals(image)) { return CParserConstants.DFLT; }
+        if("do".equals(image)) { return CParserConstants.DO; }
+        if("double".equals(image)) { return CParserConstants.DOUBLE; }
+        if("else".equals(image)) { return CParserConstants.ELSE; }
+        if("enum".equals(image)) { return CParserConstants.ENUM; }
+        if("extern".equals(image)) { return CParserConstants.EXTERN; }
+        if("float".equals(image)) { return CParserConstants.FLOAT; }
+        if("for".equals(image)) { return CParserConstants.FOR; }
+        if("goto".equals(image)) { return CParserConstants.GOTO; }
+        if("if".equals(image)) { return CParserConstants.IF; }
+        if("inline".equals(image)) { return CParserConstants.INLINE; }
+        if("int".equals(image)) { return CParserConstants.INT; }
+        if("long".equals(image)) { return CParserConstants.LONG; }
+        if("register".equals(image)) { return CParserConstants.REGISTER; }
+        if("return".equals(image)) { return CParserConstants.RETURN; }
+        if("short".equals(image)) { return CParserConstants.SHORT; }
+        if("signed".equals(image)) { return CParserConstants.SIGNED; }
+        if("sizeof".equals(image)) { return CParserConstants.SIZEOF; }
+        if("static".equals(image)) { return CParserConstants.STATIC; }
+        if("struct".equals(image)) { return CParserConstants.STRUCT; }
+        if("switch".equals(image)) { return CParserConstants.SWITCH; }
+        if("typedef".equals(image)) { return CParserConstants.TYPEDEF; }
+        if("union".equals(image)) { return CParserConstants.UNION; }
+        if("unsigned".equals(image)) { return CParserConstants.UNSIGNED; }
+        if("void".equals(image)) { return CParserConstants.VOID; }
+        if("volatile".equals(image)) { return CParserConstants.VOLATILE; }
+        if("while".equals(image)) { return CParserConstants.WHILE; }
+        if("_Alignas".equals(image)) { return CParserConstants.ALIGNAS; }
+        if("_Atomic\n".equals(image)) { return CParserConstants.ATOMIC; }
+        if("_Bool\n".equals(image)) { return CParserConstants.BOOL; }
+        if("_Complex\n".equals(image)) { return CParserConstants.COMPLEX; }
+        if("_Generic\n".equals(image)) { return CParserConstants.GENERIC; }
+        if("_Imaginary\n".equals(image)) { return CParserConstants.IMAGINARY; }
+        if("_Noreturn\n".equals(image)) { return CParserConstants.NORETURN; }
+        if("_Static_assert\n".equals(image)) { return CParserConstants.STATICASSERT; }
+        if("_Thread_local\n".equals(image)) { return CParserConstants.THREADLOCAL; }
+        else { return CParserConstants.IDENTIFIER;
         }
     }
 }

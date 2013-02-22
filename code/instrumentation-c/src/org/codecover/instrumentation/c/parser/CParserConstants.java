@@ -29,167 +29,191 @@ public interface CParserConstants {
   /** RegularExpression Id. */
   int STRING_LITERAL = 9;
   /** RegularExpression Id. */
-  int CONTINUE = 10;
+  int ALIGNOF = 10;
   /** RegularExpression Id. */
-  int VOLATILE = 11;
+  int AUTO = 11;
   /** RegularExpression Id. */
-  int REGISTER = 12;
+  int BREAK = 12;
   /** RegularExpression Id. */
-  int UNSIGNED = 13;
+  int CASE = 13;
   /** RegularExpression Id. */
-  int TYPEDEF = 14;
+  int CHAR = 14;
   /** RegularExpression Id. */
-  int DFLT = 15;
+  int CONST = 15;
   /** RegularExpression Id. */
-  int DOUBLE = 16;
+  int CONTINUE = 16;
   /** RegularExpression Id. */
-  int SIZEOF = 17;
+  int DFLT = 17;
   /** RegularExpression Id. */
-  int SWITCH = 18;
+  int DO = 18;
   /** RegularExpression Id. */
-  int RETURN = 19;
+  int DOUBLE = 19;
   /** RegularExpression Id. */
-  int EXTERN = 20;
+  int ELSE = 20;
   /** RegularExpression Id. */
-  int STRUCT = 21;
+  int ENUM = 21;
   /** RegularExpression Id. */
-  int STATIC = 22;
+  int EXTERN = 22;
   /** RegularExpression Id. */
-  int SIGNED = 23;
+  int FLOAT = 23;
   /** RegularExpression Id. */
-  int WHILE = 24;
+  int FOR = 24;
   /** RegularExpression Id. */
-  int BREAK = 25;
+  int GOTO = 25;
   /** RegularExpression Id. */
-  int UNION = 26;
+  int IF = 26;
   /** RegularExpression Id. */
-  int CONST = 27;
+  int INLINE = 27;
   /** RegularExpression Id. */
-  int FLOAT = 28;
+  int INT = 28;
   /** RegularExpression Id. */
-  int SHORT = 29;
+  int LONG = 29;
   /** RegularExpression Id. */
-  int ELSE = 30;
+  int REGISTER = 30;
   /** RegularExpression Id. */
-  int CASE = 31;
+  int RESTRICT = 31;
   /** RegularExpression Id. */
-  int LONG = 32;
+  int RETURN = 32;
   /** RegularExpression Id. */
-  int ENUM = 33;
+  int SHORT = 33;
   /** RegularExpression Id. */
-  int AUTO = 34;
+  int SIGNED = 34;
   /** RegularExpression Id. */
-  int VOID = 35;
+  int SIZEOF = 35;
   /** RegularExpression Id. */
-  int CHAR = 36;
+  int STATIC = 36;
   /** RegularExpression Id. */
-  int GOTO = 37;
+  int STRUCT = 37;
   /** RegularExpression Id. */
-  int FOR = 38;
+  int SWITCH = 38;
   /** RegularExpression Id. */
-  int INT = 39;
+  int TYPEDEF = 39;
   /** RegularExpression Id. */
-  int IF = 40;
+  int UNION = 40;
   /** RegularExpression Id. */
-  int DO = 41;
+  int UNSIGNED = 41;
   /** RegularExpression Id. */
-  int IDENTIFIER = 42;
+  int VOID = 42;
   /** RegularExpression Id. */
-  int LETTER = 43;
+  int VOLATILE = 43;
   /** RegularExpression Id. */
-  int DIGIT = 44;
+  int WHILE = 44;
   /** RegularExpression Id. */
-  int INC = 45;
+  int ALIGNAS = 45;
   /** RegularExpression Id. */
-  int DEC = 46;
+  int ATOMIC = 46;
   /** RegularExpression Id. */
-  int LAND = 47;
+  int BOOL = 47;
   /** RegularExpression Id. */
-  int LOR = 48;
+  int COMPLEX = 48;
   /** RegularExpression Id. */
-  int RBL = 49;
+  int GENERIC = 49;
   /** RegularExpression Id. */
-  int RBR = 50;
+  int IMAGINARY = 50;
   /** RegularExpression Id. */
-  int CBL = 51;
+  int NORETURN = 51;
   /** RegularExpression Id. */
-  int CBR = 52;
+  int STATICASSERT = 52;
   /** RegularExpression Id. */
-  int SBL = 53;
+  int THREADLOCAL = 53;
   /** RegularExpression Id. */
-  int SBR = 54;
+  int IDENTIFIER = 54;
   /** RegularExpression Id. */
-  int STAR = 55;
+  int LETTER = 55;
   /** RegularExpression Id. */
-  int SLASH = 56;
+  int DIGIT = 56;
   /** RegularExpression Id. */
-  int MOD = 57;
+  int INC = 57;
   /** RegularExpression Id. */
-  int PLUS = 58;
+  int DEC = 58;
   /** RegularExpression Id. */
-  int MINUS = 59;
+  int LAND = 59;
   /** RegularExpression Id. */
-  int EXCL = 60;
+  int LOR = 60;
   /** RegularExpression Id. */
-  int AMP = 61;
+  int RBL = 61;
   /** RegularExpression Id. */
-  int QEM = 62;
+  int RBR = 62;
   /** RegularExpression Id. */
-  int TILDE = 63;
+  int CBL = 63;
   /** RegularExpression Id. */
-  int CARE = 64;
+  int CBR = 64;
   /** RegularExpression Id. */
-  int PIPE = 65;
+  int SBL = 65;
   /** RegularExpression Id. */
-  int COMMA = 66;
+  int SBR = 66;
   /** RegularExpression Id. */
-  int SEMICOLON = 67;
+  int STAR = 67;
   /** RegularExpression Id. */
-  int COLON = 68;
+  int SLASH = 68;
   /** RegularExpression Id. */
-  int ASSIGNMENT = 69;
+  int MOD = 69;
   /** RegularExpression Id. */
-  int DOT = 70;
+  int PLUS = 70;
   /** RegularExpression Id. */
-  int LESS = 71;
+  int MINUS = 71;
   /** RegularExpression Id. */
-  int GREATER = 72;
+  int EXCL = 72;
   /** RegularExpression Id. */
-  int ELLIPSIS = 73;
+  int AMP = 73;
   /** RegularExpression Id. */
-  int MULT_EQ = 74;
+  int QEM = 74;
   /** RegularExpression Id. */
-  int DIV_EQ = 75;
+  int TILDE = 75;
   /** RegularExpression Id. */
-  int MOD_EQ = 76;
+  int CARE = 76;
   /** RegularExpression Id. */
-  int PLUS_EQ = 77;
+  int PIPE = 77;
   /** RegularExpression Id. */
-  int SUB_EQ = 78;
+  int COMMA = 78;
   /** RegularExpression Id. */
-  int LSH_EQ = 79;
+  int SEMICOLON = 79;
   /** RegularExpression Id. */
-  int RSH_EQ = 80;
+  int COLON = 80;
   /** RegularExpression Id. */
-  int AND_EQ = 81;
+  int ASSIGNMENT = 81;
   /** RegularExpression Id. */
-  int XOR_EQ = 82;
+  int DOT = 82;
   /** RegularExpression Id. */
-  int OR_EQ = 83;
+  int LESS = 83;
   /** RegularExpression Id. */
-  int EQ = 84;
+  int GREATER = 84;
   /** RegularExpression Id. */
-  int NE = 85;
+  int ELLIPSIS = 85;
   /** RegularExpression Id. */
-  int LE = 86;
+  int MULT_EQ = 86;
   /** RegularExpression Id. */
-  int GE = 87;
+  int DIV_EQ = 87;
   /** RegularExpression Id. */
-  int LSH = 88;
+  int MOD_EQ = 88;
   /** RegularExpression Id. */
-  int RSH = 89;
+  int PLUS_EQ = 89;
   /** RegularExpression Id. */
-  int ARROW = 90;
+  int SUB_EQ = 90;
+  /** RegularExpression Id. */
+  int LSH_EQ = 91;
+  /** RegularExpression Id. */
+  int RSH_EQ = 92;
+  /** RegularExpression Id. */
+  int AND_EQ = 93;
+  /** RegularExpression Id. */
+  int XOR_EQ = 94;
+  /** RegularExpression Id. */
+  int OR_EQ = 95;
+  /** RegularExpression Id. */
+  int EQ = 96;
+  /** RegularExpression Id. */
+  int NE = 97;
+  /** RegularExpression Id. */
+  int LE = 98;
+  /** RegularExpression Id. */
+  int GE = 99;
+  /** RegularExpression Id. */
+  int LSH = 100;
+  /** RegularExpression Id. */
+  int RSH = 101;
+  /** RegularExpression Id. */
+  int ARROW = 102;
 
   /** Literal token values. */
   String[] tokenImage = {
@@ -203,38 +227,50 @@ public interface CParserConstants {
     "<EXPONENT>",
     "<CHARACTER_LITERAL>",
     "<STRING_LITERAL>",
-    "\"continue\"",
-    "\"volatile\"",
-    "\"register\"",
-    "\"unsigned\"",
-    "\"typedef\"",
-    "\"default\"",
-    "\"double\"",
-    "\"sizeof\"",
-    "\"switch\"",
-    "\"return\"",
-    "\"extern\"",
-    "\"struct\"",
-    "\"static\"",
-    "\"signed\"",
-    "\"while\"",
-    "\"break\"",
-    "\"union\"",
-    "\"const\"",
-    "\"float\"",
-    "\"short\"",
-    "\"else\"",
-    "\"case\"",
-    "\"long\"",
-    "\"enum\"",
+    "\"alignof\"",
     "\"auto\"",
-    "\"void\"",
+    "\"break\"",
+    "\"case\"",
     "\"char\"",
-    "\"goto\"",
-    "\"for\"",
-    "\"int\"",
-    "\"if\"",
+    "\"const\"",
+    "\"continue\"",
+    "\"default\"",
     "\"do\"",
+    "\"double\"",
+    "\"else\"",
+    "\"enum\"",
+    "\"extern\"",
+    "\"float\"",
+    "\"for\"",
+    "\"goto\"",
+    "\"if\"",
+    "\"inline\"",
+    "\"int\"",
+    "\"long\"",
+    "\"register\"",
+    "\"restrict\"",
+    "\"return\"",
+    "\"short\"",
+    "\"signed\"",
+    "\"sizeof\"",
+    "\"static\"",
+    "\"struct\"",
+    "\"switch\"",
+    "\"typedef\"",
+    "\"union\"",
+    "\"unsigned\"",
+    "\"void\"",
+    "\"volatile\"",
+    "\"while\"",
+    "\"_Alignas\"",
+    "\"_Atomic\"",
+    "\"_Bool\"",
+    "\"_Complex\"",
+    "\"_Generic\"",
+    "\"_Imaginary\"",
+    "\"_Noreturn\"",
+    "\"_Static_assert\"",
+    "\"_Thread_local\"",
     "<IDENTIFIER>",
     "<LETTER>",
     "<DIGIT>",

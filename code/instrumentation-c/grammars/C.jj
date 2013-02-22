@@ -92,38 +92,50 @@ TOKEN : {
 
 
 TOKEN : {
-	<CONTINUE: "continue"> |
-	<VOLATILE: "volatile"> |
-	<REGISTER: "register"> |
-	<UNSIGNED: "unsigned"> |
-	<TYPEDEF: "typedef"> |
-	<DFLT: "default"> |
-	<DOUBLE: "double"> |
-	<SIZEOF: "sizeof"> |
-	<SWITCH: "switch"> |
-	<RETURN: "return"> |
-	<EXTERN: "extern"> |
-	<STRUCT: "struct"> |
-	<STATIC: "static"> |
-	<SIGNED: "signed"> |
-	<WHILE: "while"> |
-	<BREAK: "break"> |
-	<UNION: "union"> |
-	<CONST: "const"> |
-	<FLOAT: "float"> |
-	<SHORT: "short"> |
-	<ELSE: "else"> |
-	<CASE: "case"> |
-	<LONG: "long"> |
-	<ENUM: "enum"> |
+    <ALIGNOF: "alignof"> |
 	<AUTO: "auto"> |
-	<VOID: "void"> |
+	<BREAK: "break"> |
+	<CASE: "case"> |
 	<CHAR: "char"> |
-	<GOTO: "goto"> |
+	<CONST: "const"> |
+	<CONTINUE: "continue"> |
+	<DFLT: "default"> |
+	<DO: "do"> |
+	<DOUBLE: "double"> |
+	<ELSE: "else"> |
+	<ENUM: "enum"> |
+	<EXTERN: "extern"> |
+	<FLOAT: "float"> |
 	<FOR: "for"> |
-	<INT: "int"> |
+	<GOTO: "goto"> |
 	<IF: "if"> |
-	<DO: "do">
+	<INLINE: "inline"> |
+	<INT: "int"> |
+	<LONG: "long"> |
+	<REGISTER: "register"> |
+	<RESTRICT: "restrict"> |
+	<RETURN: "return"> |
+	<SHORT: "short"> |
+	<SIGNED: "signed"> |
+	<SIZEOF: "sizeof"> |
+	<STATIC: "static"> |
+	<STRUCT: "struct"> |
+	<SWITCH: "switch"> |
+	<TYPEDEF: "typedef"> |
+	<UNION: "union"> |
+	<UNSIGNED: "unsigned"> |
+	<VOID: "void"> |
+	<VOLATILE: "volatile"> |
+	<WHILE: "while"> |
+	<ALIGNAS: "_Alignas"> |
+	<ATOMIC: "_Atomic"> |
+	<BOOL: "_Bool"> |
+	<COMPLEX: "_Complex"> |
+	<GENERIC: "_Generic"> |
+	<IMAGINARY: "_Imaginary"> |
+	<NORETURN: "_Noreturn"> |
+	<STATICASSERT: "_Static_assert"> |
+	<THREADLOCAL: "_Thread_local">
 }
 
 TOKEN : {
