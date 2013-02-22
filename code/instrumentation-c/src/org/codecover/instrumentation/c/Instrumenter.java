@@ -23,6 +23,8 @@ import java.util.Map;
 public class Instrumenter extends org.codecover.instrumentation.Instrumenter {
     private ArrayList<CounterManager> counterManagers = new ArrayList<CounterManager>();
 
+    private int maxId;
+
     @Override
     protected void instrumentThis(Reader source,
                                   Writer target,
@@ -33,7 +35,7 @@ public class Instrumenter extends org.codecover.instrumentation.Instrumenter {
                                   Map<String, Object> instrumenterDirectives) throws ParseException, IOException {
         CParser cParser = new CParser(new TokenAdapter(source));
         TranslationUnit translationUnit = cParser.TranslationUnit();
-        CounterManager cm = new CounterManager(sourceFile.getFileName());
+        CounterManager cm = new CounterManager(Integer.toString(maxId++), sourceFile.getFileName());
 
         MastVisitor mastVisitor = new MastVisitor(builder, sourceFile, rootContainer, cm);
 
@@ -87,7 +89,7 @@ public class Instrumenter extends org.codecover.instrumentation.Instrumenter {
         out.format("fprintf(f, \"TEST_SESSION_CONTAINER \\\"%s\\\"\\n\");\n", testSessionContainerUID);
         out.println("fprintf(f, \"START_TEST_CASE \\\"Single Test Case\\\"\\n\");");
         for(CounterManager cm : counterManagers) {
-            out.format("fprintf(f, \"START_SECTION \\\"%s\\\"\\n\");", cm.getFileName());
+            out.format("fprintf(f, \"START_SECTION \\\"%s\\\"\\n\");\n", cm.getFileName());
             out.format("for(i=0; i<%d; ++i) {\n", cm.getStmtCnt());
             out.format("fprintf(f, \"%s%%i %%i\\n\", i, %s[i]);\n", cm.stmtPrefix(), cm.stmtVarName());
             out.println("}");
