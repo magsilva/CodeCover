@@ -5,4 +5,5 @@ public class CCNode {
 
     public int stmtNum;
     public int branchNum;
+    public int loopNum;
 }

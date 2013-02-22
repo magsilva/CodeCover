@@ -28,6 +28,8 @@ public class Helper {
         for(CounterManager cm : counterManagers) {
             out.format("int %s[%d];\n", cm.stmtVarName(), cm.getStmtCnt());
             out.format("int %s[%d];\n", cm.branchVarName(), cm.getBranchCnt());
+            out.format("int %s[%d];\n", cm.loopVarName(), cm.getloopCnt());
+            out.format("int %s[%d];\n", cm.loopTmpName(), cm.getloopTmpCnt());
         }
 
         /*out.println("void CodeCover_reset() {");
@@ -51,6 +53,9 @@ public class Helper {
             out.println("}");
             out.format("for(i=0; i<%d; ++i) {\n", cm.getBranchCnt());
             out.format("fprintf(f, \"%s%%i %%i\\n\", i, %s[i]);\n", cm.branchPrefix(), cm.branchVarName());
+            out.println("}");
+            out.format("for(i=0; i<%d; ++i) {\n", cm.getloopCnt());
+            out.format("fprintf(f, \"%s%%i %%i\\n\", i, %s[i]);\n", cm.loopPrefix(), cm.loopVarName());
             out.println("}");
         }
         out.println("fprintf(f, \"END_TEST_CASE \\\"Single Test Case\\\"\\n\");");

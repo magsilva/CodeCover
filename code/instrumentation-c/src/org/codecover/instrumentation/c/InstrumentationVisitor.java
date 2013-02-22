@@ -1,6 +1,7 @@
 package org.codecover.instrumentation.c;
 
 import org.codecover.instrumentation.c.manipulators.BranchManipulator;
+import org.codecover.instrumentation.c.manipulators.LoopManipulator;
 import org.codecover.instrumentation.c.manipulators.StatementManipulator;
 import org.codecover.instrumentation.c.syntaxtree.*;
 import org.codecover.instrumentation.c.syntaxtree.Statement;
@@ -10,13 +11,16 @@ import java.io.Writer;
 public class InstrumentationVisitor extends SimpleTreeDumper {
     private StatementManipulator statementManipulator;
     private BranchManipulator branchManipulator;
+    private LoopManipulator loopManipulator;
 
     public InstrumentationVisitor(Writer writer,
                                   StatementManipulator statementManipulator,
-                                  BranchManipulator branchManipulator) {
+                                  BranchManipulator branchManipulator,
+                                  LoopManipulator loopManipulator) {
         super(writer);
         this.statementManipulator = statementManipulator;
         this.branchManipulator = branchManipulator;
+        this.loopManipulator = loopManipulator;
     }
 
     @Override
@@ -25,6 +29,7 @@ public class InstrumentationVisitor extends SimpleTreeDumper {
         out.println("void CodeCover_dump();");
         statementManipulator.writeForwardDeclaration(out);
         branchManipulator.writeForwardDeclaration(out);
+        loopManipulator.writeForwardDeclaration(out);
         super.visit(n);
     }
 
@@ -48,8 +53,8 @@ public class InstrumentationVisitor extends SimpleTreeDumper {
 
     @Override
     public void visit(Statement n) {
-        if(n.nodeChoice.choice instanceof ExpressionStatement ||
-                n.nodeChoice.choice instanceof JumpStatement)
+        // Don't instrument labeled and compound statements
+        if(n.nodeChoice.which > 1)
             statementManipulator.visit(out, n);
         super.visit(n);
     }
@@ -89,40 +94,37 @@ public class InstrumentationVisitor extends SimpleTreeDumper {
 
     @Override
     public void visit(WhileStatement n) {
-        boolean braces = !(n.statement.nodeChoice.choice instanceof CompoundStatement);
-
+        loopManipulator.visitBefore(out, n);
         n.nodeToken.accept(this);
         n.nodeToken1.accept(this);
         n.expression.accept(this);
         n.nodeToken2.accept(this);
-        if(braces)
-            out.println("{");
+        out.println("{");
+        loopManipulator.visit(out, n);
         n.statement.accept(this);
-        if(braces)
-            out.println("}");
+        out.println("}");
+        loopManipulator.visitAfter(out, n);
     }
 
     @Override
     public void visit(DoStatement n) {
-        boolean braces = !(n.statement.nodeChoice.choice instanceof CompoundStatement);
-
+        loopManipulator.visitBefore(out, n);
         n.nodeToken.accept(this);
-        if(braces)
-            out.println("{");
+        out.println("{");
+        loopManipulator.visit(out, n);
         n.statement.accept(this);
-        if(braces)
-            out.println("}");
+        out.println("}");
         n.nodeToken1.accept(this);
         n.nodeToken2.accept(this);
         n.expression.accept(this);
         n.nodeToken3.accept(this);
         n.nodeToken4.accept(this);
+        loopManipulator.visitAfter(out, n);
     }
 
     @Override
     public void visit(ForStatement n) {
-        boolean braces = !(n.statement.nodeChoice.choice instanceof CompoundStatement);
-
+        loopManipulator.visitBefore(out, n);
         n.nodeToken.accept(this);
         n.nodeToken1.accept(this);
         n.nodeOptional.accept(this);
@@ -131,10 +133,10 @@ public class InstrumentationVisitor extends SimpleTreeDumper {
         n.nodeToken3.accept(this);
         n.nodeOptional2.accept(this);
         n.nodeToken4.accept(this);
-        if(braces)
-            out.println("{");
+        out.println("{");
+        loopManipulator.visit(out, n);
         n.statement.accept(this);
-        if(braces)
-            out.println("}");
+        out.println("}");
+        loopManipulator.visitAfter(out, n);
     }
 }

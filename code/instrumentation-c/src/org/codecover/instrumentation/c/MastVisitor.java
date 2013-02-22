@@ -104,7 +104,7 @@ public class MastVisitor extends DepthFirstVisitor {
     }
 
 
-    private void atticStatement(Node statement, String id) {
+    private void createBasicStatement(Node statement, String id) {
         int startOffset = BeginOffset.getStartOffset(statement);
 
         LocationList locationList = createLocationList(startOffset, lastEndOffset);
@@ -126,7 +126,7 @@ public class MastVisitor extends DepthFirstVisitor {
                 decisionEndOffset);
         StatementSequence statementSequence = popStatementLevel();
 
-        return this.builder.createBranch(locationList,
+        return builder.createBranch(locationList,
                 createCoverableItem(branchID),
                 implicit,
                 locationListDecision,
@@ -151,7 +151,7 @@ public class MastVisitor extends DepthFirstVisitor {
             setRootTerms.add(rootTerm);
         }
 
-        ConditionalStatement conditionalStatement = this.builder.createConditionalStatement(
+        ConditionalStatement conditionalStatement = builder.createConditionalStatement(
                 locationList,
                 createCoverableItem(statementID),
                 setRootTerms,
@@ -160,18 +160,37 @@ public class MastVisitor extends DepthFirstVisitor {
         statementStack.peek().add(conditionalStatement);
     }
 
+    public void createLoop(int start, int end, int keywordStart, int keywordEnd, int id, boolean optionalBodyExecution) {
+        LoopingStatement stmt = builder.createLoopingStatement(
+                createLocationList(start, end),
+                createCoverableItem(cm.stmtID(id)),
+                null,
+                popStatementLevel(),
+                createLocation(keywordStart, keywordEnd),
+                createCoverableItem(cm.loopID(id++)),
+                createCoverableItem(cm.loopID(id++)),
+                createCoverableItem(cm.loopID(id++)),
+                optionalBodyExecution,
+                null
+        );
+        statementStack.peek().add(stmt);
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
+
+
     @Override
     public void visit(org.codecover.instrumentation.c.syntaxtree.Statement n) {
         // We don't need ids for all kinds of statements
         // We want nice inscreasing IDs so we assign the ID before we visit the other nodes
-        boolean instrument = n.nodeChoice.choice instanceof ExpressionStatement ||
-                n.nodeChoice.choice instanceof JumpStatement;
-        if(instrument) {
+        if(n.nodeChoice.which > 1)
             n.stmtNum = cm.newStmtID();
-        }
         super.visit(n);
-        if(instrument) {
-            atticStatement(n, cm.stmtID(n.stmtNum));
+        if(n.nodeChoice.choice instanceof ExpressionStatement ||
+                n.nodeChoice.choice instanceof JumpStatement) {
+            createBasicStatement(n, cm.stmtID(n.stmtNum));
         }
     }
 
@@ -199,7 +218,7 @@ public class MastVisitor extends DepthFirstVisitor {
 
     @Override
     public void visit(IfStatement n) {
-        List<Branch> branchList = new Vector<Branch>(2);
+        List<Branch> branchList = new ArrayList<Branch>(2);
         n.branchNum = cm.newBranchID();
         // another ID for the else part
         cm.newBranchID();
@@ -237,7 +256,64 @@ public class MastVisitor extends DepthFirstVisitor {
     }
 
     @Override
+    public void visit(WhileStatement n) {
+        n.nodeToken.accept(this);
+        n.nodeToken1.accept(this);
+        n.expression.accept(this);
+        n.nodeToken2.accept(this);
+        pushStatementLevel();
+        n.statement.accept(this);
+
+        n.loopNum = cm.newloopID();
+
+        createLoop(
+                n.nodeToken.beginOffset, lastEndOffset,
+                n.nodeToken.beginOffset, n.nodeToken.endOffset,
+                n.loopNum, true);
+    }
+
+    @Override
+    public void visit(DoStatement n) {
+        n.nodeToken.accept(this);
+        pushStatementLevel();
+        n.statement.accept(this);
+        n.nodeToken1.accept(this);
+        n.nodeToken2.accept(this);
+        n.expression.accept(this);
+        n.nodeToken3.accept(this);
+        n.nodeToken4.accept(this);
+
+        n.loopNum = cm.newloopID();
+
+        createLoop(
+                n.nodeToken.beginOffset, n.nodeToken4.endOffset,
+                n.nodeToken.beginOffset, n.nodeToken.endOffset,
+                n.loopNum, false);
+    }
+
+    @Override
+    public void visit(ForStatement n) {
+        n.nodeToken.accept(this);
+        n.nodeToken1.accept(this);
+        n.nodeOptional.accept(this);
+        n.nodeToken2.accept(this);
+        n.nodeOptional1.accept(this);
+        n.nodeToken3.accept(this);
+        n.nodeOptional2.accept(this);
+        n.nodeToken4.accept(this);
+        pushStatementLevel();
+        n.statement.accept(this);
+
+        n.loopNum = cm.newloopID();
+
+        createLoop(
+                n.nodeToken.beginOffset, lastEndOffset,
+                n.nodeToken.beginOffset, n.nodeToken.endOffset,
+                n.loopNum, true);
+    }
+
+    @Override
     public void visit(NodeToken n) {
-        this.lastEndOffset = n.endOffset;
+        lastEndOffset = n.endOffset;
     }
 }
