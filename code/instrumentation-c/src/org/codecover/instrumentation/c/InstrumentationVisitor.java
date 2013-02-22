@@ -1,6 +1,7 @@
 package org.codecover.instrumentation.c;
 
 import org.codecover.instrumentation.HierarchyLevelContainer;
+import org.codecover.instrumentation.c.manipulators.BranchManipulator;
 import org.codecover.instrumentation.c.manipulators.StatementManipulator;
 import org.codecover.instrumentation.c.syntaxtree.*;
 import org.codecover.instrumentation.c.syntaxtree.Statement;
@@ -12,10 +13,14 @@ import java.util.*;
 
 public class InstrumentationVisitor extends SimpleTreeDumper {
     private StatementManipulator statementManipulator;
+    private BranchManipulator branchManipulator;
 
-    public InstrumentationVisitor(Writer writer, StatementManipulator statementManipulator) {
+    public InstrumentationVisitor(Writer writer,
+                                  StatementManipulator statementManipulator,
+                                  BranchManipulator branchManipulator) {
         super(writer);
         this.statementManipulator = statementManipulator;
+        this.branchManipulator = branchManipulator;
     }
 
     @Override
@@ -44,7 +49,7 @@ public class InstrumentationVisitor extends SimpleTreeDumper {
         isMain = false;
         if(tmp) {
             out.println("{");
-            out.println("CodeCover_reset();");
+            out.println("/*CodeCover_reset(); Not need because the arrays have a static storarage duration, which means that they are initialized to 0. */");
             out.println("atexit(CodeCover_dump);");
         }
         super.visit(n);
@@ -86,14 +91,22 @@ public class InstrumentationVisitor extends SimpleTreeDumper {
 
     @Override
     public void visit(ElseStatement n) {
-        addBraces = true;
-        super.visit(n);
+        n.nodeSequence.elementAt(0).accept(this);
+        Statement s = (Statement) n.nodeSequence.elementAt(1);
+        boolean braces = !(s.nodeChoice.choice instanceof CompoundStatement);
+
+        if(braces)
+            out.println("{");
+
+        s.accept(this);
+        if(braces)
+            out.println("}");
     }
 
     @Override
     public void visit(IterationStatement n) {
         statementManipulator.visit(out, n);
         addBraces = true;
-        super.visit(n);
+        n.accept(this);
     }
 }
