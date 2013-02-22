@@ -11,14 +11,8 @@ import java.io.Reader;
 public class TokenAdapter implements TokenManager {
     Preprocessor pp;
 
-    public TokenAdapter(File file) throws IOException {
-        pp = new Preprocessor(file);
-        //pp.addFeature(Feature.VERBOSE);
-        //pp.addFeature(Feature.DEBUG);
-    }
-
-    public TokenAdapter(Reader reader) throws IOException {
-        pp = new Preprocessor(new LexerSource(reader, true));
+    public TokenAdapter(File source) throws IOException {
+        pp = new CCPreprocessor(source);
         //pp.addFeature(Feature.VERBOSE);
         //pp.addFeature(Feature.DEBUG);
     }

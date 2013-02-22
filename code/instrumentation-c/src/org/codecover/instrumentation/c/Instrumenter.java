@@ -24,6 +24,14 @@ public class Instrumenter extends org.codecover.instrumentation.Instrumenter {
 
     private int maxId;
 
+    // Hack to get the File directly and not just a Reader
+    private File currentSourceFile;
+
+    @Override
+    protected void notifyBefore(SourceTargetContainer job, HierarchyLevelContainer rootHierarchyLevelContainer, MASTBuilder builder, String testSessionContainerUID, Map<String, Object> instrumenterDirectives) throws InstrumentationException {
+        currentSourceFile = job.getSource();
+    }
+
     @Override
     protected void instrumentThis(Reader source,
                                   Writer target,
@@ -32,7 +40,7 @@ public class Instrumenter extends org.codecover.instrumentation.Instrumenter {
                                   HierarchyLevelContainer rootContainer,
                                   String testSessionContainerUID,
                                   Map<String, Object> instrumenterDirectives) throws ParseException, IOException {
-        CParser cParser = new CParser(new TokenAdapter(source));
+        CParser cParser = new CParser(new TokenAdapter(currentSourceFile));
         TranslationUnit translationUnit = cParser.TranslationUnit();
         CounterManager cm = new CounterManager(Integer.toString(maxId++), sourceFile.getFileName());
 
