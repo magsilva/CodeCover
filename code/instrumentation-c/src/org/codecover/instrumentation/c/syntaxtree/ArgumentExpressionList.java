@@ -12,12 +12,15 @@ package org.codecover.instrumentation.c.syntaxtree;
  * </PRE>
  */
 public class ArgumentExpressionList extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
+   private Node parent;
    public AssignmentExpression assignmentExpression;
    public NodeListOptional nodeListOptional;
 
    public ArgumentExpressionList(AssignmentExpression n0, NodeListOptional n1) {
       assignmentExpression = n0;
+      if ( assignmentExpression != null ) assignmentExpression.setParent(this);
       nodeListOptional = n1;
+      if ( nodeListOptional != null ) nodeListOptional.setParent(this);
    }
 
    public void accept(org.codecover.instrumentation.c.visitor.Visitor v) {
@@ -32,5 +35,7 @@ public class ArgumentExpressionList extends org.codecover.instrumentation.c.adap
    public <A> void accept(org.codecover.instrumentation.c.visitor.GJVoidVisitor<A> v, A argu) {
       v.visit(this,argu);
    }
+   public void setParent(Node n) { parent = n; }
+   public Node getParent()       { return parent; }
 }
 

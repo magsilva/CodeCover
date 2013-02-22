@@ -14,6 +14,7 @@ public class NodeChoice extends org.codecover.instrumentation.c.adapter.CCNode i
 
    public NodeChoice(Node node, int whichChoice) {
       choice = node;
+      choice.setParent(this);
       which = whichChoice;
    }
 
@@ -30,6 +31,10 @@ public class NodeChoice extends org.codecover.instrumentation.c.adapter.CCNode i
       choice.accept(v,argu);
    }
 
+   public void setParent(Node n) { parent = n; }
+   public Node getParent()       { return parent; }
+
+   private Node parent;
    public Node choice;
    public int which;
 }

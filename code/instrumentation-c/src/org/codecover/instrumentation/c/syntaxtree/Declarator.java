@@ -12,12 +12,15 @@ package org.codecover.instrumentation.c.syntaxtree;
  * </PRE>
  */
 public class Declarator extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
+   private Node parent;
    public NodeOptional nodeOptional;
    public DirectDeclarator directDeclarator;
 
    public Declarator(NodeOptional n0, DirectDeclarator n1) {
       nodeOptional = n0;
+      if ( nodeOptional != null ) nodeOptional.setParent(this);
       directDeclarator = n1;
+      if ( directDeclarator != null ) directDeclarator.setParent(this);
    }
 
    public void accept(org.codecover.instrumentation.c.visitor.Visitor v) {
@@ -32,5 +35,7 @@ public class Declarator extends org.codecover.instrumentation.c.adapter.CCNode i
    public <A> void accept(org.codecover.instrumentation.c.visitor.GJVoidVisitor<A> v, A argu) {
       v.visit(this,argu);
    }
+   public void setParent(Node n) { parent = n; }
+   public Node getParent()       { return parent; }
 }
 

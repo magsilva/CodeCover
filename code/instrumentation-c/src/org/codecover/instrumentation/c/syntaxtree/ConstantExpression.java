@@ -11,10 +11,12 @@ package org.codecover.instrumentation.c.syntaxtree;
  * </PRE>
  */
 public class ConstantExpression extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
+   private Node parent;
    public ConditionalExpression conditionalExpression;
 
    public ConstantExpression(ConditionalExpression n0) {
       conditionalExpression = n0;
+      if ( conditionalExpression != null ) conditionalExpression.setParent(this);
    }
 
    public void accept(org.codecover.instrumentation.c.visitor.Visitor v) {
@@ -29,5 +31,7 @@ public class ConstantExpression extends org.codecover.instrumentation.c.adapter.
    public <A> void accept(org.codecover.instrumentation.c.visitor.GJVoidVisitor<A> v, A argu) {
       v.visit(this,argu);
    }
+   public void setParent(Node n) { parent = n; }
+   public Node getParent()       { return parent; }
 }
 

@@ -37,6 +37,7 @@ public class NodeToken extends org.codecover.instrumentation.c.adapter.CCNode im
    public void addSpecial(NodeToken s) {
       if ( specialTokens == null ) specialTokens = new Vector<NodeToken>();
       specialTokens.addElement(s);
+      s.setParent(this);
    }
 
    public void trimSpecials() {
@@ -72,6 +73,10 @@ public class NodeToken extends org.codecover.instrumentation.c.adapter.CCNode im
       v.visit(this,argu);
    }
 
+   public void setParent(Node n) { parent = n; }
+   public Node getParent()       { return parent; }
+
+   private Node parent;
    public String tokenImage;
 
    // Stores a list of NodeTokens

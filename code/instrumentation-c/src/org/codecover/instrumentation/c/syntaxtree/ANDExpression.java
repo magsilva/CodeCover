@@ -12,12 +12,15 @@ package org.codecover.instrumentation.c.syntaxtree;
  * </PRE>
  */
 public class ANDExpression extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
+   private Node parent;
    public EqualityExpression equalityExpression;
    public NodeOptional nodeOptional;
 
    public ANDExpression(EqualityExpression n0, NodeOptional n1) {
       equalityExpression = n0;
+      if ( equalityExpression != null ) equalityExpression.setParent(this);
       nodeOptional = n1;
+      if ( nodeOptional != null ) nodeOptional.setParent(this);
    }
 
    public void accept(org.codecover.instrumentation.c.visitor.Visitor v) {
@@ -32,5 +35,7 @@ public class ANDExpression extends org.codecover.instrumentation.c.adapter.CCNod
    public <A> void accept(org.codecover.instrumentation.c.visitor.GJVoidVisitor<A> v, A argu) {
       v.visit(this,argu);
    }
+   public void setParent(Node n) { parent = n; }
+   public Node getParent()       { return parent; }
 }
 

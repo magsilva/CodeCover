@@ -21,6 +21,7 @@ public class NodeList extends org.codecover.instrumentation.c.adapter.CCNode imp
 
    public void addNode(Node n) {
       nodes.addElement(n);
+      n.setParent(this);
    }
 
    public Enumeration<Node> elements() { return nodes.elements(); }
@@ -39,6 +40,10 @@ public class NodeList extends org.codecover.instrumentation.c.adapter.CCNode imp
       v.visit(this,argu);
    }
 
+   public void setParent(Node n) { parent = n; }
+   public Node getParent()       { return parent; }
+
+   private Node parent;
    public Vector<Node> nodes;
 }
 

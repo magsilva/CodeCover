@@ -14,6 +14,7 @@ package org.codecover.instrumentation.c.syntaxtree;
  * </PRE>
  */
 public class CompoundStatement extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
+   private Node parent;
    public NodeToken nodeToken;
    public NodeOptional nodeOptional;
    public NodeOptional nodeOptional1;
@@ -21,16 +22,24 @@ public class CompoundStatement extends org.codecover.instrumentation.c.adapter.C
 
    public CompoundStatement(NodeToken n0, NodeOptional n1, NodeOptional n2, NodeToken n3) {
       nodeToken = n0;
+      if ( nodeToken != null ) nodeToken.setParent(this);
       nodeOptional = n1;
+      if ( nodeOptional != null ) nodeOptional.setParent(this);
       nodeOptional1 = n2;
+      if ( nodeOptional1 != null ) nodeOptional1.setParent(this);
       nodeToken1 = n3;
+      if ( nodeToken1 != null ) nodeToken1.setParent(this);
    }
 
    public CompoundStatement(NodeOptional n0, NodeOptional n1) {
       nodeToken = new NodeToken("{");
+      if ( nodeToken != null ) nodeToken.setParent(this);
       nodeOptional = n0;
+      if ( nodeOptional != null ) nodeOptional.setParent(this);
       nodeOptional1 = n1;
+      if ( nodeOptional1 != null ) nodeOptional1.setParent(this);
       nodeToken1 = new NodeToken("}");
+      if ( nodeToken1 != null ) nodeToken1.setParent(this);
    }
 
    public void accept(org.codecover.instrumentation.c.visitor.Visitor v) {
@@ -45,5 +54,7 @@ public class CompoundStatement extends org.codecover.instrumentation.c.adapter.C
    public <A> void accept(org.codecover.instrumentation.c.visitor.GJVoidVisitor<A> v, A argu) {
       v.visit(this,argu);
    }
+   public void setParent(Node n) { parent = n; }
+   public Node getParent()       { return parent; }
 }
 

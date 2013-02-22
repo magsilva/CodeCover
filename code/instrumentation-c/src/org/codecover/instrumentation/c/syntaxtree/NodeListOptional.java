@@ -21,6 +21,7 @@ public class NodeListOptional extends org.codecover.instrumentation.c.adapter.CC
 
    public void addNode(Node n) {
       nodes.addElement(n);
+      n.setParent(this);
    }
 
    public Enumeration<Node> elements() { return nodes.elements(); }
@@ -40,6 +41,10 @@ public class NodeListOptional extends org.codecover.instrumentation.c.adapter.CC
       v.visit(this,argu);
    }
 
+   public void setParent(Node n) { parent = n; }
+   public Node getParent()       { return parent; }
+
+   private Node parent;
    public Vector<Node> nodes;
 }
 

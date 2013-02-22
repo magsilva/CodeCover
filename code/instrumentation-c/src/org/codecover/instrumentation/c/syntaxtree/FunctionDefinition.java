@@ -14,6 +14,7 @@ package org.codecover.instrumentation.c.syntaxtree;
  * </PRE>
  */
 public class FunctionDefinition extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
+   private Node parent;
    public NodeOptional nodeOptional;
    public Declarator declarator;
    public NodeOptional nodeOptional1;
@@ -21,9 +22,13 @@ public class FunctionDefinition extends org.codecover.instrumentation.c.adapter.
 
    public FunctionDefinition(NodeOptional n0, Declarator n1, NodeOptional n2, CompoundStatement n3) {
       nodeOptional = n0;
+      if ( nodeOptional != null ) nodeOptional.setParent(this);
       declarator = n1;
+      if ( declarator != null ) declarator.setParent(this);
       nodeOptional1 = n2;
+      if ( nodeOptional1 != null ) nodeOptional1.setParent(this);
       compoundStatement = n3;
+      if ( compoundStatement != null ) compoundStatement.setParent(this);
    }
 
    public void accept(org.codecover.instrumentation.c.visitor.Visitor v) {
@@ -38,5 +43,7 @@ public class FunctionDefinition extends org.codecover.instrumentation.c.adapter.
    public <A> void accept(org.codecover.instrumentation.c.visitor.GJVoidVisitor<A> v, A argu) {
       v.visit(this,argu);
    }
+   public void setParent(Node n) { parent = n; }
+   public Node getParent()       { return parent; }
 }
 

@@ -12,12 +12,15 @@ package org.codecover.instrumentation.c.syntaxtree;
  * </PRE>
  */
 public class LogicalORExpression extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
+   private Node parent;
    public LogicalANDExpression logicalANDExpression;
    public NodeOptional nodeOptional;
 
    public LogicalORExpression(LogicalANDExpression n0, NodeOptional n1) {
       logicalANDExpression = n0;
+      if ( logicalANDExpression != null ) logicalANDExpression.setParent(this);
       nodeOptional = n1;
+      if ( nodeOptional != null ) nodeOptional.setParent(this);
    }
 
    public void accept(org.codecover.instrumentation.c.visitor.Visitor v) {
@@ -32,5 +35,7 @@ public class LogicalORExpression extends org.codecover.instrumentation.c.adapter
    public <A> void accept(org.codecover.instrumentation.c.visitor.GJVoidVisitor<A> v, A argu) {
       v.visit(this,argu);
    }
+   public void setParent(Node n) { parent = n; }
+   public Node getParent()       { return parent; }
 }
 

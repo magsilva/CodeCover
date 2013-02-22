@@ -11,10 +11,12 @@ package org.codecover.instrumentation.c.syntaxtree;
  * </PRE>
  */
 public class StatementList extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
+   private Node parent;
    public NodeList nodeList;
 
    public StatementList(NodeList n0) {
       nodeList = n0;
+      if ( nodeList != null ) nodeList.setParent(this);
    }
 
    public void accept(org.codecover.instrumentation.c.visitor.Visitor v) {
@@ -29,5 +31,7 @@ public class StatementList extends org.codecover.instrumentation.c.adapter.CCNod
    public <A> void accept(org.codecover.instrumentation.c.visitor.GJVoidVisitor<A> v, A argu) {
       v.visit(this,argu);
    }
+   public void setParent(Node n) { parent = n; }
+   public Node getParent()       { return parent; }
 }
 

@@ -12,12 +12,15 @@ package org.codecover.instrumentation.c.syntaxtree;
  * </PRE>
  */
 public class InitializerList extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
+   private Node parent;
    public Initializer initializer;
    public NodeListOptional nodeListOptional;
 
    public InitializerList(Initializer n0, NodeListOptional n1) {
       initializer = n0;
+      if ( initializer != null ) initializer.setParent(this);
       nodeListOptional = n1;
+      if ( nodeListOptional != null ) nodeListOptional.setParent(this);
    }
 
    public void accept(org.codecover.instrumentation.c.visitor.Visitor v) {
@@ -32,5 +35,7 @@ public class InitializerList extends org.codecover.instrumentation.c.adapter.CCN
    public <A> void accept(org.codecover.instrumentation.c.visitor.GJVoidVisitor<A> v, A argu) {
       v.visit(this,argu);
    }
+   public void setParent(Node n) { parent = n; }
+   public Node getParent()       { return parent; }
 }
 
