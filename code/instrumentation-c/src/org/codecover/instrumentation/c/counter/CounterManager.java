@@ -6,7 +6,7 @@ public class CounterManager {
     final private UUID id = UUID.randomUUID();
     final private String uuid = UUID.randomUUID().toString().replace('-','_');
     final private String stmtVarName = "CodeCover_S" + uuid;
-    final private String stmtPrefix = String.format("S%d-", id().hashCode());
+    final private String stmtPrefix = String.format("S%d-", Math.abs(id().hashCode()));
     final private String fileName;
 
     private int StmtCounter;
