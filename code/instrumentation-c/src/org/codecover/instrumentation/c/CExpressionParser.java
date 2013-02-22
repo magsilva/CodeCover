@@ -2,6 +2,7 @@ package org.codecover.instrumentation.c;
 
 import org.codecover.instrumentation.booleanterms.InstrBooleanTerm;
 import org.codecover.instrumentation.booleanterms.InstrOperatorTerm;
+import org.codecover.instrumentation.c.parser.CParser;
 import org.codecover.instrumentation.c.syntaxtree.*;
 import org.codecover.instrumentation.c.visitor.GJNoArguDepthFirst;
 import org.codecover.instrumentation.c.visitor.GJNoArguVisitor;
@@ -190,13 +191,13 @@ public class CExpressionParser extends GJNoArguDepthFirst<InstrBooleanTerm> impl
             NodeSequence sequence = (NodeSequence) n.nodeChoice.choice;
             UnaryOperator op = (UnaryOperator) sequence.elementAt(0);
             NodeToken operatorToken = (NodeToken) op.nodeChoice.choice;
-            return new InstrOperatorTerm(CBooleanExpressions.notOperator,
-                    sequence.elementAt(1).accept(this),
-                    operatorToken.beginOffset, operatorToken.endOffset);
-        } else {
-            // Give up TODO: fix
-            return InstrBasicBooleanVisitor.convertToInstrBasicBoolean(n);
+            if(operatorToken.kind == CParser.EXCL) {
+                return new InstrOperatorTerm(CBooleanExpressions.notOperator,
+                        sequence.elementAt(1).accept(this),
+                        operatorToken.beginOffset, operatorToken.endOffset);
+            }
         }
+        return InstrBasicBooleanVisitor.convertToInstrBasicBoolean(n);
     }
 
     @Override
