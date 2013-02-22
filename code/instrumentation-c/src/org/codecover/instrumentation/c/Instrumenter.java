@@ -79,7 +79,7 @@ public class Instrumenter extends org.codecover.instrumentation.Instrumenter {
 
             counterManagers.add(cm);
         } catch(Exception e) {
-            throw new ParseException(e.getMessage());
+            throw new ParseException(e.toString());
         }
     }
 
