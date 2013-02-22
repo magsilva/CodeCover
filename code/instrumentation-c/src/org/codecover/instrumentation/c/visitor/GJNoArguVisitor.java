@@ -28,73 +28,277 @@ public interface GJNoArguVisitor<R> {
 
    /**
     * <PRE>
-    * nodeList -> ( ExternalDeclaration() )+
+    * nodeChoice -> &lt;NUMBER&gt;
+    *       | &lt;CHARACTER_LITERAL&gt;
+    *       | EnumerationConstant()
     * </PRE>
     */
-   public R visit(TranslationUnit n);
+   public R visit(Constant n);
 
    /**
     * <PRE>
-    * nodeChoice -> ( FunctionDefinition() | Declaration() )
+    * nodeToken -> &lt;IDENTIFIER&gt;
     * </PRE>
     */
-   public R visit(ExternalDeclaration n);
+   public R visit(EnumerationConstant n);
 
    /**
     * <PRE>
-    * nodeOptional -> [ DeclarationSpecifiers() ]
-    * declarator -> Declarator()
-    * nodeOptional1 -> [ DeclarationList() ]
-    * compoundStatement -> CompoundStatement()
+    * nodeList -> ( &lt;STRING_LITERAL&gt; )+
     * </PRE>
     */
-   public R visit(FunctionDefinition n);
+   public R visit(StringLiteral n);
 
    /**
     * <PRE>
-    * declarationSpecifiers -> DeclarationSpecifiers()
-    * nodeOptional -> [ InitDeclaratorList() ]
-    * nodeToken -> ";"
+    * nodeChoice -> ( &lt;IDENTIFIER&gt; | Constant() | StringLiteral() | "(" Expression() ")" )
+    *       | GenericSelection()
+    * </PRE>
+    */
+   public R visit(PrimaryExpression n);
+
+   /**
+    * <PRE>
+    * nodeToken -> &lt;GENERIC&gt;
+    * nodeToken1 -> "("
+    * assignmentExpression -> AssignmentExpression()
+    * nodeToken2 -> ","
+    * genericAssocList -> GenericAssocList()
+    * nodeToken3 -> ")"
+    * </PRE>
+    */
+   public R visit(GenericSelection n);
+
+   /**
+    * <PRE>
+    * genericAssociation -> GenericAssociation()
+    * nodeListOptional -> ( "," GenericAssociation() )*
+    * </PRE>
+    */
+   public R visit(GenericAssocList n);
+
+   /**
+    * <PRE>
+    * nodeChoice -> ( &lt;DFAULT&gt; | TypeName() )
+    * nodeToken -> ":"
+    * assignmentExpression -> AssignmentExpression()
+    * </PRE>
+    */
+   public R visit(GenericAssociation n);
+
+   /**
+    * <PRE>
+    * nodeChoice -> "(" TypeName() ")" "{" InitializerList() [ "," ] "}"
+    *       | PrimaryExpression() ( "[" Expression() "]" | "(" [ ArgumentExpressionList() ] ")" | "." &lt;IDENTIFIER&gt; | &lt;ARROW: "-&gt;"&gt; &lt;IDENTIFIER&gt; | "++" | "--" )*
+    * </PRE>
+    */
+   public R visit(PostfixExpression n);
+
+   /**
+    * <PRE>
+    * assignmentExpression -> AssignmentExpression()
+    * nodeListOptional -> ( "," AssignmentExpression() )*
+    * </PRE>
+    */
+   public R visit(ArgumentExpressionList n);
+
+   /**
+    * <PRE>
+    * nodeChoice -> ( PostfixExpression() | "++" UnaryExpression() | "--" UnaryExpression() | UnaryOperator() CastExpression() | &lt;SIZEOF&gt; ( UnaryExpression() | "(" TypeName() ")" ) )
+    *       | &lt;ALIGNOF&gt; "(" TypeName() ")"
+    * </PRE>
+    */
+   public R visit(UnaryExpression n);
+
+   /**
+    * <PRE>
+    * nodeChoice -> ( "&" | "*" | "+" | "-" | "~" | "!" )
+    * </PRE>
+    */
+   public R visit(UnaryOperator n);
+
+   /**
+    * <PRE>
+    * nodeChoice -> ( "(" TypeName() ")" CastExpression() | UnaryExpression() )
+    * </PRE>
+    */
+   public R visit(CastExpression n);
+
+   /**
+    * <PRE>
+    * castExpression -> CastExpression()
+    * nodeOptional -> [ ( "*" | "/" | "%" ) MultiplicativeExpression() ]
+    * </PRE>
+    */
+   public R visit(MultiplicativeExpression n);
+
+   /**
+    * <PRE>
+    * multiplicativeExpression -> MultiplicativeExpression()
+    * nodeOptional -> [ ( "+" | "-" ) AdditiveExpression() ]
+    * </PRE>
+    */
+   public R visit(AdditiveExpression n);
+
+   /**
+    * <PRE>
+    * additiveExpression -> AdditiveExpression()
+    * nodeOptional -> [ ( &lt;LSH: "&lt;&lt;"&gt; | &lt;RSH: "&gt;&gt;"&gt; ) ShiftExpression() ]
+    * </PRE>
+    */
+   public R visit(ShiftExpression n);
+
+   /**
+    * <PRE>
+    * shiftExpression -> ShiftExpression()
+    * nodeOptional -> [ ( "&lt;" | "&gt;" | &lt;LE: "&lt;="&gt; | &lt;GE: "&gt;="&gt; ) RelationalExpression() ]
+    * </PRE>
+    */
+   public R visit(RelationalExpression n);
+
+   /**
+    * <PRE>
+    * relationalExpression -> RelationalExpression()
+    * nodeOptional -> [ ( &lt;EQ: "=="&gt; | &lt;NE: "!="&gt; ) EqualityExpression() ]
+    * </PRE>
+    */
+   public R visit(EqualityExpression n);
+
+   /**
+    * <PRE>
+    * equalityExpression -> EqualityExpression()
+    * nodeOptional -> [ "&" ANDExpression() ]
+    * </PRE>
+    */
+   public R visit(ANDExpression n);
+
+   /**
+    * <PRE>
+    * aNDExpression -> ANDExpression()
+    * nodeOptional -> [ "^" ExclusiveORExpression() ]
+    * </PRE>
+    */
+   public R visit(ExclusiveORExpression n);
+
+   /**
+    * <PRE>
+    * exclusiveORExpression -> ExclusiveORExpression()
+    * nodeOptional -> [ "|" InclusiveORExpression() ]
+    * </PRE>
+    */
+   public R visit(InclusiveORExpression n);
+
+   /**
+    * <PRE>
+    * inclusiveORExpression -> InclusiveORExpression()
+    * nodeOptional -> [ "&&" LogicalANDExpression() ]
+    * </PRE>
+    */
+   public R visit(LogicalANDExpression n);
+
+   /**
+    * <PRE>
+    * logicalANDExpression -> LogicalANDExpression()
+    * nodeOptional -> [ "||" LogicalORExpression() ]
+    * </PRE>
+    */
+   public R visit(LogicalORExpression n);
+
+   /**
+    * <PRE>
+    * logicalORExpression -> LogicalORExpression()
+    * nodeOptional -> [ "?" Expression() ":" ConditionalExpression() ]
+    * </PRE>
+    */
+   public R visit(ConditionalExpression n);
+
+   /**
+    * <PRE>
+    * nodeChoice -> UnaryExpression() AssignmentOperator() AssignmentExpression()
+    *       | ConditionalExpression()
+    * </PRE>
+    */
+   public R visit(AssignmentExpression n);
+
+   /**
+    * <PRE>
+    * nodeChoice -> "="
+    *       | &lt;MULT_EQ: "*="&gt;
+    *       | &lt;DIV_EQ: "/="&gt;
+    *       | &lt;MOD_EQ: "%="&gt;
+    *       | &lt;PLUS_EQ: "+="&gt;
+    *       | &lt;SUB_EQ: "-="&gt;
+    *       | &lt;LSH_EQ: "&lt;&lt;="&gt;
+    *       | &lt;RSH_EQ: "&gt;&gt;="&gt;
+    *       | &lt;AND_EQ: "&="&gt;
+    *       | &lt;XOR_EQ: "^="&gt;
+    *       | &lt;OR_EQ: "|="&gt;
+    * </PRE>
+    */
+   public R visit(AssignmentOperator n);
+
+   /**
+    * <PRE>
+    * assignmentExpression -> AssignmentExpression()
+    * nodeListOptional -> ( "," AssignmentExpression() )*
+    * </PRE>
+    */
+   public R visit(Expression n);
+
+   /**
+    * <PRE>
+    * conditionalExpression -> ConditionalExpression()
+    * </PRE>
+    */
+   public R visit(ConstantExpression n);
+
+   /**
+    * <PRE>
+    * nodeChoice -> ( DeclarationSpecifiers() [ InitDeclaratorList() ] ";" | Static_AssertDeclaration() )
     * </PRE>
     */
    public R visit(Declaration n);
 
    /**
     * <PRE>
-    * nodeList -> ( Declaration() )+
-    * </PRE>
-    */
-   public R visit(DeclarationList n);
-
-   /**
-    * <PRE>
     * nodeChoice -> StorageClassSpecifier() [ DeclarationSpecifiers() ]
     *       | TypeSpecifier() [ DeclarationSpecifiers() ]
     *       | TypeQualifier() [ DeclarationSpecifiers() ]
+    *       | FunctionSpecifier() [ DeclarationSpecifiers() ]
+    *       | AlignmentSpecifier() [ DeclarationSpecifiers() ]
     * </PRE>
     */
    public R visit(DeclarationSpecifiers n);
 
    /**
     * <PRE>
-    * nodeChoice -> ( &lt;AUTO&gt; | &lt;REGISTER&gt; | &lt;STATIC&gt; | &lt;EXTERN&gt; | &lt;TYPEDEF&gt; )
+    * initDeclarator -> InitDeclarator()
+    * nodeListOptional -> ( "," InitDeclarator() )*
+    * </PRE>
+    */
+   public R visit(InitDeclaratorList n);
+
+   /**
+    * <PRE>
+    * declarator -> Declarator()
+    * nodeOptional -> [ "=" Initializer() ]
+    * </PRE>
+    */
+   public R visit(InitDeclarator n);
+
+   /**
+    * <PRE>
+    * nodeChoice -> ( &lt;EXTERN&gt; | &lt;STATIC&gt; | &lt;THREADLOCAL&gt; | &lt;AUTO&gt; | &lt;REGISTER&gt; | &lt;TYPEDEF&gt; )
     * </PRE>
     */
    public R visit(StorageClassSpecifier n);
 
    /**
     * <PRE>
-    * nodeChoice -> ( &lt;VOID&gt; | &lt;CHAR&gt; | &lt;SHORT&gt; | &lt;INT&gt; | &lt;LONG&gt; | &lt;FLOAT&gt; | &lt;DOUBLE&gt; | &lt;SIGNED&gt; | &lt;UNSIGNED&gt; | StructOrUnionSpecifier() | EnumSpecifier() | TypedefName() )
+    * nodeChoice -> ( &lt;VOID&gt; | &lt;CHAR&gt; | &lt;SHORT&gt; | &lt;INT&gt; | &lt;LONG&gt; | &lt;FLOAT&gt; | &lt;DOUBLE&gt; | &lt;SIGNED&gt; | &lt;UNSIGNED&gt; | &lt;BOOL&gt; | &lt;COMPLEX&gt; | AtomicSpecifier() | StructOrUnionSpecifier() | EnumSpecifier() | TypedefName() )
     * </PRE>
     */
    public R visit(TypeSpecifier n);
-
-   /**
-    * <PRE>
-    * nodeChoice -> ( &lt;CONST&gt; | &lt;VOLATILE&gt; )
-    * </PRE>
-    */
-   public R visit(TypeQualifier n);
 
    /**
     * <PRE>
@@ -121,25 +325,7 @@ public interface GJNoArguVisitor<R> {
 
    /**
     * <PRE>
-    * initDeclarator -> InitDeclarator()
-    * nodeListOptional -> ( "," InitDeclarator() )*
-    * </PRE>
-    */
-   public R visit(InitDeclaratorList n);
-
-   /**
-    * <PRE>
-    * declarator -> Declarator()
-    * nodeOptional -> [ "=" Initializer() ]
-    * </PRE>
-    */
-   public R visit(InitDeclarator n);
-
-   /**
-    * <PRE>
-    * specifierQualifierList -> SpecifierQualifierList()
-    * structDeclaratorList -> StructDeclaratorList()
-    * nodeToken -> ";"
+    * nodeChoice -> ( SpecifierQualifierList() [ StructDeclaratorList() ] ";" | Static_AssertDeclaration() )
     * </PRE>
     */
    public R visit(StructDeclaration n);
@@ -170,7 +356,7 @@ public interface GJNoArguVisitor<R> {
    /**
     * <PRE>
     * nodeToken -> &lt;ENUM&gt;
-    * nodeChoice -> ( [ &lt;IDENTIFIER&gt; ] "{" EnumeratorList() "}" | &lt;IDENTIFIER&gt; )
+    * nodeChoice -> ( [ &lt;IDENTIFIER&gt; ] "{" EnumeratorList() [ "," ] "}" | &lt;IDENTIFIER&gt; )
     * </PRE>
     */
    public R visit(EnumSpecifier n);
@@ -185,11 +371,44 @@ public interface GJNoArguVisitor<R> {
 
    /**
     * <PRE>
-    * nodeToken -> &lt;IDENTIFIER&gt;
+    * enumerationConstant -> EnumerationConstant()
     * nodeOptional -> [ "=" ConstantExpression() ]
     * </PRE>
     */
    public R visit(Enumerator n);
+
+   /**
+    * <PRE>
+    * nodeToken -> &lt;ATOMIC&gt;
+    * nodeToken1 -> "("TypedefName()
+    * nodeToken2 -> ")"
+    * </PRE>
+    */
+   public R visit(AtomicSpecifier n);
+
+   /**
+    * <PRE>
+    * nodeChoice -> ( &lt;CONST&gt; | &lt;RESTRICT&gt; | &lt;VOLATILE&gt; | &lt;ATOMIC&gt; )
+    * </PRE>
+    */
+   public R visit(TypeQualifier n);
+
+   /**
+    * <PRE>
+    * nodeChoice -> ( &lt;INLINE&gt; | &lt;NORETURN&gt; )
+    * </PRE>
+    */
+   public R visit(FunctionSpecifier n);
+
+   /**
+    * <PRE>
+    * nodeToken -> &lt;ALIGNAS&gt;
+    * nodeToken1 -> "("
+    * nodeChoice -> ( TypedefName() | ConstantExpression() )
+    * nodeToken2 -> ")"
+    * </PRE>
+    */
+   public R visit(AlignmentSpecifier n);
 
    /**
     * <PRE>
@@ -257,21 +476,6 @@ public interface GJNoArguVisitor<R> {
 
    /**
     * <PRE>
-    * nodeChoice -> ( AssignmentExpression() | "{" InitializerList() [ "," ] "}" )
-    * </PRE>
-    */
-   public R visit(Initializer n);
-
-   /**
-    * <PRE>
-    * initializer -> Initializer()
-    * nodeListOptional -> ( "," Initializer() )*
-    * </PRE>
-    */
-   public R visit(InitializerList n);
-
-   /**
-    * <PRE>
     * specifierQualifierList -> SpecifierQualifierList()
     * nodeOptional -> [ AbstractDeclarator() ]
     * </PRE>
@@ -302,6 +506,57 @@ public interface GJNoArguVisitor<R> {
 
    /**
     * <PRE>
+    * nodeChoice -> ( AssignmentExpression() | "{" InitializerList() [ "," ] "}" )
+    * </PRE>
+    */
+   public R visit(Initializer n);
+
+   /**
+    * <PRE>
+    * nodeOptional -> [ Designation() ]
+    * initializer -> Initializer()
+    * nodeListOptional -> ( "," Initializer() )*
+    * </PRE>
+    */
+   public R visit(InitializerList n);
+
+   /**
+    * <PRE>
+    * designatorList -> DesignatorList()
+    * nodeToken -> "="
+    * </PRE>
+    */
+   public R visit(Designation n);
+
+   /**
+    * <PRE>
+    * nodeList -> ( Designator() )+
+    * </PRE>
+    */
+   public R visit(DesignatorList n);
+
+   /**
+    * <PRE>
+    * nodeChoice -> ( "[" ConstantExpression() "]" | "." &lt;IDENTIFIER&gt; )
+    * </PRE>
+    */
+   public R visit(Designator n);
+
+   /**
+    * <PRE>
+    * nodeToken -> &lt;STATICASSERT&gt;
+    * nodeToken1 -> "("
+    * constantExpression -> ConstantExpression()
+    * nodeToken2 -> ","
+    * nodeToken3 -> &lt;STRING_LITERAL&gt;
+    * nodeToken4 -> ")"
+    * nodeToken5 -> ";"
+    * </PRE>
+    */
+   public R visit(Static_AssertDeclaration n);
+
+   /**
+    * <PRE>
     * nodeChoice -> ( LabeledStatement() | CompoundStatement() | ExpressionStatement() | IfStatement() | SwitchStatement() | WhileStatement() | DoStatement() | ForStatement() | JumpStatement() )
     * </PRE>
     */
@@ -326,7 +581,7 @@ public interface GJNoArguVisitor<R> {
 
    /**
     * <PRE>
-    * nodeToken -> &lt;DFLT&gt;
+    * nodeToken -> &lt;DFAULT&gt;
     * nodeToken1 -> ":"
     * statement -> Statement()
     * </PRE>
@@ -335,17 +590,8 @@ public interface GJNoArguVisitor<R> {
 
    /**
     * <PRE>
-    * nodeOptional -> [ Expression() ]
-    * nodeToken -> ";"
-    * </PRE>
-    */
-   public R visit(ExpressionStatement n);
-
-   /**
-    * <PRE>
     * nodeToken -> "{"
-    * nodeOptional -> [ DeclarationList() ]
-    * nodeOptional1 -> [ StatementList() ]
+    * nodeOptional -> [ BlockItemList() ]
     * nodeToken1 -> "}"
     * </PRE>
     */
@@ -353,10 +599,26 @@ public interface GJNoArguVisitor<R> {
 
    /**
     * <PRE>
-    * nodeList -> ( Statement() )+
+    * nodeList -> ( BlockItem() )+
     * </PRE>
     */
-   public R visit(StatementList n);
+   public R visit(BlockItemList n);
+
+   /**
+    * <PRE>
+    * nodeChoice -> Declaration()
+    *       | Statement()
+    * </PRE>
+    */
+   public R visit(BlockItem n);
+
+   /**
+    * <PRE>
+    * nodeOptional -> [ Expression() ]
+    * nodeToken -> ";"
+    * </PRE>
+    */
+   public R visit(ExpressionStatement n);
 
    /**
     * <PRE>
@@ -409,12 +671,10 @@ public interface GJNoArguVisitor<R> {
     * <PRE>
     * nodeToken -> &lt;FOR&gt;
     * nodeToken1 -> "("
-    * nodeOptional -> [ Expression() ]
+    * nodeChoice -> ( Declaration() [ Expression() ] | [ Expression() ] ";" [ Expression() ] )
     * nodeToken2 -> ";"
-    * nodeOptional1 -> [ Expression() ]
-    * nodeToken3 -> ";"
-    * nodeOptional2 -> [ Expression() ]
-    * nodeToken4 -> ")"
+    * nodeOptional -> [ Expression() ]
+    * nodeToken3 -> ")"
     * statement -> Statement()
     * </PRE>
     */
@@ -438,174 +698,34 @@ public interface GJNoArguVisitor<R> {
 
    /**
     * <PRE>
-    * assignmentExpression -> AssignmentExpression()
-    * nodeListOptional -> ( "," AssignmentExpression() )*
+    * nodeList -> ( ExternalDeclaration() )+
     * </PRE>
     */
-   public R visit(Expression n);
+   public R visit(TranslationUnit n);
 
    /**
     * <PRE>
-    * nodeChoice -> UnaryExpression() AssignmentOperator() AssignmentExpression()
-    *       | ConditionalExpression()
+    * nodeChoice -> ( FunctionDefinition() | Declaration() )
     * </PRE>
     */
-   public R visit(AssignmentExpression n);
+   public R visit(ExternalDeclaration n);
 
    /**
     * <PRE>
-    * nodeChoice -> ( "=" | &lt;MULT_EQ: "*="&gt; | &lt;DIV_EQ: "/="&gt; | &lt;MOD_EQ: "%="&gt; | &lt;PLUS_EQ: "+="&gt; | &lt;SUB_EQ: "-="&gt; | &lt;LSH_EQ: "&lt;&lt;="&gt; | &lt;RSH_EQ: "&gt;&gt;="&gt; | &lt;AND_EQ: "&="&gt; | &lt;XOR_EQ: "^="&gt; | &lt;OR_EQ: "|="&gt; )
+    * nodeOptional -> [ DeclarationSpecifiers() ]
+    * declarator -> Declarator()
+    * nodeOptional1 -> [ DeclarationList() ]
+    * compoundStatement -> CompoundStatement()
     * </PRE>
     */
-   public R visit(AssignmentOperator n);
+   public R visit(FunctionDefinition n);
 
    /**
     * <PRE>
-    * logicalORExpression -> LogicalORExpression()
-    * nodeOptional -> [ "?" Expression() ":" ConditionalExpression() ]
+    * nodeList -> ( Declaration() )+
     * </PRE>
     */
-   public R visit(ConditionalExpression n);
-
-   /**
-    * <PRE>
-    * conditionalExpression -> ConditionalExpression()
-    * </PRE>
-    */
-   public R visit(ConstantExpression n);
-
-   /**
-    * <PRE>
-    * logicalANDExpression -> LogicalANDExpression()
-    * nodeOptional -> [ "||" LogicalORExpression() ]
-    * </PRE>
-    */
-   public R visit(LogicalORExpression n);
-
-   /**
-    * <PRE>
-    * inclusiveORExpression -> InclusiveORExpression()
-    * nodeOptional -> [ "&&" LogicalANDExpression() ]
-    * </PRE>
-    */
-   public R visit(LogicalANDExpression n);
-
-   /**
-    * <PRE>
-    * exclusiveORExpression -> ExclusiveORExpression()
-    * nodeOptional -> [ "|" InclusiveORExpression() ]
-    * </PRE>
-    */
-   public R visit(InclusiveORExpression n);
-
-   /**
-    * <PRE>
-    * aNDExpression -> ANDExpression()
-    * nodeOptional -> [ "^" ExclusiveORExpression() ]
-    * </PRE>
-    */
-   public R visit(ExclusiveORExpression n);
-
-   /**
-    * <PRE>
-    * equalityExpression -> EqualityExpression()
-    * nodeOptional -> [ "&" ANDExpression() ]
-    * </PRE>
-    */
-   public R visit(ANDExpression n);
-
-   /**
-    * <PRE>
-    * relationalExpression -> RelationalExpression()
-    * nodeOptional -> [ ( &lt;EQ: "=="&gt; | &lt;NE: "!="&gt; ) EqualityExpression() ]
-    * </PRE>
-    */
-   public R visit(EqualityExpression n);
-
-   /**
-    * <PRE>
-    * shiftExpression -> ShiftExpression()
-    * nodeOptional -> [ ( "&lt;" | "&gt;" | &lt;LE: "&lt;="&gt; | &lt;GE: "&gt;="&gt; ) RelationalExpression() ]
-    * </PRE>
-    */
-   public R visit(RelationalExpression n);
-
-   /**
-    * <PRE>
-    * additiveExpression -> AdditiveExpression()
-    * nodeOptional -> [ ( &lt;LSH: "&lt;&lt;"&gt; | &lt;RSH: "&gt;&gt;"&gt; ) ShiftExpression() ]
-    * </PRE>
-    */
-   public R visit(ShiftExpression n);
-
-   /**
-    * <PRE>
-    * multiplicativeExpression -> MultiplicativeExpression()
-    * nodeOptional -> [ ( "+" | "-" ) AdditiveExpression() ]
-    * </PRE>
-    */
-   public R visit(AdditiveExpression n);
-
-   /**
-    * <PRE>
-    * castExpression -> CastExpression()
-    * nodeOptional -> [ ( "*" | "/" | "%" ) MultiplicativeExpression() ]
-    * </PRE>
-    */
-   public R visit(MultiplicativeExpression n);
-
-   /**
-    * <PRE>
-    * nodeChoice -> ( "(" TypeName() ")" CastExpression() | UnaryExpression() )
-    * </PRE>
-    */
-   public R visit(CastExpression n);
-
-   /**
-    * <PRE>
-    * nodeChoice -> ( PostfixExpression() | "++" UnaryExpression() | "--" UnaryExpression() | UnaryOperator() CastExpression() | &lt;SIZEOF&gt; ( UnaryExpression() | "(" TypeName() ")" ) )
-    * </PRE>
-    */
-   public R visit(UnaryExpression n);
-
-   /**
-    * <PRE>
-    * nodeChoice -> ( "&" | "*" | "+" | "-" | "~" | "!" )
-    * </PRE>
-    */
-   public R visit(UnaryOperator n);
-
-   /**
-    * <PRE>
-    * primaryExpression -> PrimaryExpression()
-    * nodeListOptional -> ( "[" Expression() "]" | "(" [ ArgumentExpressionList() ] ")" | "." &lt;IDENTIFIER&gt; | &lt;ARROW: "-&gt;"&gt; &lt;IDENTIFIER&gt; | "++" | "--" )*
-    * </PRE>
-    */
-   public R visit(PostfixExpression n);
-
-   /**
-    * <PRE>
-    * nodeChoice -> ( &lt;IDENTIFIER&gt; | Constant() | "(" Expression() ")" )
-    * </PRE>
-    */
-   public R visit(PrimaryExpression n);
-
-   /**
-    * <PRE>
-    * assignmentExpression -> AssignmentExpression()
-    * nodeListOptional -> ( "," AssignmentExpression() )*
-    * </PRE>
-    */
-   public R visit(ArgumentExpressionList n);
-
-   /**
-    * <PRE>
-    * nodeChoice -> &lt;NUMBER&gt;
-    *       | &lt;CHARACTER_LITERAL&gt;
-    *       | ( &lt;STRING_LITERAL&gt; )+
-    * </PRE>
-    */
-   public R visit(Constant n);
+   public R visit(DeclarationList n);
 
 }
 

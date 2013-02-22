@@ -225,7 +225,7 @@ public class TokenAdapter implements TokenManager {
         if("char".equals(image)) { return CParserConstants.CHAR; }
         if("const".equals(image)) { return CParserConstants.CONST; }
         if("continue".equals(image)) { return CParserConstants.CONTINUE; }
-        if("default".equals(image)) { return CParserConstants.DFLT; }
+        if("default".equals(image)) { return CParserConstants.DFAULT; }
         if("do".equals(image)) { return CParserConstants.DO; }
         if("double".equals(image)) { return CParserConstants.DOUBLE; }
         if("else".equals(image)) { return CParserConstants.ELSE; }

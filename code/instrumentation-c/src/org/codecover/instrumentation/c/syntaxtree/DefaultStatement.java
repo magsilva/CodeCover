@@ -7,7 +7,7 @@ package org.codecover.instrumentation.c.syntaxtree;
 /**
  * Grammar production:
  * <PRE>
- * nodeToken -> &lt;DFLT&gt;
+ * nodeToken -> &lt;DFAULT&gt;
  * nodeToken1 -> ":"
  * statement -> Statement()
  * </PRE>
@@ -28,7 +28,7 @@ public class DefaultStatement extends org.codecover.instrumentation.c.adapter.CC
    }
 
    public DefaultStatement(Statement n0) {
-      nodeToken = new NodeToken("default");
+      nodeToken = new NodeToken("DFAULT");
       if ( nodeToken != null ) nodeToken.setParent(this);
       nodeToken1 = new NodeToken(":");
       if ( nodeToken1 != null ) nodeToken1.setParent(this);

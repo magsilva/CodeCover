@@ -7,33 +7,16 @@ package org.codecover.instrumentation.c.syntaxtree;
 /**
  * Grammar production:
  * <PRE>
- * declarationSpecifiers -> DeclarationSpecifiers()
- * nodeOptional -> [ InitDeclaratorList() ]
- * nodeToken -> ";"
+ * nodeChoice -> ( DeclarationSpecifiers() [ InitDeclaratorList() ] ";" | Static_AssertDeclaration() )
  * </PRE>
  */
 public class Declaration extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
    private Node parent;
-   public DeclarationSpecifiers declarationSpecifiers;
-   public NodeOptional nodeOptional;
-   public NodeToken nodeToken;
+   public NodeChoice nodeChoice;
 
-   public Declaration(DeclarationSpecifiers n0, NodeOptional n1, NodeToken n2) {
-      declarationSpecifiers = n0;
-      if ( declarationSpecifiers != null ) declarationSpecifiers.setParent(this);
-      nodeOptional = n1;
-      if ( nodeOptional != null ) nodeOptional.setParent(this);
-      nodeToken = n2;
-      if ( nodeToken != null ) nodeToken.setParent(this);
-   }
-
-   public Declaration(DeclarationSpecifiers n0, NodeOptional n1) {
-      declarationSpecifiers = n0;
-      if ( declarationSpecifiers != null ) declarationSpecifiers.setParent(this);
-      nodeOptional = n1;
-      if ( nodeOptional != null ) nodeOptional.setParent(this);
-      nodeToken = new NodeToken(";");
-      if ( nodeToken != null ) nodeToken.setParent(this);
+   public Declaration(NodeChoice n0) {
+      nodeChoice = n0;
+      if ( nodeChoice != null ) nodeChoice.setParent(this);
    }
 
    public void accept(org.codecover.instrumentation.c.visitor.Visitor v) {

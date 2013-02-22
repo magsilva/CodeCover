@@ -7,20 +7,17 @@ package org.codecover.instrumentation.c.syntaxtree;
 /**
  * Grammar production:
  * <PRE>
- * primaryExpression -> PrimaryExpression()
- * nodeListOptional -> ( "[" Expression() "]" | "(" [ ArgumentExpressionList() ] ")" | "." &lt;IDENTIFIER&gt; | &lt;ARROW: "-&gt;"&gt; &lt;IDENTIFIER&gt; | "++" | "--" )*
+ * nodeChoice -> "(" TypeName() ")" "{" InitializerList() [ "," ] "}"
+ *       | PrimaryExpression() ( "[" Expression() "]" | "(" [ ArgumentExpressionList() ] ")" | "." &lt;IDENTIFIER&gt; | &lt;ARROW: "-&gt;"&gt; &lt;IDENTIFIER&gt; | "++" | "--" )*
  * </PRE>
  */
 public class PostfixExpression extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
    private Node parent;
-   public PrimaryExpression primaryExpression;
-   public NodeListOptional nodeListOptional;
+   public NodeChoice nodeChoice;
 
-   public PostfixExpression(PrimaryExpression n0, NodeListOptional n1) {
-      primaryExpression = n0;
-      if ( primaryExpression != null ) primaryExpression.setParent(this);
-      nodeListOptional = n1;
-      if ( nodeListOptional != null ) nodeListOptional.setParent(this);
+   public PostfixExpression(NodeChoice n0) {
+      nodeChoice = n0;
+      if ( nodeChoice != null ) nodeChoice.setParent(this);
    }
 
    public void accept(org.codecover.instrumentation.c.visitor.Visitor v) {

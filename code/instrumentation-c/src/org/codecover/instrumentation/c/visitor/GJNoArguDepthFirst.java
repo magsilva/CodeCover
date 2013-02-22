@@ -63,21 +63,12 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
 
    /**
     * <PRE>
-    * nodeList -> ( ExternalDeclaration() )+
+    * nodeChoice -> &lt;NUMBER&gt;
+    *       | &lt;CHARACTER_LITERAL&gt;
+    *       | EnumerationConstant()
     * </PRE>
     */
-   public R visit(TranslationUnit n) {
-      R _ret=null;
-      n.nodeList.accept(this);
-      return _ret;
-   }
-
-   /**
-    * <PRE>
-    * nodeChoice -> ( FunctionDefinition() | Declaration() )
-    * </PRE>
-    */
-   public R visit(ExternalDeclaration n) {
+   public R visit(Constant n) {
       R _ret=null;
       n.nodeChoice.accept(this);
       return _ret;
@@ -85,44 +76,354 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
 
    /**
     * <PRE>
-    * nodeOptional -> [ DeclarationSpecifiers() ]
-    * declarator -> Declarator()
-    * nodeOptional1 -> [ DeclarationList() ]
-    * compoundStatement -> CompoundStatement()
+    * nodeToken -> &lt;IDENTIFIER&gt;
     * </PRE>
     */
-   public R visit(FunctionDefinition n) {
+   public R visit(EnumerationConstant n) {
       R _ret=null;
-      n.nodeOptional.accept(this);
-      n.declarator.accept(this);
-      n.nodeOptional1.accept(this);
-      n.compoundStatement.accept(this);
-      return _ret;
-   }
-
-   /**
-    * <PRE>
-    * declarationSpecifiers -> DeclarationSpecifiers()
-    * nodeOptional -> [ InitDeclaratorList() ]
-    * nodeToken -> ";"
-    * </PRE>
-    */
-   public R visit(Declaration n) {
-      R _ret=null;
-      n.declarationSpecifiers.accept(this);
-      n.nodeOptional.accept(this);
       n.nodeToken.accept(this);
       return _ret;
    }
 
    /**
     * <PRE>
-    * nodeList -> ( Declaration() )+
+    * nodeList -> ( &lt;STRING_LITERAL&gt; )+
     * </PRE>
     */
-   public R visit(DeclarationList n) {
+   public R visit(StringLiteral n) {
       R _ret=null;
       n.nodeList.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * nodeChoice -> ( &lt;IDENTIFIER&gt; | Constant() | StringLiteral() | "(" Expression() ")" )
+    *       | GenericSelection()
+    * </PRE>
+    */
+   public R visit(PrimaryExpression n) {
+      R _ret=null;
+      n.nodeChoice.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * nodeToken -> &lt;GENERIC&gt;
+    * nodeToken1 -> "("
+    * assignmentExpression -> AssignmentExpression()
+    * nodeToken2 -> ","
+    * genericAssocList -> GenericAssocList()
+    * nodeToken3 -> ")"
+    * </PRE>
+    */
+   public R visit(GenericSelection n) {
+      R _ret=null;
+      n.nodeToken.accept(this);
+      n.nodeToken1.accept(this);
+      n.assignmentExpression.accept(this);
+      n.nodeToken2.accept(this);
+      n.genericAssocList.accept(this);
+      n.nodeToken3.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * genericAssociation -> GenericAssociation()
+    * nodeListOptional -> ( "," GenericAssociation() )*
+    * </PRE>
+    */
+   public R visit(GenericAssocList n) {
+      R _ret=null;
+      n.genericAssociation.accept(this);
+      n.nodeListOptional.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * nodeChoice -> ( &lt;DFAULT&gt; | TypeName() )
+    * nodeToken -> ":"
+    * assignmentExpression -> AssignmentExpression()
+    * </PRE>
+    */
+   public R visit(GenericAssociation n) {
+      R _ret=null;
+      n.nodeChoice.accept(this);
+      n.nodeToken.accept(this);
+      n.assignmentExpression.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * nodeChoice -> "(" TypeName() ")" "{" InitializerList() [ "," ] "}"
+    *       | PrimaryExpression() ( "[" Expression() "]" | "(" [ ArgumentExpressionList() ] ")" | "." &lt;IDENTIFIER&gt; | &lt;ARROW: "-&gt;"&gt; &lt;IDENTIFIER&gt; | "++" | "--" )*
+    * </PRE>
+    */
+   public R visit(PostfixExpression n) {
+      R _ret=null;
+      n.nodeChoice.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * assignmentExpression -> AssignmentExpression()
+    * nodeListOptional -> ( "," AssignmentExpression() )*
+    * </PRE>
+    */
+   public R visit(ArgumentExpressionList n) {
+      R _ret=null;
+      n.assignmentExpression.accept(this);
+      n.nodeListOptional.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * nodeChoice -> ( PostfixExpression() | "++" UnaryExpression() | "--" UnaryExpression() | UnaryOperator() CastExpression() | &lt;SIZEOF&gt; ( UnaryExpression() | "(" TypeName() ")" ) )
+    *       | &lt;ALIGNOF&gt; "(" TypeName() ")"
+    * </PRE>
+    */
+   public R visit(UnaryExpression n) {
+      R _ret=null;
+      n.nodeChoice.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * nodeChoice -> ( "&" | "*" | "+" | "-" | "~" | "!" )
+    * </PRE>
+    */
+   public R visit(UnaryOperator n) {
+      R _ret=null;
+      n.nodeChoice.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * nodeChoice -> ( "(" TypeName() ")" CastExpression() | UnaryExpression() )
+    * </PRE>
+    */
+   public R visit(CastExpression n) {
+      R _ret=null;
+      n.nodeChoice.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * castExpression -> CastExpression()
+    * nodeOptional -> [ ( "*" | "/" | "%" ) MultiplicativeExpression() ]
+    * </PRE>
+    */
+   public R visit(MultiplicativeExpression n) {
+      R _ret=null;
+      n.castExpression.accept(this);
+      n.nodeOptional.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * multiplicativeExpression -> MultiplicativeExpression()
+    * nodeOptional -> [ ( "+" | "-" ) AdditiveExpression() ]
+    * </PRE>
+    */
+   public R visit(AdditiveExpression n) {
+      R _ret=null;
+      n.multiplicativeExpression.accept(this);
+      n.nodeOptional.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * additiveExpression -> AdditiveExpression()
+    * nodeOptional -> [ ( &lt;LSH: "&lt;&lt;"&gt; | &lt;RSH: "&gt;&gt;"&gt; ) ShiftExpression() ]
+    * </PRE>
+    */
+   public R visit(ShiftExpression n) {
+      R _ret=null;
+      n.additiveExpression.accept(this);
+      n.nodeOptional.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * shiftExpression -> ShiftExpression()
+    * nodeOptional -> [ ( "&lt;" | "&gt;" | &lt;LE: "&lt;="&gt; | &lt;GE: "&gt;="&gt; ) RelationalExpression() ]
+    * </PRE>
+    */
+   public R visit(RelationalExpression n) {
+      R _ret=null;
+      n.shiftExpression.accept(this);
+      n.nodeOptional.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * relationalExpression -> RelationalExpression()
+    * nodeOptional -> [ ( &lt;EQ: "=="&gt; | &lt;NE: "!="&gt; ) EqualityExpression() ]
+    * </PRE>
+    */
+   public R visit(EqualityExpression n) {
+      R _ret=null;
+      n.relationalExpression.accept(this);
+      n.nodeOptional.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * equalityExpression -> EqualityExpression()
+    * nodeOptional -> [ "&" ANDExpression() ]
+    * </PRE>
+    */
+   public R visit(ANDExpression n) {
+      R _ret=null;
+      n.equalityExpression.accept(this);
+      n.nodeOptional.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * aNDExpression -> ANDExpression()
+    * nodeOptional -> [ "^" ExclusiveORExpression() ]
+    * </PRE>
+    */
+   public R visit(ExclusiveORExpression n) {
+      R _ret=null;
+      n.aNDExpression.accept(this);
+      n.nodeOptional.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * exclusiveORExpression -> ExclusiveORExpression()
+    * nodeOptional -> [ "|" InclusiveORExpression() ]
+    * </PRE>
+    */
+   public R visit(InclusiveORExpression n) {
+      R _ret=null;
+      n.exclusiveORExpression.accept(this);
+      n.nodeOptional.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * inclusiveORExpression -> InclusiveORExpression()
+    * nodeOptional -> [ "&&" LogicalANDExpression() ]
+    * </PRE>
+    */
+   public R visit(LogicalANDExpression n) {
+      R _ret=null;
+      n.inclusiveORExpression.accept(this);
+      n.nodeOptional.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * logicalANDExpression -> LogicalANDExpression()
+    * nodeOptional -> [ "||" LogicalORExpression() ]
+    * </PRE>
+    */
+   public R visit(LogicalORExpression n) {
+      R _ret=null;
+      n.logicalANDExpression.accept(this);
+      n.nodeOptional.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * logicalORExpression -> LogicalORExpression()
+    * nodeOptional -> [ "?" Expression() ":" ConditionalExpression() ]
+    * </PRE>
+    */
+   public R visit(ConditionalExpression n) {
+      R _ret=null;
+      n.logicalORExpression.accept(this);
+      n.nodeOptional.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * nodeChoice -> UnaryExpression() AssignmentOperator() AssignmentExpression()
+    *       | ConditionalExpression()
+    * </PRE>
+    */
+   public R visit(AssignmentExpression n) {
+      R _ret=null;
+      n.nodeChoice.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * nodeChoice -> "="
+    *       | &lt;MULT_EQ: "*="&gt;
+    *       | &lt;DIV_EQ: "/="&gt;
+    *       | &lt;MOD_EQ: "%="&gt;
+    *       | &lt;PLUS_EQ: "+="&gt;
+    *       | &lt;SUB_EQ: "-="&gt;
+    *       | &lt;LSH_EQ: "&lt;&lt;="&gt;
+    *       | &lt;RSH_EQ: "&gt;&gt;="&gt;
+    *       | &lt;AND_EQ: "&="&gt;
+    *       | &lt;XOR_EQ: "^="&gt;
+    *       | &lt;OR_EQ: "|="&gt;
+    * </PRE>
+    */
+   public R visit(AssignmentOperator n) {
+      R _ret=null;
+      n.nodeChoice.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * assignmentExpression -> AssignmentExpression()
+    * nodeListOptional -> ( "," AssignmentExpression() )*
+    * </PRE>
+    */
+   public R visit(Expression n) {
+      R _ret=null;
+      n.assignmentExpression.accept(this);
+      n.nodeListOptional.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * conditionalExpression -> ConditionalExpression()
+    * </PRE>
+    */
+   public R visit(ConstantExpression n) {
+      R _ret=null;
+      n.conditionalExpression.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * nodeChoice -> ( DeclarationSpecifiers() [ InitDeclaratorList() ] ";" | Static_AssertDeclaration() )
+    * </PRE>
+    */
+   public R visit(Declaration n) {
+      R _ret=null;
+      n.nodeChoice.accept(this);
       return _ret;
    }
 
@@ -131,6 +432,8 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
     * nodeChoice -> StorageClassSpecifier() [ DeclarationSpecifiers() ]
     *       | TypeSpecifier() [ DeclarationSpecifiers() ]
     *       | TypeQualifier() [ DeclarationSpecifiers() ]
+    *       | FunctionSpecifier() [ DeclarationSpecifiers() ]
+    *       | AlignmentSpecifier() [ DeclarationSpecifiers() ]
     * </PRE>
     */
    public R visit(DeclarationSpecifiers n) {
@@ -141,7 +444,33 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
 
    /**
     * <PRE>
-    * nodeChoice -> ( &lt;AUTO&gt; | &lt;REGISTER&gt; | &lt;STATIC&gt; | &lt;EXTERN&gt; | &lt;TYPEDEF&gt; )
+    * initDeclarator -> InitDeclarator()
+    * nodeListOptional -> ( "," InitDeclarator() )*
+    * </PRE>
+    */
+   public R visit(InitDeclaratorList n) {
+      R _ret=null;
+      n.initDeclarator.accept(this);
+      n.nodeListOptional.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * declarator -> Declarator()
+    * nodeOptional -> [ "=" Initializer() ]
+    * </PRE>
+    */
+   public R visit(InitDeclarator n) {
+      R _ret=null;
+      n.declarator.accept(this);
+      n.nodeOptional.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * nodeChoice -> ( &lt;EXTERN&gt; | &lt;STATIC&gt; | &lt;THREADLOCAL&gt; | &lt;AUTO&gt; | &lt;REGISTER&gt; | &lt;TYPEDEF&gt; )
     * </PRE>
     */
    public R visit(StorageClassSpecifier n) {
@@ -152,21 +481,10 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
 
    /**
     * <PRE>
-    * nodeChoice -> ( &lt;VOID&gt; | &lt;CHAR&gt; | &lt;SHORT&gt; | &lt;INT&gt; | &lt;LONG&gt; | &lt;FLOAT&gt; | &lt;DOUBLE&gt; | &lt;SIGNED&gt; | &lt;UNSIGNED&gt; | StructOrUnionSpecifier() | EnumSpecifier() | TypedefName() )
+    * nodeChoice -> ( &lt;VOID&gt; | &lt;CHAR&gt; | &lt;SHORT&gt; | &lt;INT&gt; | &lt;LONG&gt; | &lt;FLOAT&gt; | &lt;DOUBLE&gt; | &lt;SIGNED&gt; | &lt;UNSIGNED&gt; | &lt;BOOL&gt; | &lt;COMPLEX&gt; | AtomicSpecifier() | StructOrUnionSpecifier() | EnumSpecifier() | TypedefName() )
     * </PRE>
     */
    public R visit(TypeSpecifier n) {
-      R _ret=null;
-      n.nodeChoice.accept(this);
-      return _ret;
-   }
-
-   /**
-    * <PRE>
-    * nodeChoice -> ( &lt;CONST&gt; | &lt;VOLATILE&gt; )
-    * </PRE>
-    */
-   public R visit(TypeQualifier n) {
       R _ret=null;
       n.nodeChoice.accept(this);
       return _ret;
@@ -210,42 +528,12 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
 
    /**
     * <PRE>
-    * initDeclarator -> InitDeclarator()
-    * nodeListOptional -> ( "," InitDeclarator() )*
-    * </PRE>
-    */
-   public R visit(InitDeclaratorList n) {
-      R _ret=null;
-      n.initDeclarator.accept(this);
-      n.nodeListOptional.accept(this);
-      return _ret;
-   }
-
-   /**
-    * <PRE>
-    * declarator -> Declarator()
-    * nodeOptional -> [ "=" Initializer() ]
-    * </PRE>
-    */
-   public R visit(InitDeclarator n) {
-      R _ret=null;
-      n.declarator.accept(this);
-      n.nodeOptional.accept(this);
-      return _ret;
-   }
-
-   /**
-    * <PRE>
-    * specifierQualifierList -> SpecifierQualifierList()
-    * structDeclaratorList -> StructDeclaratorList()
-    * nodeToken -> ";"
+    * nodeChoice -> ( SpecifierQualifierList() [ StructDeclaratorList() ] ";" | Static_AssertDeclaration() )
     * </PRE>
     */
    public R visit(StructDeclaration n) {
       R _ret=null;
-      n.specifierQualifierList.accept(this);
-      n.structDeclaratorList.accept(this);
-      n.nodeToken.accept(this);
+      n.nodeChoice.accept(this);
       return _ret;
    }
 
@@ -288,7 +576,7 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
    /**
     * <PRE>
     * nodeToken -> &lt;ENUM&gt;
-    * nodeChoice -> ( [ &lt;IDENTIFIER&gt; ] "{" EnumeratorList() "}" | &lt;IDENTIFIER&gt; )
+    * nodeChoice -> ( [ &lt;IDENTIFIER&gt; ] "{" EnumeratorList() [ "," ] "}" | &lt;IDENTIFIER&gt; )
     * </PRE>
     */
    public R visit(EnumSpecifier n) {
@@ -313,14 +601,69 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
 
    /**
     * <PRE>
-    * nodeToken -> &lt;IDENTIFIER&gt;
+    * enumerationConstant -> EnumerationConstant()
     * nodeOptional -> [ "=" ConstantExpression() ]
     * </PRE>
     */
    public R visit(Enumerator n) {
       R _ret=null;
-      n.nodeToken.accept(this);
+      n.enumerationConstant.accept(this);
       n.nodeOptional.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * nodeToken -> &lt;ATOMIC&gt;
+    * nodeToken1 -> "("TypedefName()
+    * nodeToken2 -> ")"
+    * </PRE>
+    */
+   public R visit(AtomicSpecifier n) {
+      R _ret=null;
+      n.nodeToken.accept(this);
+      n.nodeToken1.accept(this);
+      n.typedefName.accept(this);
+      n.nodeToken2.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * nodeChoice -> ( &lt;CONST&gt; | &lt;RESTRICT&gt; | &lt;VOLATILE&gt; | &lt;ATOMIC&gt; )
+    * </PRE>
+    */
+   public R visit(TypeQualifier n) {
+      R _ret=null;
+      n.nodeChoice.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * nodeChoice -> ( &lt;INLINE&gt; | &lt;NORETURN&gt; )
+    * </PRE>
+    */
+   public R visit(FunctionSpecifier n) {
+      R _ret=null;
+      n.nodeChoice.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * nodeToken -> &lt;ALIGNAS&gt;
+    * nodeToken1 -> "("
+    * nodeChoice -> ( TypedefName() | ConstantExpression() )
+    * nodeToken2 -> ")"
+    * </PRE>
+    */
+   public R visit(AlignmentSpecifier n) {
+      R _ret=null;
+      n.nodeToken.accept(this);
+      n.nodeToken1.accept(this);
+      n.nodeChoice.accept(this);
+      n.nodeToken2.accept(this);
       return _ret;
    }
 
@@ -430,30 +773,6 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
 
    /**
     * <PRE>
-    * nodeChoice -> ( AssignmentExpression() | "{" InitializerList() [ "," ] "}" )
-    * </PRE>
-    */
-   public R visit(Initializer n) {
-      R _ret=null;
-      n.nodeChoice.accept(this);
-      return _ret;
-   }
-
-   /**
-    * <PRE>
-    * initializer -> Initializer()
-    * nodeListOptional -> ( "," Initializer() )*
-    * </PRE>
-    */
-   public R visit(InitializerList n) {
-      R _ret=null;
-      n.initializer.accept(this);
-      n.nodeListOptional.accept(this);
-      return _ret;
-   }
-
-   /**
-    * <PRE>
     * specifierQualifierList -> SpecifierQualifierList()
     * nodeOptional -> [ AbstractDeclarator() ]
     * </PRE>
@@ -502,6 +821,90 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
 
    /**
     * <PRE>
+    * nodeChoice -> ( AssignmentExpression() | "{" InitializerList() [ "," ] "}" )
+    * </PRE>
+    */
+   public R visit(Initializer n) {
+      R _ret=null;
+      n.nodeChoice.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * nodeOptional -> [ Designation() ]
+    * initializer -> Initializer()
+    * nodeListOptional -> ( "," Initializer() )*
+    * </PRE>
+    */
+   public R visit(InitializerList n) {
+      R _ret=null;
+      n.nodeOptional.accept(this);
+      n.initializer.accept(this);
+      n.nodeListOptional.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * designatorList -> DesignatorList()
+    * nodeToken -> "="
+    * </PRE>
+    */
+   public R visit(Designation n) {
+      R _ret=null;
+      n.designatorList.accept(this);
+      n.nodeToken.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * nodeList -> ( Designator() )+
+    * </PRE>
+    */
+   public R visit(DesignatorList n) {
+      R _ret=null;
+      n.nodeList.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * nodeChoice -> ( "[" ConstantExpression() "]" | "." &lt;IDENTIFIER&gt; )
+    * </PRE>
+    */
+   public R visit(Designator n) {
+      R _ret=null;
+      n.nodeChoice.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * nodeToken -> &lt;STATICASSERT&gt;
+    * nodeToken1 -> "("
+    * constantExpression -> ConstantExpression()
+    * nodeToken2 -> ","
+    * nodeToken3 -> &lt;STRING_LITERAL&gt;
+    * nodeToken4 -> ")"
+    * nodeToken5 -> ";"
+    * </PRE>
+    */
+   public R visit(Static_AssertDeclaration n) {
+      R _ret=null;
+      n.nodeToken.accept(this);
+      n.nodeToken1.accept(this);
+      n.constantExpression.accept(this);
+      n.nodeToken2.accept(this);
+      n.nodeToken3.accept(this);
+      n.nodeToken4.accept(this);
+      n.nodeToken5.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
     * nodeChoice -> ( LabeledStatement() | CompoundStatement() | ExpressionStatement() | IfStatement() | SwitchStatement() | WhileStatement() | DoStatement() | ForStatement() | JumpStatement() )
     * </PRE>
     */
@@ -541,7 +944,7 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
 
    /**
     * <PRE>
-    * nodeToken -> &lt;DFLT&gt;
+    * nodeToken -> &lt;DFAULT&gt;
     * nodeToken1 -> ":"
     * statement -> Statement()
     * </PRE>
@@ -556,6 +959,44 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
 
    /**
     * <PRE>
+    * nodeToken -> "{"
+    * nodeOptional -> [ BlockItemList() ]
+    * nodeToken1 -> "}"
+    * </PRE>
+    */
+   public R visit(CompoundStatement n) {
+      R _ret=null;
+      n.nodeToken.accept(this);
+      n.nodeOptional.accept(this);
+      n.nodeToken1.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * nodeList -> ( BlockItem() )+
+    * </PRE>
+    */
+   public R visit(BlockItemList n) {
+      R _ret=null;
+      n.nodeList.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * nodeChoice -> Declaration()
+    *       | Statement()
+    * </PRE>
+    */
+   public R visit(BlockItem n) {
+      R _ret=null;
+      n.nodeChoice.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
     * nodeOptional -> [ Expression() ]
     * nodeToken -> ";"
     * </PRE>
@@ -564,34 +1005,6 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
       R _ret=null;
       n.nodeOptional.accept(this);
       n.nodeToken.accept(this);
-      return _ret;
-   }
-
-   /**
-    * <PRE>
-    * nodeToken -> "{"
-    * nodeOptional -> [ DeclarationList() ]
-    * nodeOptional1 -> [ StatementList() ]
-    * nodeToken1 -> "}"
-    * </PRE>
-    */
-   public R visit(CompoundStatement n) {
-      R _ret=null;
-      n.nodeToken.accept(this);
-      n.nodeOptional.accept(this);
-      n.nodeOptional1.accept(this);
-      n.nodeToken1.accept(this);
-      return _ret;
-   }
-
-   /**
-    * <PRE>
-    * nodeList -> ( Statement() )+
-    * </PRE>
-    */
-   public R visit(StatementList n) {
-      R _ret=null;
-      n.nodeList.accept(this);
       return _ret;
    }
 
@@ -681,12 +1094,10 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
     * <PRE>
     * nodeToken -> &lt;FOR&gt;
     * nodeToken1 -> "("
-    * nodeOptional -> [ Expression() ]
+    * nodeChoice -> ( Declaration() [ Expression() ] | [ Expression() ] ";" [ Expression() ] )
     * nodeToken2 -> ";"
-    * nodeOptional1 -> [ Expression() ]
-    * nodeToken3 -> ";"
-    * nodeOptional2 -> [ Expression() ]
-    * nodeToken4 -> ")"
+    * nodeOptional -> [ Expression() ]
+    * nodeToken3 -> ")"
     * statement -> Statement()
     * </PRE>
     */
@@ -694,12 +1105,10 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
       R _ret=null;
       n.nodeToken.accept(this);
       n.nodeToken1.accept(this);
-      n.nodeOptional.accept(this);
+      n.nodeChoice.accept(this);
       n.nodeToken2.accept(this);
-      n.nodeOptional1.accept(this);
+      n.nodeOptional.accept(this);
       n.nodeToken3.accept(this);
-      n.nodeOptional2.accept(this);
-      n.nodeToken4.accept(this);
       n.statement.accept(this);
       return _ret;
    }
@@ -732,24 +1141,21 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
 
    /**
     * <PRE>
-    * assignmentExpression -> AssignmentExpression()
-    * nodeListOptional -> ( "," AssignmentExpression() )*
+    * nodeList -> ( ExternalDeclaration() )+
     * </PRE>
     */
-   public R visit(Expression n) {
+   public R visit(TranslationUnit n) {
       R _ret=null;
-      n.assignmentExpression.accept(this);
-      n.nodeListOptional.accept(this);
+      n.nodeList.accept(this);
       return _ret;
    }
 
    /**
     * <PRE>
-    * nodeChoice -> UnaryExpression() AssignmentOperator() AssignmentExpression()
-    *       | ConditionalExpression()
+    * nodeChoice -> ( FunctionDefinition() | Declaration() )
     * </PRE>
     */
-   public R visit(AssignmentExpression n) {
+   public R visit(ExternalDeclaration n) {
       R _ret=null;
       n.nodeChoice.accept(this);
       return _ret;
@@ -757,249 +1163,29 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
 
    /**
     * <PRE>
-    * nodeChoice -> ( "=" | &lt;MULT_EQ: "*="&gt; | &lt;DIV_EQ: "/="&gt; | &lt;MOD_EQ: "%="&gt; | &lt;PLUS_EQ: "+="&gt; | &lt;SUB_EQ: "-="&gt; | &lt;LSH_EQ: "&lt;&lt;="&gt; | &lt;RSH_EQ: "&gt;&gt;="&gt; | &lt;AND_EQ: "&="&gt; | &lt;XOR_EQ: "^="&gt; | &lt;OR_EQ: "|="&gt; )
+    * nodeOptional -> [ DeclarationSpecifiers() ]
+    * declarator -> Declarator()
+    * nodeOptional1 -> [ DeclarationList() ]
+    * compoundStatement -> CompoundStatement()
     * </PRE>
     */
-   public R visit(AssignmentOperator n) {
+   public R visit(FunctionDefinition n) {
       R _ret=null;
-      n.nodeChoice.accept(this);
-      return _ret;
-   }
-
-   /**
-    * <PRE>
-    * logicalORExpression -> LogicalORExpression()
-    * nodeOptional -> [ "?" Expression() ":" ConditionalExpression() ]
-    * </PRE>
-    */
-   public R visit(ConditionalExpression n) {
-      R _ret=null;
-      n.logicalORExpression.accept(this);
       n.nodeOptional.accept(this);
+      n.declarator.accept(this);
+      n.nodeOptional1.accept(this);
+      n.compoundStatement.accept(this);
       return _ret;
    }
 
    /**
     * <PRE>
-    * conditionalExpression -> ConditionalExpression()
+    * nodeList -> ( Declaration() )+
     * </PRE>
     */
-   public R visit(ConstantExpression n) {
+   public R visit(DeclarationList n) {
       R _ret=null;
-      n.conditionalExpression.accept(this);
-      return _ret;
-   }
-
-   /**
-    * <PRE>
-    * logicalANDExpression -> LogicalANDExpression()
-    * nodeOptional -> [ "||" LogicalORExpression() ]
-    * </PRE>
-    */
-   public R visit(LogicalORExpression n) {
-      R _ret=null;
-      n.logicalANDExpression.accept(this);
-      n.nodeOptional.accept(this);
-      return _ret;
-   }
-
-   /**
-    * <PRE>
-    * inclusiveORExpression -> InclusiveORExpression()
-    * nodeOptional -> [ "&&" LogicalANDExpression() ]
-    * </PRE>
-    */
-   public R visit(LogicalANDExpression n) {
-      R _ret=null;
-      n.inclusiveORExpression.accept(this);
-      n.nodeOptional.accept(this);
-      return _ret;
-   }
-
-   /**
-    * <PRE>
-    * exclusiveORExpression -> ExclusiveORExpression()
-    * nodeOptional -> [ "|" InclusiveORExpression() ]
-    * </PRE>
-    */
-   public R visit(InclusiveORExpression n) {
-      R _ret=null;
-      n.exclusiveORExpression.accept(this);
-      n.nodeOptional.accept(this);
-      return _ret;
-   }
-
-   /**
-    * <PRE>
-    * aNDExpression -> ANDExpression()
-    * nodeOptional -> [ "^" ExclusiveORExpression() ]
-    * </PRE>
-    */
-   public R visit(ExclusiveORExpression n) {
-      R _ret=null;
-      n.aNDExpression.accept(this);
-      n.nodeOptional.accept(this);
-      return _ret;
-   }
-
-   /**
-    * <PRE>
-    * equalityExpression -> EqualityExpression()
-    * nodeOptional -> [ "&" ANDExpression() ]
-    * </PRE>
-    */
-   public R visit(ANDExpression n) {
-      R _ret=null;
-      n.equalityExpression.accept(this);
-      n.nodeOptional.accept(this);
-      return _ret;
-   }
-
-   /**
-    * <PRE>
-    * relationalExpression -> RelationalExpression()
-    * nodeOptional -> [ ( &lt;EQ: "=="&gt; | &lt;NE: "!="&gt; ) EqualityExpression() ]
-    * </PRE>
-    */
-   public R visit(EqualityExpression n) {
-      R _ret=null;
-      n.relationalExpression.accept(this);
-      n.nodeOptional.accept(this);
-      return _ret;
-   }
-
-   /**
-    * <PRE>
-    * shiftExpression -> ShiftExpression()
-    * nodeOptional -> [ ( "&lt;" | "&gt;" | &lt;LE: "&lt;="&gt; | &lt;GE: "&gt;="&gt; ) RelationalExpression() ]
-    * </PRE>
-    */
-   public R visit(RelationalExpression n) {
-      R _ret=null;
-      n.shiftExpression.accept(this);
-      n.nodeOptional.accept(this);
-      return _ret;
-   }
-
-   /**
-    * <PRE>
-    * additiveExpression -> AdditiveExpression()
-    * nodeOptional -> [ ( &lt;LSH: "&lt;&lt;"&gt; | &lt;RSH: "&gt;&gt;"&gt; ) ShiftExpression() ]
-    * </PRE>
-    */
-   public R visit(ShiftExpression n) {
-      R _ret=null;
-      n.additiveExpression.accept(this);
-      n.nodeOptional.accept(this);
-      return _ret;
-   }
-
-   /**
-    * <PRE>
-    * multiplicativeExpression -> MultiplicativeExpression()
-    * nodeOptional -> [ ( "+" | "-" ) AdditiveExpression() ]
-    * </PRE>
-    */
-   public R visit(AdditiveExpression n) {
-      R _ret=null;
-      n.multiplicativeExpression.accept(this);
-      n.nodeOptional.accept(this);
-      return _ret;
-   }
-
-   /**
-    * <PRE>
-    * castExpression -> CastExpression()
-    * nodeOptional -> [ ( "*" | "/" | "%" ) MultiplicativeExpression() ]
-    * </PRE>
-    */
-   public R visit(MultiplicativeExpression n) {
-      R _ret=null;
-      n.castExpression.accept(this);
-      n.nodeOptional.accept(this);
-      return _ret;
-   }
-
-   /**
-    * <PRE>
-    * nodeChoice -> ( "(" TypeName() ")" CastExpression() | UnaryExpression() )
-    * </PRE>
-    */
-   public R visit(CastExpression n) {
-      R _ret=null;
-      n.nodeChoice.accept(this);
-      return _ret;
-   }
-
-   /**
-    * <PRE>
-    * nodeChoice -> ( PostfixExpression() | "++" UnaryExpression() | "--" UnaryExpression() | UnaryOperator() CastExpression() | &lt;SIZEOF&gt; ( UnaryExpression() | "(" TypeName() ")" ) )
-    * </PRE>
-    */
-   public R visit(UnaryExpression n) {
-      R _ret=null;
-      n.nodeChoice.accept(this);
-      return _ret;
-   }
-
-   /**
-    * <PRE>
-    * nodeChoice -> ( "&" | "*" | "+" | "-" | "~" | "!" )
-    * </PRE>
-    */
-   public R visit(UnaryOperator n) {
-      R _ret=null;
-      n.nodeChoice.accept(this);
-      return _ret;
-   }
-
-   /**
-    * <PRE>
-    * primaryExpression -> PrimaryExpression()
-    * nodeListOptional -> ( "[" Expression() "]" | "(" [ ArgumentExpressionList() ] ")" | "." &lt;IDENTIFIER&gt; | &lt;ARROW: "-&gt;"&gt; &lt;IDENTIFIER&gt; | "++" | "--" )*
-    * </PRE>
-    */
-   public R visit(PostfixExpression n) {
-      R _ret=null;
-      n.primaryExpression.accept(this);
-      n.nodeListOptional.accept(this);
-      return _ret;
-   }
-
-   /**
-    * <PRE>
-    * nodeChoice -> ( &lt;IDENTIFIER&gt; | Constant() | "(" Expression() ")" )
-    * </PRE>
-    */
-   public R visit(PrimaryExpression n) {
-      R _ret=null;
-      n.nodeChoice.accept(this);
-      return _ret;
-   }
-
-   /**
-    * <PRE>
-    * assignmentExpression -> AssignmentExpression()
-    * nodeListOptional -> ( "," AssignmentExpression() )*
-    * </PRE>
-    */
-   public R visit(ArgumentExpressionList n) {
-      R _ret=null;
-      n.assignmentExpression.accept(this);
-      n.nodeListOptional.accept(this);
-      return _ret;
-   }
-
-   /**
-    * <PRE>
-    * nodeChoice -> &lt;NUMBER&gt;
-    *       | &lt;CHARACTER_LITERAL&gt;
-    *       | ( &lt;STRING_LITERAL&gt; )+
-    * </PRE>
-    */
-   public R visit(Constant n) {
-      R _ret=null;
-      n.nodeChoice.accept(this);
+      n.nodeList.accept(this);
       return _ret;
    }
 

@@ -14,11 +14,6 @@
   does not seem to be used as a type. I found that just deleting the __attribute__
   and the following "offensive" code works.
 
-  This grammar also prints out all the types defined while parsing the file. This
-  is done via a call to printTypes() when the parser is complete. If you do not want
-  this, just comment out the printTypes() method call in the production rule
-  TranslationUnit(), which BTW is the root node for parsing a C source file.
-
   I have not in anyway extensively tested this grammar, in fact it is barely tested,
   but I imagine it is better to have a starting point for a C grammar other than from
   scratch. It has not been optimized in anyway, my main aim was to get a parser that
@@ -29,10 +24,6 @@
   this grammar to the best of my ability, but at this point in time, this is only a side
   hobby (unless someone wants to pay me for doing JavaCC work!). In that regards, I am
   interested in hearing bugs and comments.
-
-  TODO:
-
-    Insert the appropriate code to enable C source trees from this grammar.
 
 =============================================
 3/2/06: Modified by Tom Copeland
@@ -52,8 +43,8 @@ package org.codecover.instrumentation.c.parser;
 
 import java.util.*;
 
-  public class CParser{
-
+public class CParser
+{
     // Hastable for storing typedef types
     private Set types = new HashSet();
 
@@ -63,15 +54,15 @@ import java.util.*;
 
     // Returns true if the given string is
     // a typedef type.
-    private boolean isType(String type){
-   	  return types.contains(type);
+    private boolean isType(String type) {
+        return types.contains(type);
     }
 
     // Add a typedef type to those already defined
-    private void addType(String type){
-   	  types.add(type);
+    private void addType(String type) {
+        types.add(type);
     }
-  }
+}
 
 PARSER_END(CParser)
 
@@ -93,49 +84,49 @@ TOKEN : {
 
 TOKEN : {
     <ALIGNOF: "alignof"> |
-	<AUTO: "auto"> |
-	<BREAK: "break"> |
-	<CASE: "case"> |
-	<CHAR: "char"> |
-	<CONST: "const"> |
-	<CONTINUE: "continue"> |
-	<DFLT: "default"> |
-	<DO: "do"> |
-	<DOUBLE: "double"> |
-	<ELSE: "else"> |
-	<ENUM: "enum"> |
-	<EXTERN: "extern"> |
-	<FLOAT: "float"> |
-	<FOR: "for"> |
-	<GOTO: "goto"> |
-	<IF: "if"> |
-	<INLINE: "inline"> |
-	<INT: "int"> |
-	<LONG: "long"> |
-	<REGISTER: "register"> |
-	<RESTRICT: "restrict"> |
-	<RETURN: "return"> |
-	<SHORT: "short"> |
-	<SIGNED: "signed"> |
-	<SIZEOF: "sizeof"> |
-	<STATIC: "static"> |
-	<STRUCT: "struct"> |
-	<SWITCH: "switch"> |
-	<TYPEDEF: "typedef"> |
-	<UNION: "union"> |
-	<UNSIGNED: "unsigned"> |
-	<VOID: "void"> |
-	<VOLATILE: "volatile"> |
-	<WHILE: "while"> |
-	<ALIGNAS: "_Alignas"> |
-	<ATOMIC: "_Atomic"> |
-	<BOOL: "_Bool"> |
-	<COMPLEX: "_Complex"> |
-	<GENERIC: "_Generic"> |
-	<IMAGINARY: "_Imaginary"> |
-	<NORETURN: "_Noreturn"> |
-	<STATICASSERT: "_Static_assert"> |
-	<THREADLOCAL: "_Thread_local">
+    <AUTO: "auto"> |
+    <BREAK: "break"> |
+    <CASE: "case"> |
+    <CHAR: "char"> |
+    <CONST: "const"> |
+    <CONTINUE: "continue"> |
+    <DFAULT: "DFAULT"> |
+    <DO: "do"> |
+    <DOUBLE: "double"> |
+    <ELSE: "else"> |
+    <ENUM: "enum"> |
+    <EXTERN: "extern"> |
+    <FLOAT: "float"> |
+    <FOR: "for"> |
+    <GOTO: "goto"> |
+    <IF: "if"> |
+    <INLINE: "inline"> |
+    <INT: "int"> |
+    <LONG: "long"> |
+    <REGISTER: "register"> |
+    <RESTRICT: "restrict"> |
+    <RETURN: "return"> |
+    <SHORT: "short"> |
+    <SIGNED: "signed"> |
+    <SIZEOF: "sizeof"> |
+    <STATIC: "static"> |
+    <STRUCT: "struct"> |
+    <SWITCH: "switch"> |
+    <TYPEDEF: "typedef"> |
+    <UNION: "union"> |
+    <UNSIGNED: "unsigned"> |
+    <VOID: "void"> |
+    <VOLATILE: "volatile"> |
+    <WHILE: "while"> |
+    <ALIGNAS: "_Alignas"> |
+    <ATOMIC: "_Atomic"> |
+    <BOOL: "_Bool"> |
+    <COMPLEX: "_Complex"> |
+    <GENERIC: "_Generic"> |
+    <IMAGINARY: "_Imaginary"> |
+    <NORETURN: "_Noreturn"> |
+    <STATICASSERT: "_Static_assert"> |
+    <THREADLOCAL: "_Thread_local">
 }
 
 TOKEN : {
@@ -175,61 +166,258 @@ TOKEN : {
     <GREATER: ">">
 }
 
-void TranslationUnit() : {}
+//////////////////
+// A.1.5 Constants
+//////////////////
+
+// 6.4.4
+void Constant() : {}
 {
-	(ExternalDeclaration())+
+ <NUMBER> | <CHARACTER_LITERAL> | EnumerationConstant()
 }
 
-void ExternalDeclaration() : {}
+// 6.4.4.3
+void EnumerationConstant() : {}
 {
-	( LOOKAHEAD( FunctionDefinition() ) FunctionDefinition() | Declaration())
+    <IDENTIFIER>
 }
 
-void FunctionDefinition() : {}
+// 6.4.5
+void StringLiteral() : {}
 {
-	[LOOKAHEAD(DeclarationSpecifiers()) DeclarationSpecifiers()] Declarator() [ DeclarationList() ]
-	CompoundStatement()
+    (<STRING_LITERAL>)+
 }
 
+////////////////////
+// A.2.1 Expressions
+////////////////////
+
+// 6.5.1
+void PrimaryExpression() : {}
+{
+	(  <IDENTIFIER> | // That's OK
+	  Constant() |
+	  StringLiteral() |
+	  "(" Expression() ")" ) |
+	  GenericSelection()
+}
+
+// 6.5.1.1
+void GenericSelection() : {}
+{
+    <GENERIC> "(" AssignmentExpression() "," GenericAssocList() ")"
+}
+
+// 6.5.1.1
+void GenericAssocList() : {}
+{
+    GenericAssociation() ("," GenericAssociation())*
+}
+
+// 6.5.1.1
+void GenericAssociation() : {}
+{
+    (<DFAULT> | TypeName()) ":" AssignmentExpression()
+}
+
+// 6.5.2
+void PostfixExpression() : {}
+{
+	LOOKAHEAD(2) "(" TypeName() ")" "{" InitializerList() [","] "}" |
+	PrimaryExpression()
+	( "[" Expression() "]" |
+      "(" [ LOOKAHEAD(ArgumentExpressionList() ) ArgumentExpressionList() ] ")" |
+      "." <IDENTIFIER> |
+      <ARROW: "->"> <IDENTIFIER> |
+      "++" |
+      "--" )*
+}
+
+// 6.5.2
+void ArgumentExpressionList() : {}
+{
+	AssignmentExpression() ( "," AssignmentExpression() )*
+}
+
+// 6.5.3
+void UnaryExpression() : {}
+{
+	( LOOKAHEAD(3) PostfixExpression() |
+	  "++" UnaryExpression() |
+	  "--" UnaryExpression() |
+	  UnaryOperator() CastExpression() |
+	  <SIZEOF> ( LOOKAHEAD(UnaryExpression() ) UnaryExpression() | "(" TypeName() ")" ) ) |
+	  <ALIGNOF> "(" TypeName() ")"
+}
+
+// 6.5.3
+void UnaryOperator() : {}
+{
+	( "&" | "*" | "+" | "-" | "~" | "!" )
+}
+
+// 6.5.4
+void CastExpression() : {}
+{
+	( LOOKAHEAD("(" TypeName() ")" CastExpression() ) "(" TypeName() ")" CastExpression() |
+	  UnaryExpression() )
+}
+
+// 6.5.5
+void MultiplicativeExpression() : {}
+{
+	CastExpression() [ ( "*" | "/" | "%" ) MultiplicativeExpression() ]
+}
+
+// 6.5.6
+void AdditiveExpression() : {}
+{
+	MultiplicativeExpression() [ ( "+" | "-" ) AdditiveExpression() ]
+}
+
+// 6.5.7
+void ShiftExpression() : {}
+{
+	AdditiveExpression() [ ( <LSH: "<<"> | <RSH: ">>"> ) ShiftExpression() ]
+}
+
+// 6.5.8
+void RelationalExpression() : {}
+{
+	ShiftExpression() [ ( "<" | ">" | <LE: "<="> | <GE: ">="> ) RelationalExpression() ]
+}
+
+// 6.5.9
+void EqualityExpression() : {}
+{
+	RelationalExpression() [ ( <EQ: "=="> | <NE: "!="> ) EqualityExpression() ]
+}
+
+// 6.5.10
+void ANDExpression() : {}
+{
+    EqualityExpression() [ "&" ANDExpression() ]
+}
+
+// 6.5.11
+void ExclusiveORExpression() : {}
+{
+	ANDExpression() [ "^" ExclusiveORExpression() ]
+}
+
+// 6.5.12
+void InclusiveORExpression() : {}
+{
+	ExclusiveORExpression() [ "|" InclusiveORExpression() ]
+}
+
+// 6.5.13
+void LogicalANDExpression() : {}
+{
+	InclusiveORExpression() [ "&&" LogicalANDExpression() ]
+}
+
+// 6.5.14
+void LogicalORExpression() : {}
+{
+	LogicalANDExpression() [ "||" LogicalORExpression() ]
+}
+
+// 6.5.15
+void ConditionalExpression() : {}
+{
+	LogicalORExpression() [ "?" Expression() ":" ConditionalExpression() ]
+}
+
+// 6.5.16
+void AssignmentExpression() : {}
+{
+	  LOOKAHEAD(UnaryExpression() AssignmentOperator()) UnaryExpression() AssignmentOperator() AssignmentExpression() |
+	  LOOKAHEAD(3) ConditionalExpression()
+}
+
+// 6.5.17
+void AssignmentOperator() : {}
+{
+    "=" | <MULT_EQ: "*="> | <DIV_EQ: "/="> | <MOD_EQ: "%="> | <PLUS_EQ: "+="> | <SUB_EQ: "-="> | <LSH_EQ: "<<="> | <RSH_EQ: ">>="> | <AND_EQ: "&="> | <XOR_EQ: "^="> | <OR_EQ: "|=">
+}
+
+// 6.5.17
+void Expression() : {}
+{
+	AssignmentExpression() ( "," AssignmentExpression() )*
+}
+
+// 6.6
+void ConstantExpression() : {}
+{
+	ConditionalExpression()
+}
+
+/////////////////////
+// A.2.2 Declarations
+/////////////////////
+
+// 6.7
 void Declaration() : {}
 {
-	DeclarationSpecifiers() [ InitDeclaratorList() ] ";"
+    ( DeclarationSpecifiers() [ InitDeclaratorList() ] ";" |
+      Static_AssertDeclaration() )
 }
 
-void DeclarationList() : {}
-{
-	( LOOKAHEAD(Declaration()) Declaration() )+
-}
-
+// 6.7
 void DeclarationSpecifiers() : {}
 {
-	  StorageClassSpecifier() [ LOOKAHEAD(DeclarationSpecifiers())
-	        DeclarationSpecifiers() ] |
-	  TypeSpecifier()  [ LOOKAHEAD(DeclarationSpecifiers())
-	        DeclarationSpecifiers() ] |
-	  TypeQualifier() [ LOOKAHEAD(DeclarationSpecifiers())
-	        DeclarationSpecifiers() ]
+    StorageClassSpecifier() [ LOOKAHEAD(DeclarationSpecifiers())
+        DeclarationSpecifiers() ] |
+    LOOKAHEAD(2)
+    TypeSpecifier()  [ LOOKAHEAD(DeclarationSpecifiers())
+        DeclarationSpecifiers() ] |
+    TypeQualifier() [ LOOKAHEAD(DeclarationSpecifiers())
+        DeclarationSpecifiers() ] |
+    FunctionSpecifier() [ LOOKAHEAD(DeclarationSpecifiers())
+        DeclarationSpecifiers() ] |
+    AlignmentSpecifier() [ LOOKAHEAD(DeclarationSpecifiers())
+        DeclarationSpecifiers() ]
 }
 
+// 6.7
+void InitDeclaratorList() : {}
+{
+	InitDeclarator() ("," InitDeclarator())*
+	{
+		// Finished with a typedefDeclaration??
+		if(!(typedefParsingStack.empty()) && (typedefParsingStack.peek())){
+		   	typedefParsingStack.pop();
+	  }
+	}
+}
+
+// 6.7
+void InitDeclarator() : {}
+{
+	Declarator() [ "=" Initializer() ]
+}
+
+// 6.7.1
 void StorageClassSpecifier() : {}
 {
-	( <AUTO> | <REGISTER> | <STATIC> | <EXTERN> | <TYPEDEF>
+	( <EXTERN> | <STATIC> | <THREADLOCAL> | <AUTO> | <REGISTER> | <TYPEDEF>
 	{
 		typedefParsingStack.push(true);
 	} )
 }
 
+// 6.7.2
 void TypeSpecifier() : {}
 {
-	( <VOID> | <CHAR> | <SHORT> | <INT> | <LONG> | <FLOAT> | <DOUBLE> | <SIGNED> |
-	  <UNSIGNED> | StructOrUnionSpecifier() | EnumSpecifier() | LOOKAHEAD( { isType(getToken(1).image) } )TypedefName() )
+    ( <VOID> | <CHAR> | <SHORT> | <INT> | <LONG> | <FLOAT> | <DOUBLE> |
+	  <SIGNED> | <UNSIGNED> | <BOOL> | <COMPLEX> |
+	  AtomicSpecifier() | StructOrUnionSpecifier() | EnumSpecifier() |
+	  LOOKAHEAD( { isType(getToken(1).image) } ) TypedefName() )
 }
 
-void TypeQualifier() : {}
-{
-	( <CONST> | <VOLATILE> )
-}
-
+// 6.7.2.1
 void StructOrUnionSpecifier() : {}
 {
 	{
@@ -243,75 +431,98 @@ void StructOrUnionSpecifier() : {}
 	}
 }
 
+// 6.7.2.1
 void StructOrUnion() : {}
 {
 	( <STRUCT> | <UNION> )
 }
 
+// 6.7.2.1
 void StructDeclarationList() : {}
 {
 	(StructDeclaration())+
 }
 
-void InitDeclaratorList() : {}
-{
-	InitDeclarator() ("," InitDeclarator())*
-	{
-		// Finished with a typedefDeclaration??
-		if(!(typedefParsingStack.empty()) && (typedefParsingStack.peek())){
-		   	typedefParsingStack.pop();
-	  }
-	}
-}
-
-void InitDeclarator() : {}
-{
-	Declarator() [ "=" Initializer() ]
-}
-
+// 6.7.2.1
 void StructDeclaration() : {}
 {
-	SpecifierQualifierList() StructDeclaratorList() ";"
+    ( SpecifierQualifierList() [ StructDeclaratorList() ] ";" |
+      Static_AssertDeclaration() )
 }
 
+// 6.7.2.1
 void SpecifierQualifierList() : {}
 {
+	  LOOKAHEAD(2)
 	  TypeSpecifier() [ LOOKAHEAD(SpecifierQualifierList())
-	        SpecifierQualifierList() ]|
+	        SpecifierQualifierList() ] |
 	  TypeQualifier() [ LOOKAHEAD(SpecifierQualifierList())
 	        SpecifierQualifierList() ]
 }
 
+// 6.7.2.1
 void StructDeclaratorList() : {}
 {
 	StructDeclarator() ( "," StructDeclarator() )*
 }
 
+// 6.7.2.1
 void StructDeclarator() : {}
 {
 	( LOOKAHEAD(3) Declarator() | [ Declarator() ] ":" ConstantExpression() )
 }
 
+// 6.7.2.2
 void EnumSpecifier() : {}
 {
-	<ENUM> ( LOOKAHEAD(3) [ <IDENTIFIER> ] "{" EnumeratorList() "}" | <IDENTIFIER> )
+	<ENUM> ( LOOKAHEAD(3) [ <IDENTIFIER> ] "{" EnumeratorList() [","] "}" | <IDENTIFIER> )
 }
 
+// 6.7.2.2
 void EnumeratorList() : {}
 {
-	Enumerator() ("," Enumerator())*
+	Enumerator() (LOOKAHEAD(2) "," Enumerator())*
 }
 
+// 6.7.2.2
 void Enumerator() : {}
 {
-	<IDENTIFIER> [ "=" ConstantExpression() ]
+    EnumerationConstant() [ "=" ConstantExpression() ]
 }
 
+// 6.7.2.4
+void AtomicSpecifier() : {}
+{
+	<ATOMIC> "(" LOOKAHEAD( { isType(getToken(1).image) } ) TypedefName() ")"
+}
+
+// 6.7.3
+void TypeQualifier() : {}
+{
+	( <CONST> | <RESTRICT> | <VOLATILE> | <ATOMIC> )
+}
+
+// 6.7.4
+void FunctionSpecifier() : {}
+{
+    ( <INLINE> | <NORETURN> )
+}
+
+// 6.7.5
+void AlignmentSpecifier() : {}
+{
+    <ALIGNAS> "(" ( LOOKAHEAD( { isType(getToken(1).image) } ) TypedefName() |
+      ConstantExpression() )
+    ")"
+}
+
+// 6.7.6
 void Declarator() : {}
 {
 	[ Pointer() ] DirectDeclarator()
 }
 
+// 6.7.6
 void DirectDeclarator() : { Token t;}
 {
 	( t = <IDENTIFIER>
@@ -321,6 +532,8 @@ void DirectDeclarator() : { Token t;}
 	  }
 	}
 	 | "(" Declarator() ")" )
+
+	 // TODO
   
   { typedefParsingStack.push( false ); }
 
@@ -330,61 +543,60 @@ void DirectDeclarator() : { Token t;}
       { typedefParsingStack.pop(); }
 }
 
+// 6.7.6
 void Pointer() : {}
 {
 	"*" [ TypeQualifierList() ] [ Pointer() ]
 }
 
+// 6.7.6
 void TypeQualifierList() : {}
 {
 	(TypeQualifier())+
 }
 
+// 6.7.6
 void ParameterTypeList() : {}
 {
 	ParameterList() ["," <ELLIPSIS: "..."> ]
 }
 
+// 6.7.6
 void ParameterList() : {}
 {
 	ParameterDeclaration() (LOOKAHEAD(2) "," ParameterDeclaration())*
 }
 
+// 6.7.6
 void ParameterDeclaration() : {}
 {
 	DeclarationSpecifiers() ( LOOKAHEAD(Declarator()) Declarator() | [ AbstractDeclarator() ] )
 }
 
+// 6.7.6
 void IdentifierList() : {}
 {
 	<IDENTIFIER> ("," <IDENTIFIER>)*
 }
 
-void Initializer() : {}
-{
-	( AssignmentExpression() |
-	  "{" InitializerList() [","] "}" )
-}
-
-void InitializerList() : {}
-{
-	Initializer() (LOOKAHEAD(2) "," Initializer())*
-}
-
+// 6.7.7
 void TypeName() : {}
 {
 	SpecifierQualifierList() [ AbstractDeclarator() ]
-
 }
 
+// 6.7.7
 void AbstractDeclarator() : {}
 {
 	( LOOKAHEAD(3) Pointer() |
 	  [Pointer()] DirectAbstractDeclarator() )
 }
 
+// 6.7.7
 void DirectAbstractDeclarator() : {}
 {
+
+// TODO
 	( LOOKAHEAD(2) "(" AbstractDeclarator() ")" |
 	               "[" [ConstantExpression()] "]" |
 	               "(" [ParameterTypeList()] ")" )
@@ -392,11 +604,55 @@ void DirectAbstractDeclarator() : {}
 	  ( "[" [ ConstantExpression() ] "]" | "(" [ ParameterTypeList() ] ")" )*
 }
 
+// 6.7.8
 void TypedefName() : {}
 {
 	<IDENTIFIER>
 }
 
+// 6.7.9
+void Initializer() : {}
+{
+	( AssignmentExpression() |
+	  "{" InitializerList() [","] "}" )
+}
+
+// 6.7.9
+void InitializerList() : {}
+{
+	[Designation()] Initializer() (LOOKAHEAD(2) "," Initializer())*
+}
+
+// 6.7.9
+void Designation() : {}
+{
+    DesignatorList() "="
+}
+
+// 6.7.9
+void DesignatorList() : {}
+{
+    (Designator())+
+}
+
+// 6.7.9
+void Designator() : {}
+{
+    ( "[" ConstantExpression() "]" |
+      "." <IDENTIFIER> )
+}
+
+// 6.7.10
+void Static_AssertDeclaration() : {}
+{
+    <STATICASSERT> "(" ConstantExpression() "," <STRING_LITERAL> ")"  ";"
+}
+
+///////////////////
+// A.2.3 Statements
+///////////////////
+
+// 6.8
 void Statement() : {}
 {
 	( LOOKAHEAD(2) LabeledStatement() |
@@ -410,6 +666,7 @@ void Statement() : {}
 	  JumpStatement() )
 }
 
+// 6.8.1
 void LabeledStatement() : {}
 {
 	( <IDENTIFIER> ":" Statement() |
@@ -417,58 +674,78 @@ void LabeledStatement() : {}
 	  DefaultStatement() )
 }
 
+// 6.8.1 LabeledStatement
 void CaseStatement() : {}
 {
     <CASE> ConstantExpression() ":" Statement()
 }
 
+// 6.8.1 LabeledStatement
 void DefaultStatement() : {}
 {
-    <DFLT> ":" Statement()
+    <DFAULT> ":" Statement()
 }
 
+// 6.8.2
+void CompoundStatement() : {}
+{
+    "{" [BlockItemList()] "}"
+}
+
+// 6.8.2
+void BlockItemList() : {}
+{
+    (BlockItem())+
+}
+
+// 6.8.2
+void BlockItem() : {}
+{
+    Declaration() |
+    Statement()
+}
+
+// 6.8.3
 void ExpressionStatement() : {}
 {
 	[ Expression() ] ";"
 }
 
-void CompoundStatement() : {}
-{
-	"{" [ LOOKAHEAD(DeclarationList()) DeclarationList() ]
-	    [ StatementList() ]
-	"}"
-}
-
-void StatementList() : {}
-{
-	(Statement())+
-}
-
+// 6.8.4 SelectionStatement
 void IfStatement() : {}
 {
     <IF> "(" Expression() ")" Statement() [ LOOKAHEAD(2) <ELSE> Statement() ]
 }
 
+// 6.8.4 SelectionStatement
 void SwitchStatement() : {}
 {
     <SWITCH> "(" Expression() ")" Statement()
 }
 
+// 6.8.5 IterationStatement
 void WhileStatement() : {}
 {
     <WHILE> "(" Expression() ")" Statement()
 }
 
+// 6.8.5 IterationStatement
 void DoStatement() : {}
 {
     <DO> Statement() <WHILE> "(" Expression() ")" ";"
 }
 
+// 6.8.5 IterationStatement
 void ForStatement() : {}
 {
-    <FOR> "(" [ Expression() ] ";" [ Expression() ] ";" [ Expression() ] ")" Statement()
+    <FOR> "("
+    ( LOOKAHEAD(Declaration()) Declaration() [ Expression() ] |
+      [ Expression() ] ";" [ Expression() ] )
+
+    ";" [ Expression() ] ")" Statement()
 }
 
+// 6.8.6
 void JumpStatement() : {}
 {
 	( <GOTO> <IDENTIFIER> ";" |
@@ -477,131 +754,38 @@ void JumpStatement() : {}
 	  ReturnStatement() )
 }
 
+// 6.8.6 ReturnStatement
 void ReturnStatement() : {}
 {
     <RETURN> [ Expression() ] ";"
 }
 
-void Expression() : {}
+/////////////////////////////
+// A.2.4 External definitions
+/////////////////////////////
+
+// 6.9
+void TranslationUnit() : {}
 {
-	AssignmentExpression() ( "," AssignmentExpression() )*
+    (ExternalDeclaration())+
 }
 
-void AssignmentExpression() : {}
+// 6.9
+void ExternalDeclaration() : {}
 {
-	  LOOKAHEAD(UnaryExpression() AssignmentOperator()) UnaryExpression() AssignmentOperator() AssignmentExpression() |
-	  LOOKAHEAD(3) ConditionalExpression()
+    ( LOOKAHEAD( FunctionDefinition() ) FunctionDefinition() | Declaration())
 }
 
-void AssignmentOperator() : {}
+// 6.9.1
+void FunctionDefinition() : {}
 {
-	( "=" | <MULT_EQ: "*="> | <DIV_EQ: "/="> | <MOD_EQ: "%="> | <PLUS_EQ: "+="> | <SUB_EQ: "-="> | <LSH_EQ: "<<="> | <RSH_EQ: ">>="> | <AND_EQ: "&="> | <XOR_EQ: "^="> | <OR_EQ: "|="> )
+    [LOOKAHEAD(DeclarationSpecifiers()) DeclarationSpecifiers()] Declarator() [ DeclarationList() ]
+    CompoundStatement()
 }
 
-void ConditionalExpression() : {}
+// 6.9.1
+void DeclarationList() : {}
 {
-	LogicalORExpression() [ "?" Expression() ":" ConditionalExpression() ]
-}
-
-void ConstantExpression() : {}
-{
-	ConditionalExpression()
-}
-
-void LogicalORExpression() : {}
-{
-	LogicalANDExpression() [ "||" LogicalORExpression() ]
-}
-
-void LogicalANDExpression() : {}
-{
-	InclusiveORExpression() [ "&&" LogicalANDExpression() ]
-}
-
-void InclusiveORExpression() : {}
-{
-	ExclusiveORExpression() [ "|" InclusiveORExpression() ]
-}
-
-void ExclusiveORExpression() : {}
-{
-	ANDExpression() [ "^" ExclusiveORExpression() ]
-}
-
-void ANDExpression() : {}
-{
-	EqualityExpression() [ "&" ANDExpression() ]
-}
-
-void EqualityExpression() : {}
-{
-	RelationalExpression() [ ( <EQ: "=="> | <NE: "!="> ) EqualityExpression() ]
-}
-
-void RelationalExpression() : {}
-{
-	ShiftExpression() [ ( "<" | ">" | <LE: "<="> | <GE: ">="> ) RelationalExpression() ]
-}
-
-void ShiftExpression() : {}
-{
-	AdditiveExpression() [ ( <LSH: "<<"> | <RSH: ">>"> ) ShiftExpression() ]
-}
-
-void AdditiveExpression() : {}
-{
-	MultiplicativeExpression() [ ( "+" | "-" ) AdditiveExpression() ]
-}
-
-void MultiplicativeExpression() : {}
-{
-	CastExpression() [ ( "*" | "/" | "%" ) MultiplicativeExpression() ]
-}
-
-void CastExpression() : {}
-{
-	( LOOKAHEAD("(" TypeName() ")" CastExpression() ) "(" TypeName() ")" CastExpression() |
-	  UnaryExpression() )
-}
-
-void UnaryExpression() : {}
-{
-	( LOOKAHEAD(3) PostfixExpression() |
-	  "++" UnaryExpression() |
-	  "--" UnaryExpression() |
-	  UnaryOperator() CastExpression() |
-	  <SIZEOF> ( LOOKAHEAD(UnaryExpression() ) UnaryExpression() | "(" TypeName() ")" ) )
-}
-
-void UnaryOperator() : {}
-{
-	( "&" | "*" | "+" | "-" | "~" | "!" )
-}
-
-void PostfixExpression() : {}
-{
-	PrimaryExpression() ( "[" Expression() "]" |
-	                      "(" [ LOOKAHEAD(ArgumentExpressionList() ) ArgumentExpressionList() ] ")" |
-	  					  "." <IDENTIFIER> |
-	  					  <ARROW: "->"> <IDENTIFIER> |
-	  					  "++" |
-	  					  "--" )*
-}
-
-void PrimaryExpression() : {}
-{
-	( <IDENTIFIER> |
-	  Constant() |
-	  "(" Expression() ")" )
-}
-
-void ArgumentExpressionList() : {}
-{
-	AssignmentExpression() ( "," AssignmentExpression() )*
-}
-
-void Constant() : {}
-{
- <NUMBER> | <CHARACTER_LITERAL> | (<STRING_LITERAL>)+
+    ( LOOKAHEAD(Declaration()) Declaration() )+
 }
 

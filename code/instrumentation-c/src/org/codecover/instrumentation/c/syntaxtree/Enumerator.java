@@ -7,18 +7,18 @@ package org.codecover.instrumentation.c.syntaxtree;
 /**
  * Grammar production:
  * <PRE>
- * nodeToken -> &lt;IDENTIFIER&gt;
+ * enumerationConstant -> EnumerationConstant()
  * nodeOptional -> [ "=" ConstantExpression() ]
  * </PRE>
  */
 public class Enumerator extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
    private Node parent;
-   public NodeToken nodeToken;
+   public EnumerationConstant enumerationConstant;
    public NodeOptional nodeOptional;
 
-   public Enumerator(NodeToken n0, NodeOptional n1) {
-      nodeToken = n0;
-      if ( nodeToken != null ) nodeToken.setParent(this);
+   public Enumerator(EnumerationConstant n0, NodeOptional n1) {
+      enumerationConstant = n0;
+      if ( enumerationConstant != null ) enumerationConstant.setParent(this);
       nodeOptional = n1;
       if ( nodeOptional != null ) nodeOptional.setParent(this);
    }

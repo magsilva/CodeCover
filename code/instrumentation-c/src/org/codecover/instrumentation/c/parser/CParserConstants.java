@@ -43,7 +43,7 @@ public interface CParserConstants {
   /** RegularExpression Id. */
   int CONTINUE = 16;
   /** RegularExpression Id. */
-  int DFLT = 17;
+  int DFAULT = 17;
   /** RegularExpression Id. */
   int DO = 18;
   /** RegularExpression Id. */
@@ -179,41 +179,41 @@ public interface CParserConstants {
   /** RegularExpression Id. */
   int GREATER = 84;
   /** RegularExpression Id. */
-  int ELLIPSIS = 85;
+  int ARROW = 85;
   /** RegularExpression Id. */
-  int MULT_EQ = 86;
+  int LSH = 86;
   /** RegularExpression Id. */
-  int DIV_EQ = 87;
+  int RSH = 87;
   /** RegularExpression Id. */
-  int MOD_EQ = 88;
+  int LE = 88;
   /** RegularExpression Id. */
-  int PLUS_EQ = 89;
+  int GE = 89;
   /** RegularExpression Id. */
-  int SUB_EQ = 90;
+  int EQ = 90;
   /** RegularExpression Id. */
-  int LSH_EQ = 91;
+  int NE = 91;
   /** RegularExpression Id. */
-  int RSH_EQ = 92;
+  int MULT_EQ = 92;
   /** RegularExpression Id. */
-  int AND_EQ = 93;
+  int DIV_EQ = 93;
   /** RegularExpression Id. */
-  int XOR_EQ = 94;
+  int MOD_EQ = 94;
   /** RegularExpression Id. */
-  int OR_EQ = 95;
+  int PLUS_EQ = 95;
   /** RegularExpression Id. */
-  int EQ = 96;
+  int SUB_EQ = 96;
   /** RegularExpression Id. */
-  int NE = 97;
+  int LSH_EQ = 97;
   /** RegularExpression Id. */
-  int LE = 98;
+  int RSH_EQ = 98;
   /** RegularExpression Id. */
-  int GE = 99;
+  int AND_EQ = 99;
   /** RegularExpression Id. */
-  int LSH = 100;
+  int XOR_EQ = 100;
   /** RegularExpression Id. */
-  int RSH = 101;
+  int OR_EQ = 101;
   /** RegularExpression Id. */
-  int ARROW = 102;
+  int ELLIPSIS = 102;
 
   /** Literal token values. */
   String[] tokenImage = {
@@ -234,7 +234,7 @@ public interface CParserConstants {
     "\"char\"",
     "\"const\"",
     "\"continue\"",
-    "\"default\"",
+    "\"DFAULT\"",
     "\"do\"",
     "\"double\"",
     "\"else\"",
@@ -302,7 +302,13 @@ public interface CParserConstants {
     "\".\"",
     "\"<\"",
     "\">\"",
-    "\"...\"",
+    "\"->\"",
+    "\"<<\"",
+    "\">>\"",
+    "\"<=\"",
+    "\">=\"",
+    "\"==\"",
+    "\"!=\"",
     "\"*=\"",
     "\"/=\"",
     "\"%=\"",
@@ -313,13 +319,7 @@ public interface CParserConstants {
     "\"&=\"",
     "\"^=\"",
     "\"|=\"",
-    "\"==\"",
-    "\"!=\"",
-    "\"<=\"",
-    "\">=\"",
-    "\"<<\"",
-    "\">>\"",
-    "\"->\"",
+    "\"...\"",
   };
 
 }

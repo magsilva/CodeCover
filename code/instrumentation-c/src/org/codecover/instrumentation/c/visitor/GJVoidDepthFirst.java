@@ -53,57 +53,312 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
 
    /**
     * <PRE>
-    * nodeList -> ( ExternalDeclaration() )+
+    * nodeChoice -> &lt;NUMBER&gt;
+    *       | &lt;CHARACTER_LITERAL&gt;
+    *       | EnumerationConstant()
     * </PRE>
     */
-   public void visit(TranslationUnit n, A argu) {
-      n.nodeList.accept(this, argu);
-   }
-
-   /**
-    * <PRE>
-    * nodeChoice -> ( FunctionDefinition() | Declaration() )
-    * </PRE>
-    */
-   public void visit(ExternalDeclaration n, A argu) {
+   public void visit(Constant n, A argu) {
       n.nodeChoice.accept(this, argu);
    }
 
    /**
     * <PRE>
-    * nodeOptional -> [ DeclarationSpecifiers() ]
-    * declarator -> Declarator()
-    * nodeOptional1 -> [ DeclarationList() ]
-    * compoundStatement -> CompoundStatement()
+    * nodeToken -> &lt;IDENTIFIER&gt;
     * </PRE>
     */
-   public void visit(FunctionDefinition n, A argu) {
-      n.nodeOptional.accept(this, argu);
-      n.declarator.accept(this, argu);
-      n.nodeOptional1.accept(this, argu);
-      n.compoundStatement.accept(this, argu);
-   }
-
-   /**
-    * <PRE>
-    * declarationSpecifiers -> DeclarationSpecifiers()
-    * nodeOptional -> [ InitDeclaratorList() ]
-    * nodeToken -> ";"
-    * </PRE>
-    */
-   public void visit(Declaration n, A argu) {
-      n.declarationSpecifiers.accept(this, argu);
-      n.nodeOptional.accept(this, argu);
+   public void visit(EnumerationConstant n, A argu) {
       n.nodeToken.accept(this, argu);
    }
 
    /**
     * <PRE>
-    * nodeList -> ( Declaration() )+
+    * nodeList -> ( &lt;STRING_LITERAL&gt; )+
     * </PRE>
     */
-   public void visit(DeclarationList n, A argu) {
+   public void visit(StringLiteral n, A argu) {
       n.nodeList.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * nodeChoice -> ( &lt;IDENTIFIER&gt; | Constant() | StringLiteral() | "(" Expression() ")" )
+    *       | GenericSelection()
+    * </PRE>
+    */
+   public void visit(PrimaryExpression n, A argu) {
+      n.nodeChoice.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * nodeToken -> &lt;GENERIC&gt;
+    * nodeToken1 -> "("
+    * assignmentExpression -> AssignmentExpression()
+    * nodeToken2 -> ","
+    * genericAssocList -> GenericAssocList()
+    * nodeToken3 -> ")"
+    * </PRE>
+    */
+   public void visit(GenericSelection n, A argu) {
+      n.nodeToken.accept(this, argu);
+      n.nodeToken1.accept(this, argu);
+      n.assignmentExpression.accept(this, argu);
+      n.nodeToken2.accept(this, argu);
+      n.genericAssocList.accept(this, argu);
+      n.nodeToken3.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * genericAssociation -> GenericAssociation()
+    * nodeListOptional -> ( "," GenericAssociation() )*
+    * </PRE>
+    */
+   public void visit(GenericAssocList n, A argu) {
+      n.genericAssociation.accept(this, argu);
+      n.nodeListOptional.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * nodeChoice -> ( &lt;DFAULT&gt; | TypeName() )
+    * nodeToken -> ":"
+    * assignmentExpression -> AssignmentExpression()
+    * </PRE>
+    */
+   public void visit(GenericAssociation n, A argu) {
+      n.nodeChoice.accept(this, argu);
+      n.nodeToken.accept(this, argu);
+      n.assignmentExpression.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * nodeChoice -> "(" TypeName() ")" "{" InitializerList() [ "," ] "}"
+    *       | PrimaryExpression() ( "[" Expression() "]" | "(" [ ArgumentExpressionList() ] ")" | "." &lt;IDENTIFIER&gt; | &lt;ARROW: "-&gt;"&gt; &lt;IDENTIFIER&gt; | "++" | "--" )*
+    * </PRE>
+    */
+   public void visit(PostfixExpression n, A argu) {
+      n.nodeChoice.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * assignmentExpression -> AssignmentExpression()
+    * nodeListOptional -> ( "," AssignmentExpression() )*
+    * </PRE>
+    */
+   public void visit(ArgumentExpressionList n, A argu) {
+      n.assignmentExpression.accept(this, argu);
+      n.nodeListOptional.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * nodeChoice -> ( PostfixExpression() | "++" UnaryExpression() | "--" UnaryExpression() | UnaryOperator() CastExpression() | &lt;SIZEOF&gt; ( UnaryExpression() | "(" TypeName() ")" ) )
+    *       | &lt;ALIGNOF&gt; "(" TypeName() ")"
+    * </PRE>
+    */
+   public void visit(UnaryExpression n, A argu) {
+      n.nodeChoice.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * nodeChoice -> ( "&" | "*" | "+" | "-" | "~" | "!" )
+    * </PRE>
+    */
+   public void visit(UnaryOperator n, A argu) {
+      n.nodeChoice.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * nodeChoice -> ( "(" TypeName() ")" CastExpression() | UnaryExpression() )
+    * </PRE>
+    */
+   public void visit(CastExpression n, A argu) {
+      n.nodeChoice.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * castExpression -> CastExpression()
+    * nodeOptional -> [ ( "*" | "/" | "%" ) MultiplicativeExpression() ]
+    * </PRE>
+    */
+   public void visit(MultiplicativeExpression n, A argu) {
+      n.castExpression.accept(this, argu);
+      n.nodeOptional.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * multiplicativeExpression -> MultiplicativeExpression()
+    * nodeOptional -> [ ( "+" | "-" ) AdditiveExpression() ]
+    * </PRE>
+    */
+   public void visit(AdditiveExpression n, A argu) {
+      n.multiplicativeExpression.accept(this, argu);
+      n.nodeOptional.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * additiveExpression -> AdditiveExpression()
+    * nodeOptional -> [ ( &lt;LSH: "&lt;&lt;"&gt; | &lt;RSH: "&gt;&gt;"&gt; ) ShiftExpression() ]
+    * </PRE>
+    */
+   public void visit(ShiftExpression n, A argu) {
+      n.additiveExpression.accept(this, argu);
+      n.nodeOptional.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * shiftExpression -> ShiftExpression()
+    * nodeOptional -> [ ( "&lt;" | "&gt;" | &lt;LE: "&lt;="&gt; | &lt;GE: "&gt;="&gt; ) RelationalExpression() ]
+    * </PRE>
+    */
+   public void visit(RelationalExpression n, A argu) {
+      n.shiftExpression.accept(this, argu);
+      n.nodeOptional.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * relationalExpression -> RelationalExpression()
+    * nodeOptional -> [ ( &lt;EQ: "=="&gt; | &lt;NE: "!="&gt; ) EqualityExpression() ]
+    * </PRE>
+    */
+   public void visit(EqualityExpression n, A argu) {
+      n.relationalExpression.accept(this, argu);
+      n.nodeOptional.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * equalityExpression -> EqualityExpression()
+    * nodeOptional -> [ "&" ANDExpression() ]
+    * </PRE>
+    */
+   public void visit(ANDExpression n, A argu) {
+      n.equalityExpression.accept(this, argu);
+      n.nodeOptional.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * aNDExpression -> ANDExpression()
+    * nodeOptional -> [ "^" ExclusiveORExpression() ]
+    * </PRE>
+    */
+   public void visit(ExclusiveORExpression n, A argu) {
+      n.aNDExpression.accept(this, argu);
+      n.nodeOptional.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * exclusiveORExpression -> ExclusiveORExpression()
+    * nodeOptional -> [ "|" InclusiveORExpression() ]
+    * </PRE>
+    */
+   public void visit(InclusiveORExpression n, A argu) {
+      n.exclusiveORExpression.accept(this, argu);
+      n.nodeOptional.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * inclusiveORExpression -> InclusiveORExpression()
+    * nodeOptional -> [ "&&" LogicalANDExpression() ]
+    * </PRE>
+    */
+   public void visit(LogicalANDExpression n, A argu) {
+      n.inclusiveORExpression.accept(this, argu);
+      n.nodeOptional.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * logicalANDExpression -> LogicalANDExpression()
+    * nodeOptional -> [ "||" LogicalORExpression() ]
+    * </PRE>
+    */
+   public void visit(LogicalORExpression n, A argu) {
+      n.logicalANDExpression.accept(this, argu);
+      n.nodeOptional.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * logicalORExpression -> LogicalORExpression()
+    * nodeOptional -> [ "?" Expression() ":" ConditionalExpression() ]
+    * </PRE>
+    */
+   public void visit(ConditionalExpression n, A argu) {
+      n.logicalORExpression.accept(this, argu);
+      n.nodeOptional.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * nodeChoice -> UnaryExpression() AssignmentOperator() AssignmentExpression()
+    *       | ConditionalExpression()
+    * </PRE>
+    */
+   public void visit(AssignmentExpression n, A argu) {
+      n.nodeChoice.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * nodeChoice -> "="
+    *       | &lt;MULT_EQ: "*="&gt;
+    *       | &lt;DIV_EQ: "/="&gt;
+    *       | &lt;MOD_EQ: "%="&gt;
+    *       | &lt;PLUS_EQ: "+="&gt;
+    *       | &lt;SUB_EQ: "-="&gt;
+    *       | &lt;LSH_EQ: "&lt;&lt;="&gt;
+    *       | &lt;RSH_EQ: "&gt;&gt;="&gt;
+    *       | &lt;AND_EQ: "&="&gt;
+    *       | &lt;XOR_EQ: "^="&gt;
+    *       | &lt;OR_EQ: "|="&gt;
+    * </PRE>
+    */
+   public void visit(AssignmentOperator n, A argu) {
+      n.nodeChoice.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * assignmentExpression -> AssignmentExpression()
+    * nodeListOptional -> ( "," AssignmentExpression() )*
+    * </PRE>
+    */
+   public void visit(Expression n, A argu) {
+      n.assignmentExpression.accept(this, argu);
+      n.nodeListOptional.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * conditionalExpression -> ConditionalExpression()
+    * </PRE>
+    */
+   public void visit(ConstantExpression n, A argu) {
+      n.conditionalExpression.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * nodeChoice -> ( DeclarationSpecifiers() [ InitDeclaratorList() ] ";" | Static_AssertDeclaration() )
+    * </PRE>
+    */
+   public void visit(Declaration n, A argu) {
+      n.nodeChoice.accept(this, argu);
    }
 
    /**
@@ -111,6 +366,8 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
     * nodeChoice -> StorageClassSpecifier() [ DeclarationSpecifiers() ]
     *       | TypeSpecifier() [ DeclarationSpecifiers() ]
     *       | TypeQualifier() [ DeclarationSpecifiers() ]
+    *       | FunctionSpecifier() [ DeclarationSpecifiers() ]
+    *       | AlignmentSpecifier() [ DeclarationSpecifiers() ]
     * </PRE>
     */
    public void visit(DeclarationSpecifiers n, A argu) {
@@ -119,7 +376,29 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
 
    /**
     * <PRE>
-    * nodeChoice -> ( &lt;AUTO&gt; | &lt;REGISTER&gt; | &lt;STATIC&gt; | &lt;EXTERN&gt; | &lt;TYPEDEF&gt; )
+    * initDeclarator -> InitDeclarator()
+    * nodeListOptional -> ( "," InitDeclarator() )*
+    * </PRE>
+    */
+   public void visit(InitDeclaratorList n, A argu) {
+      n.initDeclarator.accept(this, argu);
+      n.nodeListOptional.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * declarator -> Declarator()
+    * nodeOptional -> [ "=" Initializer() ]
+    * </PRE>
+    */
+   public void visit(InitDeclarator n, A argu) {
+      n.declarator.accept(this, argu);
+      n.nodeOptional.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * nodeChoice -> ( &lt;EXTERN&gt; | &lt;STATIC&gt; | &lt;THREADLOCAL&gt; | &lt;AUTO&gt; | &lt;REGISTER&gt; | &lt;TYPEDEF&gt; )
     * </PRE>
     */
    public void visit(StorageClassSpecifier n, A argu) {
@@ -128,19 +407,10 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
 
    /**
     * <PRE>
-    * nodeChoice -> ( &lt;VOID&gt; | &lt;CHAR&gt; | &lt;SHORT&gt; | &lt;INT&gt; | &lt;LONG&gt; | &lt;FLOAT&gt; | &lt;DOUBLE&gt; | &lt;SIGNED&gt; | &lt;UNSIGNED&gt; | StructOrUnionSpecifier() | EnumSpecifier() | TypedefName() )
+    * nodeChoice -> ( &lt;VOID&gt; | &lt;CHAR&gt; | &lt;SHORT&gt; | &lt;INT&gt; | &lt;LONG&gt; | &lt;FLOAT&gt; | &lt;DOUBLE&gt; | &lt;SIGNED&gt; | &lt;UNSIGNED&gt; | &lt;BOOL&gt; | &lt;COMPLEX&gt; | AtomicSpecifier() | StructOrUnionSpecifier() | EnumSpecifier() | TypedefName() )
     * </PRE>
     */
    public void visit(TypeSpecifier n, A argu) {
-      n.nodeChoice.accept(this, argu);
-   }
-
-   /**
-    * <PRE>
-    * nodeChoice -> ( &lt;CONST&gt; | &lt;VOLATILE&gt; )
-    * </PRE>
-    */
-   public void visit(TypeQualifier n, A argu) {
       n.nodeChoice.accept(this, argu);
    }
 
@@ -176,37 +446,11 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
 
    /**
     * <PRE>
-    * initDeclarator -> InitDeclarator()
-    * nodeListOptional -> ( "," InitDeclarator() )*
-    * </PRE>
-    */
-   public void visit(InitDeclaratorList n, A argu) {
-      n.initDeclarator.accept(this, argu);
-      n.nodeListOptional.accept(this, argu);
-   }
-
-   /**
-    * <PRE>
-    * declarator -> Declarator()
-    * nodeOptional -> [ "=" Initializer() ]
-    * </PRE>
-    */
-   public void visit(InitDeclarator n, A argu) {
-      n.declarator.accept(this, argu);
-      n.nodeOptional.accept(this, argu);
-   }
-
-   /**
-    * <PRE>
-    * specifierQualifierList -> SpecifierQualifierList()
-    * structDeclaratorList -> StructDeclaratorList()
-    * nodeToken -> ";"
+    * nodeChoice -> ( SpecifierQualifierList() [ StructDeclaratorList() ] ";" | Static_AssertDeclaration() )
     * </PRE>
     */
    public void visit(StructDeclaration n, A argu) {
-      n.specifierQualifierList.accept(this, argu);
-      n.structDeclaratorList.accept(this, argu);
-      n.nodeToken.accept(this, argu);
+      n.nodeChoice.accept(this, argu);
    }
 
    /**
@@ -242,7 +486,7 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
    /**
     * <PRE>
     * nodeToken -> &lt;ENUM&gt;
-    * nodeChoice -> ( [ &lt;IDENTIFIER&gt; ] "{" EnumeratorList() "}" | &lt;IDENTIFIER&gt; )
+    * nodeChoice -> ( [ &lt;IDENTIFIER&gt; ] "{" EnumeratorList() [ "," ] "}" | &lt;IDENTIFIER&gt; )
     * </PRE>
     */
    public void visit(EnumSpecifier n, A argu) {
@@ -263,13 +507,60 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
 
    /**
     * <PRE>
-    * nodeToken -> &lt;IDENTIFIER&gt;
+    * enumerationConstant -> EnumerationConstant()
     * nodeOptional -> [ "=" ConstantExpression() ]
     * </PRE>
     */
    public void visit(Enumerator n, A argu) {
-      n.nodeToken.accept(this, argu);
+      n.enumerationConstant.accept(this, argu);
       n.nodeOptional.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * nodeToken -> &lt;ATOMIC&gt;
+    * nodeToken1 -> "("TypedefName()
+    * nodeToken2 -> ")"
+    * </PRE>
+    */
+   public void visit(AtomicSpecifier n, A argu) {
+      n.nodeToken.accept(this, argu);
+      n.nodeToken1.accept(this, argu);
+      n.typedefName.accept(this, argu);
+      n.nodeToken2.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * nodeChoice -> ( &lt;CONST&gt; | &lt;RESTRICT&gt; | &lt;VOLATILE&gt; | &lt;ATOMIC&gt; )
+    * </PRE>
+    */
+   public void visit(TypeQualifier n, A argu) {
+      n.nodeChoice.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * nodeChoice -> ( &lt;INLINE&gt; | &lt;NORETURN&gt; )
+    * </PRE>
+    */
+   public void visit(FunctionSpecifier n, A argu) {
+      n.nodeChoice.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * nodeToken -> &lt;ALIGNAS&gt;
+    * nodeToken1 -> "("
+    * nodeChoice -> ( TypedefName() | ConstantExpression() )
+    * nodeToken2 -> ")"
+    * </PRE>
+    */
+   public void visit(AlignmentSpecifier n, A argu) {
+      n.nodeToken.accept(this, argu);
+      n.nodeToken1.accept(this, argu);
+      n.nodeChoice.accept(this, argu);
+      n.nodeToken2.accept(this, argu);
    }
 
    /**
@@ -362,26 +653,6 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
 
    /**
     * <PRE>
-    * nodeChoice -> ( AssignmentExpression() | "{" InitializerList() [ "," ] "}" )
-    * </PRE>
-    */
-   public void visit(Initializer n, A argu) {
-      n.nodeChoice.accept(this, argu);
-   }
-
-   /**
-    * <PRE>
-    * initializer -> Initializer()
-    * nodeListOptional -> ( "," Initializer() )*
-    * </PRE>
-    */
-   public void visit(InitializerList n, A argu) {
-      n.initializer.accept(this, argu);
-      n.nodeListOptional.accept(this, argu);
-   }
-
-   /**
-    * <PRE>
     * specifierQualifierList -> SpecifierQualifierList()
     * nodeOptional -> [ AbstractDeclarator() ]
     * </PRE>
@@ -422,6 +693,78 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
 
    /**
     * <PRE>
+    * nodeChoice -> ( AssignmentExpression() | "{" InitializerList() [ "," ] "}" )
+    * </PRE>
+    */
+   public void visit(Initializer n, A argu) {
+      n.nodeChoice.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * nodeOptional -> [ Designation() ]
+    * initializer -> Initializer()
+    * nodeListOptional -> ( "," Initializer() )*
+    * </PRE>
+    */
+   public void visit(InitializerList n, A argu) {
+      n.nodeOptional.accept(this, argu);
+      n.initializer.accept(this, argu);
+      n.nodeListOptional.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * designatorList -> DesignatorList()
+    * nodeToken -> "="
+    * </PRE>
+    */
+   public void visit(Designation n, A argu) {
+      n.designatorList.accept(this, argu);
+      n.nodeToken.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * nodeList -> ( Designator() )+
+    * </PRE>
+    */
+   public void visit(DesignatorList n, A argu) {
+      n.nodeList.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * nodeChoice -> ( "[" ConstantExpression() "]" | "." &lt;IDENTIFIER&gt; )
+    * </PRE>
+    */
+   public void visit(Designator n, A argu) {
+      n.nodeChoice.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * nodeToken -> &lt;STATICASSERT&gt;
+    * nodeToken1 -> "("
+    * constantExpression -> ConstantExpression()
+    * nodeToken2 -> ","
+    * nodeToken3 -> &lt;STRING_LITERAL&gt;
+    * nodeToken4 -> ")"
+    * nodeToken5 -> ";"
+    * </PRE>
+    */
+   public void visit(Static_AssertDeclaration n, A argu) {
+      n.nodeToken.accept(this, argu);
+      n.nodeToken1.accept(this, argu);
+      n.constantExpression.accept(this, argu);
+      n.nodeToken2.accept(this, argu);
+      n.nodeToken3.accept(this, argu);
+      n.nodeToken4.accept(this, argu);
+      n.nodeToken5.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
     * nodeChoice -> ( LabeledStatement() | CompoundStatement() | ExpressionStatement() | IfStatement() | SwitchStatement() | WhileStatement() | DoStatement() | ForStatement() | JumpStatement() )
     * </PRE>
     */
@@ -455,7 +798,7 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
 
    /**
     * <PRE>
-    * nodeToken -> &lt;DFLT&gt;
+    * nodeToken -> &lt;DFAULT&gt;
     * nodeToken1 -> ":"
     * statement -> Statement()
     * </PRE>
@@ -468,6 +811,38 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
 
    /**
     * <PRE>
+    * nodeToken -> "{"
+    * nodeOptional -> [ BlockItemList() ]
+    * nodeToken1 -> "}"
+    * </PRE>
+    */
+   public void visit(CompoundStatement n, A argu) {
+      n.nodeToken.accept(this, argu);
+      n.nodeOptional.accept(this, argu);
+      n.nodeToken1.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * nodeList -> ( BlockItem() )+
+    * </PRE>
+    */
+   public void visit(BlockItemList n, A argu) {
+      n.nodeList.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * nodeChoice -> Declaration()
+    *       | Statement()
+    * </PRE>
+    */
+   public void visit(BlockItem n, A argu) {
+      n.nodeChoice.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
     * nodeOptional -> [ Expression() ]
     * nodeToken -> ";"
     * </PRE>
@@ -475,30 +850,6 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
    public void visit(ExpressionStatement n, A argu) {
       n.nodeOptional.accept(this, argu);
       n.nodeToken.accept(this, argu);
-   }
-
-   /**
-    * <PRE>
-    * nodeToken -> "{"
-    * nodeOptional -> [ DeclarationList() ]
-    * nodeOptional1 -> [ StatementList() ]
-    * nodeToken1 -> "}"
-    * </PRE>
-    */
-   public void visit(CompoundStatement n, A argu) {
-      n.nodeToken.accept(this, argu);
-      n.nodeOptional.accept(this, argu);
-      n.nodeOptional1.accept(this, argu);
-      n.nodeToken1.accept(this, argu);
-   }
-
-   /**
-    * <PRE>
-    * nodeList -> ( Statement() )+
-    * </PRE>
-    */
-   public void visit(StatementList n, A argu) {
-      n.nodeList.accept(this, argu);
    }
 
    /**
@@ -579,24 +930,20 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
     * <PRE>
     * nodeToken -> &lt;FOR&gt;
     * nodeToken1 -> "("
-    * nodeOptional -> [ Expression() ]
+    * nodeChoice -> ( Declaration() [ Expression() ] | [ Expression() ] ";" [ Expression() ] )
     * nodeToken2 -> ";"
-    * nodeOptional1 -> [ Expression() ]
-    * nodeToken3 -> ";"
-    * nodeOptional2 -> [ Expression() ]
-    * nodeToken4 -> ")"
+    * nodeOptional -> [ Expression() ]
+    * nodeToken3 -> ")"
     * statement -> Statement()
     * </PRE>
     */
    public void visit(ForStatement n, A argu) {
       n.nodeToken.accept(this, argu);
       n.nodeToken1.accept(this, argu);
-      n.nodeOptional.accept(this, argu);
+      n.nodeChoice.accept(this, argu);
       n.nodeToken2.accept(this, argu);
-      n.nodeOptional1.accept(this, argu);
+      n.nodeOptional.accept(this, argu);
       n.nodeToken3.accept(this, argu);
-      n.nodeOptional2.accept(this, argu);
-      n.nodeToken4.accept(this, argu);
       n.statement.accept(this, argu);
    }
 
@@ -624,231 +971,44 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
 
    /**
     * <PRE>
-    * assignmentExpression -> AssignmentExpression()
-    * nodeListOptional -> ( "," AssignmentExpression() )*
+    * nodeList -> ( ExternalDeclaration() )+
     * </PRE>
     */
-   public void visit(Expression n, A argu) {
-      n.assignmentExpression.accept(this, argu);
-      n.nodeListOptional.accept(this, argu);
+   public void visit(TranslationUnit n, A argu) {
+      n.nodeList.accept(this, argu);
    }
 
    /**
     * <PRE>
-    * nodeChoice -> UnaryExpression() AssignmentOperator() AssignmentExpression()
-    *       | ConditionalExpression()
+    * nodeChoice -> ( FunctionDefinition() | Declaration() )
     * </PRE>
     */
-   public void visit(AssignmentExpression n, A argu) {
+   public void visit(ExternalDeclaration n, A argu) {
       n.nodeChoice.accept(this, argu);
    }
 
    /**
     * <PRE>
-    * nodeChoice -> ( "=" | &lt;MULT_EQ: "*="&gt; | &lt;DIV_EQ: "/="&gt; | &lt;MOD_EQ: "%="&gt; | &lt;PLUS_EQ: "+="&gt; | &lt;SUB_EQ: "-="&gt; | &lt;LSH_EQ: "&lt;&lt;="&gt; | &lt;RSH_EQ: "&gt;&gt;="&gt; | &lt;AND_EQ: "&="&gt; | &lt;XOR_EQ: "^="&gt; | &lt;OR_EQ: "|="&gt; )
+    * nodeOptional -> [ DeclarationSpecifiers() ]
+    * declarator -> Declarator()
+    * nodeOptional1 -> [ DeclarationList() ]
+    * compoundStatement -> CompoundStatement()
     * </PRE>
     */
-   public void visit(AssignmentOperator n, A argu) {
-      n.nodeChoice.accept(this, argu);
-   }
-
-   /**
-    * <PRE>
-    * logicalORExpression -> LogicalORExpression()
-    * nodeOptional -> [ "?" Expression() ":" ConditionalExpression() ]
-    * </PRE>
-    */
-   public void visit(ConditionalExpression n, A argu) {
-      n.logicalORExpression.accept(this, argu);
+   public void visit(FunctionDefinition n, A argu) {
       n.nodeOptional.accept(this, argu);
+      n.declarator.accept(this, argu);
+      n.nodeOptional1.accept(this, argu);
+      n.compoundStatement.accept(this, argu);
    }
 
    /**
     * <PRE>
-    * conditionalExpression -> ConditionalExpression()
+    * nodeList -> ( Declaration() )+
     * </PRE>
     */
-   public void visit(ConstantExpression n, A argu) {
-      n.conditionalExpression.accept(this, argu);
-   }
-
-   /**
-    * <PRE>
-    * logicalANDExpression -> LogicalANDExpression()
-    * nodeOptional -> [ "||" LogicalORExpression() ]
-    * </PRE>
-    */
-   public void visit(LogicalORExpression n, A argu) {
-      n.logicalANDExpression.accept(this, argu);
-      n.nodeOptional.accept(this, argu);
-   }
-
-   /**
-    * <PRE>
-    * inclusiveORExpression -> InclusiveORExpression()
-    * nodeOptional -> [ "&&" LogicalANDExpression() ]
-    * </PRE>
-    */
-   public void visit(LogicalANDExpression n, A argu) {
-      n.inclusiveORExpression.accept(this, argu);
-      n.nodeOptional.accept(this, argu);
-   }
-
-   /**
-    * <PRE>
-    * exclusiveORExpression -> ExclusiveORExpression()
-    * nodeOptional -> [ "|" InclusiveORExpression() ]
-    * </PRE>
-    */
-   public void visit(InclusiveORExpression n, A argu) {
-      n.exclusiveORExpression.accept(this, argu);
-      n.nodeOptional.accept(this, argu);
-   }
-
-   /**
-    * <PRE>
-    * aNDExpression -> ANDExpression()
-    * nodeOptional -> [ "^" ExclusiveORExpression() ]
-    * </PRE>
-    */
-   public void visit(ExclusiveORExpression n, A argu) {
-      n.aNDExpression.accept(this, argu);
-      n.nodeOptional.accept(this, argu);
-   }
-
-   /**
-    * <PRE>
-    * equalityExpression -> EqualityExpression()
-    * nodeOptional -> [ "&" ANDExpression() ]
-    * </PRE>
-    */
-   public void visit(ANDExpression n, A argu) {
-      n.equalityExpression.accept(this, argu);
-      n.nodeOptional.accept(this, argu);
-   }
-
-   /**
-    * <PRE>
-    * relationalExpression -> RelationalExpression()
-    * nodeOptional -> [ ( &lt;EQ: "=="&gt; | &lt;NE: "!="&gt; ) EqualityExpression() ]
-    * </PRE>
-    */
-   public void visit(EqualityExpression n, A argu) {
-      n.relationalExpression.accept(this, argu);
-      n.nodeOptional.accept(this, argu);
-   }
-
-   /**
-    * <PRE>
-    * shiftExpression -> ShiftExpression()
-    * nodeOptional -> [ ( "&lt;" | "&gt;" | &lt;LE: "&lt;="&gt; | &lt;GE: "&gt;="&gt; ) RelationalExpression() ]
-    * </PRE>
-    */
-   public void visit(RelationalExpression n, A argu) {
-      n.shiftExpression.accept(this, argu);
-      n.nodeOptional.accept(this, argu);
-   }
-
-   /**
-    * <PRE>
-    * additiveExpression -> AdditiveExpression()
-    * nodeOptional -> [ ( &lt;LSH: "&lt;&lt;"&gt; | &lt;RSH: "&gt;&gt;"&gt; ) ShiftExpression() ]
-    * </PRE>
-    */
-   public void visit(ShiftExpression n, A argu) {
-      n.additiveExpression.accept(this, argu);
-      n.nodeOptional.accept(this, argu);
-   }
-
-   /**
-    * <PRE>
-    * multiplicativeExpression -> MultiplicativeExpression()
-    * nodeOptional -> [ ( "+" | "-" ) AdditiveExpression() ]
-    * </PRE>
-    */
-   public void visit(AdditiveExpression n, A argu) {
-      n.multiplicativeExpression.accept(this, argu);
-      n.nodeOptional.accept(this, argu);
-   }
-
-   /**
-    * <PRE>
-    * castExpression -> CastExpression()
-    * nodeOptional -> [ ( "*" | "/" | "%" ) MultiplicativeExpression() ]
-    * </PRE>
-    */
-   public void visit(MultiplicativeExpression n, A argu) {
-      n.castExpression.accept(this, argu);
-      n.nodeOptional.accept(this, argu);
-   }
-
-   /**
-    * <PRE>
-    * nodeChoice -> ( "(" TypeName() ")" CastExpression() | UnaryExpression() )
-    * </PRE>
-    */
-   public void visit(CastExpression n, A argu) {
-      n.nodeChoice.accept(this, argu);
-   }
-
-   /**
-    * <PRE>
-    * nodeChoice -> ( PostfixExpression() | "++" UnaryExpression() | "--" UnaryExpression() | UnaryOperator() CastExpression() | &lt;SIZEOF&gt; ( UnaryExpression() | "(" TypeName() ")" ) )
-    * </PRE>
-    */
-   public void visit(UnaryExpression n, A argu) {
-      n.nodeChoice.accept(this, argu);
-   }
-
-   /**
-    * <PRE>
-    * nodeChoice -> ( "&" | "*" | "+" | "-" | "~" | "!" )
-    * </PRE>
-    */
-   public void visit(UnaryOperator n, A argu) {
-      n.nodeChoice.accept(this, argu);
-   }
-
-   /**
-    * <PRE>
-    * primaryExpression -> PrimaryExpression()
-    * nodeListOptional -> ( "[" Expression() "]" | "(" [ ArgumentExpressionList() ] ")" | "." &lt;IDENTIFIER&gt; | &lt;ARROW: "-&gt;"&gt; &lt;IDENTIFIER&gt; | "++" | "--" )*
-    * </PRE>
-    */
-   public void visit(PostfixExpression n, A argu) {
-      n.primaryExpression.accept(this, argu);
-      n.nodeListOptional.accept(this, argu);
-   }
-
-   /**
-    * <PRE>
-    * nodeChoice -> ( &lt;IDENTIFIER&gt; | Constant() | "(" Expression() ")" )
-    * </PRE>
-    */
-   public void visit(PrimaryExpression n, A argu) {
-      n.nodeChoice.accept(this, argu);
-   }
-
-   /**
-    * <PRE>
-    * assignmentExpression -> AssignmentExpression()
-    * nodeListOptional -> ( "," AssignmentExpression() )*
-    * </PRE>
-    */
-   public void visit(ArgumentExpressionList n, A argu) {
-      n.assignmentExpression.accept(this, argu);
-      n.nodeListOptional.accept(this, argu);
-   }
-
-   /**
-    * <PRE>
-    * nodeChoice -> &lt;NUMBER&gt;
-    *       | &lt;CHARACTER_LITERAL&gt;
-    *       | ( &lt;STRING_LITERAL&gt; )+
-    * </PRE>
-    */
-   public void visit(Constant n, A argu) {
-      n.nodeChoice.accept(this, argu);
+   public void visit(DeclarationList n, A argu) {
+      n.nodeList.accept(this, argu);
    }
 
 }

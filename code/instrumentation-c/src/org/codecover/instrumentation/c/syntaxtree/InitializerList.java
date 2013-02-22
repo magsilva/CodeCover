@@ -7,19 +7,23 @@ package org.codecover.instrumentation.c.syntaxtree;
 /**
  * Grammar production:
  * <PRE>
+ * nodeOptional -> [ Designation() ]
  * initializer -> Initializer()
  * nodeListOptional -> ( "," Initializer() )*
  * </PRE>
  */
 public class InitializerList extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
    private Node parent;
+   public NodeOptional nodeOptional;
    public Initializer initializer;
    public NodeListOptional nodeListOptional;
 
-   public InitializerList(Initializer n0, NodeListOptional n1) {
-      initializer = n0;
+   public InitializerList(NodeOptional n0, Initializer n1, NodeListOptional n2) {
+      nodeOptional = n0;
+      if ( nodeOptional != null ) nodeOptional.setParent(this);
+      initializer = n1;
       if ( initializer != null ) initializer.setParent(this);
-      nodeListOptional = n1;
+      nodeListOptional = n2;
       if ( nodeListOptional != null ) nodeListOptional.setParent(this);
    }
 

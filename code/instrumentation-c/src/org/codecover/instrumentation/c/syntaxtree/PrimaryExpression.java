@@ -7,7 +7,8 @@ package org.codecover.instrumentation.c.syntaxtree;
 /**
  * Grammar production:
  * <PRE>
- * nodeChoice -> ( &lt;IDENTIFIER&gt; | Constant() | "(" Expression() ")" )
+ * nodeChoice -> ( &lt;IDENTIFIER&gt; | Constant() | StringLiteral() | "(" Expression() ")" )
+ *       | GenericSelection()
  * </PRE>
  */
 public class PrimaryExpression extends org.codecover.instrumentation.c.adapter.CCNode implements Node {

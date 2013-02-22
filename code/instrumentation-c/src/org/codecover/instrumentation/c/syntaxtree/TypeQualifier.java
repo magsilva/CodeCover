@@ -7,7 +7,7 @@ package org.codecover.instrumentation.c.syntaxtree;
 /**
  * Grammar production:
  * <PRE>
- * nodeChoice -> ( &lt;CONST&gt; | &lt;VOLATILE&gt; )
+ * nodeChoice -> ( &lt;CONST&gt; | &lt;RESTRICT&gt; | &lt;VOLATILE&gt; | &lt;ATOMIC&gt; )
  * </PRE>
  */
 public class TypeQualifier extends org.codecover.instrumentation.c.adapter.CCNode implements Node {

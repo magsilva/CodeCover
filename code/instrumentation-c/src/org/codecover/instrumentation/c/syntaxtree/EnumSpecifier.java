@@ -8,7 +8,7 @@ package org.codecover.instrumentation.c.syntaxtree;
  * Grammar production:
  * <PRE>
  * nodeToken -> &lt;ENUM&gt;
- * nodeChoice -> ( [ &lt;IDENTIFIER&gt; ] "{" EnumeratorList() "}" | &lt;IDENTIFIER&gt; )
+ * nodeChoice -> ( [ &lt;IDENTIFIER&gt; ] "{" EnumeratorList() [ "," ] "}" | &lt;IDENTIFIER&gt; )
  * </PRE>
  */
 public class EnumSpecifier extends org.codecover.instrumentation.c.adapter.CCNode implements Node {

@@ -8,6 +8,7 @@ package org.codecover.instrumentation.c.syntaxtree;
  * Grammar production:
  * <PRE>
  * nodeChoice -> ( PostfixExpression() | "++" UnaryExpression() | "--" UnaryExpression() | UnaryOperator() CastExpression() | &lt;SIZEOF&gt; ( UnaryExpression() | "(" TypeName() ")" ) )
+ *       | &lt;ALIGNOF&gt; "(" TypeName() ")"
  * </PRE>
  */
 public class UnaryExpression extends org.codecover.instrumentation.c.adapter.CCNode implements Node {

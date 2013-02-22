@@ -146,12 +146,10 @@ public class InstrumentationVisitor extends SimpleTreeDumper {
         loopManipulator.visitBefore(out, n);
         n.nodeToken.accept(this);
         n.nodeToken1.accept(this);
-        n.nodeOptional.accept(this);
+        n.nodeChoice.accept(this);
         n.nodeToken2.accept(this);
-        n.nodeOptional1.accept(this);
+        n.nodeOptional.accept(this);
         n.nodeToken3.accept(this);
-        n.nodeOptional2.accept(this);
-        n.nodeToken4.accept(this);
         out.println("{");
         loopManipulator.visit(out, n);
         n.statement.accept(this);

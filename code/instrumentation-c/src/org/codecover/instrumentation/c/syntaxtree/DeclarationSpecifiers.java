@@ -10,6 +10,8 @@ package org.codecover.instrumentation.c.syntaxtree;
  * nodeChoice -> StorageClassSpecifier() [ DeclarationSpecifiers() ]
  *       | TypeSpecifier() [ DeclarationSpecifiers() ]
  *       | TypeQualifier() [ DeclarationSpecifiers() ]
+ *       | FunctionSpecifier() [ DeclarationSpecifiers() ]
+ *       | AlignmentSpecifier() [ DeclarationSpecifiers() ]
  * </PRE>
  */
 public class DeclarationSpecifiers extends org.codecover.instrumentation.c.adapter.CCNode implements Node {

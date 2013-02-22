@@ -360,12 +360,10 @@ public class MastVisitor extends DepthFirstVisitor {
     public void visit(ForStatement n) {
         n.nodeToken.accept(this);
         n.nodeToken1.accept(this);
-        n.nodeOptional.accept(this);
+        n.nodeChoice.accept(this);
         n.nodeToken2.accept(this);
-        n.nodeOptional1.accept(this);
+        n.nodeOptional.accept(this);
         n.nodeToken3.accept(this);
-        n.nodeOptional2.accept(this);
-        n.nodeToken4.accept(this);
         pushStatementLevel();
         n.statement.accept(this);
 
