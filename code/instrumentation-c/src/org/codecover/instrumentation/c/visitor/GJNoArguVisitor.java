@@ -341,10 +341,17 @@ public interface GJNoArguVisitor<R> {
 
    /**
     * <PRE>
-    * f0 -> ( &lt;IF&gt; "(" Expression() ")" Statement() [ &lt;ELSE&gt; Statement() ] | &lt;SWITCH&gt; "(" Expression() ")" Statement() )
+    * f0 -> ( ( &lt;IF&gt; "(" Expression() ")" Statement() [ ElseStatement() ] ) | &lt;SWITCH&gt; "(" Expression() ")" Statement() )
     * </PRE>
     */
    public R visit(SelectionStatement n);
+
+   /**
+    * <PRE>
+    * f0 -> ( &lt;ELSE&gt; Statement() )
+    * </PRE>
+    */
+   public R visit(ElseStatement n);
 
    /**
     * <PRE>

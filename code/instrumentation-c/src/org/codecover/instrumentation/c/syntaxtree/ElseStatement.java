@@ -7,14 +7,14 @@ package org.codecover.instrumentation.c.syntaxtree;
 /**
  * Grammar production:
  * <PRE>
- * f0 -> ( ( &lt;IF&gt; "(" Expression() ")" Statement() [ ElseStatement() ] ) | &lt;SWITCH&gt; "(" Expression() ")" Statement() )
+ * f0 -> ( &lt;ELSE&gt; Statement() )
  * </PRE>
  */
-public class SelectionStatement implements Node {
+public class ElseStatement implements Node {
    private Node parent;
-   public NodeChoice f0;
+   public NodeSequence f0;
 
-   public SelectionStatement(NodeChoice n0) {
+   public ElseStatement(NodeSequence n0) {
       f0 = n0;
       if ( f0 != null ) f0.setParent(this);
    }
