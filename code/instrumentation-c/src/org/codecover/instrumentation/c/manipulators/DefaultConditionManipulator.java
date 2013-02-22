@@ -55,7 +55,7 @@ public class DefaultConditionManipulator implements ConditionManipulator {
                                                String counter,
                                                int numValues) {
         InstrBooleanTerm write = new InstrBasicBooleanTerm(
-                String.format("(CCCondAdd(%s,%s,%d), 1)", counter, helper, numValues) ,-1 ,-1);
+                String.format("(CodeCover_ConditionAdd(%s,%s,%d), 1)", counter, helper, numValues) ,-1 ,-1);
 
         return new InstrOperatorTerm(new InstrBracketTerm(root),
                 CBooleanExpressions.andOperator, write, -1, -1);
