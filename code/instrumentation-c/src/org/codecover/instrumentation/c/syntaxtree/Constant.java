@@ -9,7 +9,6 @@ package org.codecover.instrumentation.c.syntaxtree;
  * <PRE>
  * nodeChoice -> &lt;NUMBER&gt;
  *       | &lt;CHARACTER_LITERAL&gt;
- *       | EnumerationConstant()
  * </PRE>
  */
 public class Constant extends org.codecover.instrumentation.c.adapter.CCNode implements Node {

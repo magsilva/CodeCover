@@ -150,7 +150,6 @@ Constant Constant() :
    Token n2;
    NodeToken n3;
    Token n4;
-   EnumerationConstant n5;
 
    
 }
@@ -161,9 +160,6 @@ Constant Constant() :
    |
       n4=<CHARACTER_LITERAL> { n3 = JTBToolkit.makeNodeToken(n4); }
       { n0 = new NodeChoice(n3, 1); }
-   |
-      n5=EnumerationConstant()
-      { n0 = new NodeChoice(n5, 2); }
    )
    
    { return new Constant(n0); }

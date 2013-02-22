@@ -65,7 +65,6 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
     * <PRE>
     * nodeChoice -> &lt;NUMBER&gt;
     *       | &lt;CHARACTER_LITERAL&gt;
-    *       | EnumerationConstant()
     * </PRE>
     */
    public R visit(Constant n) {

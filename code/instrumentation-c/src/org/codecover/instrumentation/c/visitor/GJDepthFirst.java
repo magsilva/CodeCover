@@ -65,7 +65,6 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
     * <PRE>
     * nodeChoice -> &lt;NUMBER&gt;
     *       | &lt;CHARACTER_LITERAL&gt;
-    *       | EnumerationConstant()
     * </PRE>
     */
    public R visit(Constant n, A argu) {

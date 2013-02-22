@@ -173,7 +173,7 @@ TOKEN : {
 // 6.4.4
 void Constant() : {}
 {
- <NUMBER> | <CHARACTER_LITERAL> | EnumerationConstant()
+ <NUMBER> | <CHARACTER_LITERAL> // | EnumerationConstant()
 }
 
 // 6.4.4.3

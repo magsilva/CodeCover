@@ -30,7 +30,6 @@ public interface Visitor {
     * <PRE>
     * nodeChoice -> &lt;NUMBER&gt;
     *       | &lt;CHARACTER_LITERAL&gt;
-    *       | EnumerationConstant()
     * </PRE>
     */
    public void visit(Constant n);

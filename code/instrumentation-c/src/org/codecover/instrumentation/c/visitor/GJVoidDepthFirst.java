@@ -55,7 +55,6 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
     * <PRE>
     * nodeChoice -> &lt;NUMBER&gt;
     *       | &lt;CHARACTER_LITERAL&gt;
-    *       | EnumerationConstant()
     * </PRE>
     */
    public void visit(Constant n, A argu) {
