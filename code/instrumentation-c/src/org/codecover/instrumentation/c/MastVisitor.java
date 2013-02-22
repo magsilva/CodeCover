@@ -144,8 +144,8 @@ public class MastVisitor extends DepthFirstVisitor {
                                             int keywordEndOffset) {
         LocationList locationList = createLocationList(startOffset, endOffset);
         Location keywordLocation = createLocation(keywordStartOffset, keywordEndOffset);
-        Set<RootTerm> setRootTerms;
 
+        Set<RootTerm> setRootTerms;
         if (rootTerm == null) {
             setRootTerms = Collections.emptySet();
         } else {
@@ -162,11 +162,19 @@ public class MastVisitor extends DepthFirstVisitor {
         statementStack.peek().add(conditionalStatement);
     }
 
-    public void createLoop(int start, int end, int keywordStart, int keywordEnd, int id, boolean optionalBodyExecution) {
+    public void createLoop(RootTerm rootTerm, int start, int end, int keywordStart, int keywordEnd, int id, boolean optionalBodyExecution) {
+        Set<RootTerm> setRootTerms;
+        if (rootTerm == null) {
+            setRootTerms = Collections.emptySet();
+        } else {
+            setRootTerms = new HashSet<RootTerm>();
+            setRootTerms.add(rootTerm);
+        }
+
         LoopingStatement stmt = builder.createLoopingStatement(
                 createLocationList(start, end),
                 createCoverableItem(cm.stmtID(id)),
-                null,
+                setRootTerms,
                 popStatementLevel(),
                 createLocation(keywordStart, keywordEnd),
                 createCoverableItem(cm.loopID(id++)),
@@ -231,7 +239,6 @@ public class MastVisitor extends DepthFirstVisitor {
         n.terms = expressionParser.visit(n.expression);
         RootTerm rootTerm = builder.createRootTerm(n.terms.toBooleanTerm(builder, sourceFile),
                 createCoverableItem(cm.condID(n.condID)));
-        // TODO nicht parsen?
         n.expression.accept(this);
         n.nodeToken2.accept(this);
 
@@ -331,14 +338,19 @@ public class MastVisitor extends DepthFirstVisitor {
     public void visit(WhileStatement n) {
         n.nodeToken.accept(this);
         n.nodeToken1.accept(this);
+        n.terms = expressionParser.visit(n.expression);
         n.expression.accept(this);
         n.nodeToken2.accept(this);
         pushStatementLevel();
         n.statement.accept(this);
 
+        n.condID = cm.newCondID();
         n.loopID = cm.newloopID();
 
-        createLoop(
+        RootTerm rootTerm = builder.createRootTerm(n.terms.toBooleanTerm(builder, sourceFile),
+                createCoverableItem(cm.condID(n.condID)));
+
+        createLoop(rootTerm,
                 n.nodeToken.beginOffset, lastEndOffset,
                 n.nodeToken.beginOffset, n.nodeToken.endOffset,
                 n.loopID, true);
@@ -351,13 +363,18 @@ public class MastVisitor extends DepthFirstVisitor {
         n.statement.accept(this);
         n.nodeToken1.accept(this);
         n.nodeToken2.accept(this);
+        n.terms = expressionParser.visit(n.expression);
         n.expression.accept(this);
         n.nodeToken3.accept(this);
         n.nodeToken4.accept(this);
 
         n.loopID = cm.newloopID();
+        n.condID = cm.newCondID();
 
-        createLoop(
+        RootTerm rootTerm = builder.createRootTerm(n.terms.toBooleanTerm(builder, sourceFile),
+                createCoverableItem(cm.condID(n.condID)));
+
+        createLoop(rootTerm,
                 n.nodeToken.beginOffset, n.nodeToken4.endOffset,
                 n.nodeToken.beginOffset, n.nodeToken.endOffset,
                 n.loopID, false);
@@ -375,8 +392,9 @@ public class MastVisitor extends DepthFirstVisitor {
         n.statement.accept(this);
 
         n.loopID = cm.newloopID();
+        n.condID = cm.newCondID();
 
-        createLoop(
+        createLoop(null,
                 n.nodeToken.beginOffset, lastEndOffset,
                 n.nodeToken.beginOffset, n.nodeToken.endOffset,
                 n.loopID, true);

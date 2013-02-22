@@ -135,20 +135,31 @@ public class InstrumentationVisitor extends DepthFirstVisitor {
 
     @Override
     public void visit(WhileStatement n) {
+        // We need another block because the condition manipulator adds a tmp variable
+        out.println("{");
+        InstrBooleanTerm term = conditionManipulator.visit(out, n);
         loopManipulator.visitBefore(out, n);
         n.nodeToken.accept(this);
         n.nodeToken1.accept(this);
-        n.expression.accept(this);
+        try {
+            term.writeToTarget(out);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         n.nodeToken2.accept(this);
         out.println("{");
         loopManipulator.visit(out, n);
         n.statement.accept(this);
         out.println("}");
         loopManipulator.visitAfter(out, n);
+        out.println("}");
     }
 
     @Override
     public void visit(DoStatement n) {
+        // We need another block because the condition manipulator adds a tmp variable
+        out.println("{");
+        InstrBooleanTerm term = conditionManipulator.visit(out, n);
         loopManipulator.visitBefore(out, n);
         n.nodeToken.accept(this);
         out.println("{");
@@ -157,10 +168,15 @@ public class InstrumentationVisitor extends DepthFirstVisitor {
         out.println("}");
         n.nodeToken1.accept(this);
         n.nodeToken2.accept(this);
-        n.expression.accept(this);
+        try {
+            term.writeToTarget(out);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         n.nodeToken3.accept(this);
         n.nodeToken4.accept(this);
         loopManipulator.visitAfter(out, n);
+        out.println("}");
     }
 
     @Override
