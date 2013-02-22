@@ -434,7 +434,6 @@ public class MastVisitor extends DepthFirstVisitor {
                     createLocationList(exp2begin, lastEndOffset),
                     createCoverableItem(cm.qmoID(r.qmoID) + "-1"));
 
-
             QuestionMarkOperator qmo = new QuestionMarkOperator(
                     createLocationList(r.nodeToken.beginOffset, r.nodeToken.endOffset),
                     createCoverableItem(cm.qmoID(r.qmoID)), exp1, exp2);
