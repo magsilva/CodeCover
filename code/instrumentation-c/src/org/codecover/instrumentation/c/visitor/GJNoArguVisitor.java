@@ -346,7 +346,7 @@ public interface GJNoArguVisitor<R> {
     * expression -> Expression()
     * nodeToken2 -> ")"
     * statement -> Statement()
-    * nodeOptional -> [ ElseStatement() ]
+    * nodeOptional -> [ &lt;ELSE&gt; Statement() ]
     * </PRE>
     */
    public R visit(IfStatement n);
@@ -361,14 +361,6 @@ public interface GJNoArguVisitor<R> {
     * </PRE>
     */
    public R visit(SwitchStatement n);
-
-   /**
-    * <PRE>
-    * nodeToken -> &lt;ELSE&gt;
-    * statement -> Statement()
-    * </PRE>
-    */
-   public R visit(ElseStatement n);
 
    /**
     * <PRE>

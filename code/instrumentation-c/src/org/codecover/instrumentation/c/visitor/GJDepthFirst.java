@@ -570,7 +570,7 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
     * expression -> Expression()
     * nodeToken2 -> ")"
     * statement -> Statement()
-    * nodeOptional -> [ ElseStatement() ]
+    * nodeOptional -> [ &lt;ELSE&gt; Statement() ]
     * </PRE>
     */
    public R visit(IfStatement n, A argu) {
@@ -599,19 +599,6 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
       n.nodeToken1.accept(this, argu);
       n.expression.accept(this, argu);
       n.nodeToken2.accept(this, argu);
-      n.statement.accept(this, argu);
-      return _ret;
-   }
-
-   /**
-    * <PRE>
-    * nodeToken -> &lt;ELSE&gt;
-    * statement -> Statement()
-    * </PRE>
-    */
-   public R visit(ElseStatement n, A argu) {
-      R _ret=null;
-      n.nodeToken.accept(this, argu);
       n.statement.accept(this, argu);
       return _ret;
    }

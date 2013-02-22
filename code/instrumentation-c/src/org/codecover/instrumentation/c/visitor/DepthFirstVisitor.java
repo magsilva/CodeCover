@@ -470,7 +470,7 @@ public class DepthFirstVisitor implements Visitor {
     * expression -> Expression()
     * nodeToken2 -> ")"
     * statement -> Statement()
-    * nodeOptional -> [ ElseStatement() ]
+    * nodeOptional -> [ &lt;ELSE&gt; Statement() ]
     * </PRE>
     */
    public void visit(IfStatement n) {
@@ -496,17 +496,6 @@ public class DepthFirstVisitor implements Visitor {
       n.nodeToken1.accept(this);
       n.expression.accept(this);
       n.nodeToken2.accept(this);
-      n.statement.accept(this);
-   }
-
-   /**
-    * <PRE>
-    * nodeToken -> &lt;ELSE&gt;
-    * statement -> Statement()
-    * </PRE>
-    */
-   public void visit(ElseStatement n) {
-      n.nodeToken.accept(this);
       n.statement.accept(this);
    }
 

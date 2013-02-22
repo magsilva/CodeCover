@@ -1545,7 +1545,10 @@ IfStatement IfStatement() :
    Token n6;
    Statement n7;
    NodeOptional n8 = new NodeOptional();
-   ElseStatement n9;
+   NodeSequence n9;
+   NodeToken n10;
+   Token n11;
+   Statement n12;
 
    
 }
@@ -1557,7 +1560,11 @@ IfStatement IfStatement() :
    n7=Statement()
    (
       LOOKAHEAD(2)
-      n9=ElseStatement()
+      { n9 = new NodeSequence(2); }
+      n11=<ELSE> { n10 = JTBToolkit.makeNodeToken(n11); }
+      { n9.addNode(n10); }
+      n12=Statement()
+      { n9.addNode(n12); }
       { n8.addNode(n9); }
    )?
    
@@ -1585,21 +1592,6 @@ SwitchStatement SwitchStatement() :
    n7=Statement()
    
    { return new SwitchStatement(n0,n2,n4,n5,n7); }
-}
-
-ElseStatement ElseStatement() :
-{
-   NodeToken n0;
-   Token n1;
-   Statement n2;
-
-   
-}
-{
-   n1=<ELSE> { n0 = JTBToolkit.makeNodeToken(n1); }
-   n2=Statement()
-   
-   { return new ElseStatement(n0,n2); }
 }
 
 WhileStatement WhileStatement() :

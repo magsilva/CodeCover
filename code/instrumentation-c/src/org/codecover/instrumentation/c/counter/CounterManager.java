@@ -2,11 +2,14 @@ package org.codecover.instrumentation.c.counter;
 
 public class CounterManager {
     final private String id;
+    final private String fileName;
     final private String stmtVarName;
     final private String stmtPrefix;
-    final private String fileName;
+    final private String branchVarName;
+    final private String branchPrefix;
 
-    private int StmtCounter;
+    private int stmtCounter;
+    private int branchCounter;
 
     /**
      * @param id must be a positive integer
@@ -17,10 +20,16 @@ public class CounterManager {
         this.fileName = fileName;
         stmtPrefix = "S" + id + "-";
         stmtVarName = "CodeCover_S" + id;
+        branchPrefix = "B" + id + "-";
+        branchVarName = "CodeCover_B" + id;
     }
 
     public String id() {
         return id;
+    }
+
+    public String getFileName() {
+        return fileName;
     }
 
     public String stmtVarName() {
@@ -32,14 +41,26 @@ public class CounterManager {
     }
 
     public int newStmtID() {
-        return StmtCounter++;
+        return stmtCounter++;
     }
 
     public int getStmtCnt() {
-        return StmtCounter;
+        return stmtCounter;
     }
 
-    public String getFileName() {
-        return fileName;
+    public String branchVarName() {
+        return branchVarName;
+    }
+
+    public String branchPrefix() {
+        return branchPrefix;
+    }
+
+    public int newBranchID() {
+        return branchCounter++;
+    }
+
+    public int getBranchCnt() {
+        return branchCounter;
     }
 }

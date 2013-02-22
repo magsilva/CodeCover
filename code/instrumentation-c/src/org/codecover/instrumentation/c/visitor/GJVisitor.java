@@ -346,7 +346,7 @@ public interface GJVisitor<R,A> {
     * expression -> Expression()
     * nodeToken2 -> ")"
     * statement -> Statement()
-    * nodeOptional -> [ ElseStatement() ]
+    * nodeOptional -> [ &lt;ELSE&gt; Statement() ]
     * </PRE>
     */
    public R visit(IfStatement n, A argu);
@@ -361,14 +361,6 @@ public interface GJVisitor<R,A> {
     * </PRE>
     */
    public R visit(SwitchStatement n, A argu);
-
-   /**
-    * <PRE>
-    * nodeToken -> &lt;ELSE&gt;
-    * statement -> Statement()
-    * </PRE>
-    */
-   public R visit(ElseStatement n, A argu);
 
    /**
     * <PRE>

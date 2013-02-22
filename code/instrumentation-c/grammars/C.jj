@@ -424,17 +424,12 @@ void StatementList() : {}
 
 void IfStatement() : {}
 {
-    <IF> "(" Expression() ")" Statement() [ LOOKAHEAD(2) ElseStatement() ]
+    <IF> "(" Expression() ")" Statement() [ LOOKAHEAD(2) <ELSE> Statement() ]
 }
 
 void SwitchStatement() : {}
 {
     <SWITCH> "(" Expression() ")" Statement()
-}
-
-void ElseStatement() : {}
-{
-    <ELSE> Statement()
 }
 
 void WhileStatement() : {}

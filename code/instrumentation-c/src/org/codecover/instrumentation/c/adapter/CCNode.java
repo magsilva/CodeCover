@@ -4,4 +4,5 @@ public class CCNode {
     public int beginOffset, endOffset;
 
     public int stmtNum;
+    public int branchNum;
 }

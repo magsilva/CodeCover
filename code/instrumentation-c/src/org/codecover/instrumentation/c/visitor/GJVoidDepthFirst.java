@@ -480,7 +480,7 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
     * expression -> Expression()
     * nodeToken2 -> ")"
     * statement -> Statement()
-    * nodeOptional -> [ ElseStatement() ]
+    * nodeOptional -> [ &lt;ELSE&gt; Statement() ]
     * </PRE>
     */
    public void visit(IfStatement n, A argu) {
@@ -506,17 +506,6 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
       n.nodeToken1.accept(this, argu);
       n.expression.accept(this, argu);
       n.nodeToken2.accept(this, argu);
-      n.statement.accept(this, argu);
-   }
-
-   /**
-    * <PRE>
-    * nodeToken -> &lt;ELSE&gt;
-    * statement -> Statement()
-    * </PRE>
-    */
-   public void visit(ElseStatement n, A argu) {
-      n.nodeToken.accept(this, argu);
       n.statement.accept(this, argu);
    }
 

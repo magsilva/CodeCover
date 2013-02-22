@@ -346,7 +346,7 @@ public interface Visitor {
     * expression -> Expression()
     * nodeToken2 -> ")"
     * statement -> Statement()
-    * nodeOptional -> [ ElseStatement() ]
+    * nodeOptional -> [ &lt;ELSE&gt; Statement() ]
     * </PRE>
     */
    public void visit(IfStatement n);
@@ -361,14 +361,6 @@ public interface Visitor {
     * </PRE>
     */
    public void visit(SwitchStatement n);
-
-   /**
-    * <PRE>
-    * nodeToken -> &lt;ELSE&gt;
-    * statement -> Statement()
-    * </PRE>
-    */
-   public void visit(ElseStatement n);
 
    /**
     * <PRE>

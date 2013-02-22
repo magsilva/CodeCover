@@ -346,7 +346,7 @@ public interface GJVoidVisitor<A> {
     * expression -> Expression()
     * nodeToken2 -> ")"
     * statement -> Statement()
-    * nodeOptional -> [ ElseStatement() ]
+    * nodeOptional -> [ &lt;ELSE&gt; Statement() ]
     * </PRE>
     */
    public void visit(IfStatement n, A argu);
@@ -361,14 +361,6 @@ public interface GJVoidVisitor<A> {
     * </PRE>
     */
    public void visit(SwitchStatement n, A argu);
-
-   /**
-    * <PRE>
-    * nodeToken -> &lt;ELSE&gt;
-    * statement -> Statement()
-    * </PRE>
-    */
-   public void visit(ElseStatement n, A argu);
 
    /**
     * <PRE>

@@ -24,6 +24,7 @@ public class InstrumentationVisitor extends SimpleTreeDumper {
         out.println("void CodeCover_reset();");
         out.println("void CodeCover_dump();");
         statementManipulator.writeForwardDeclaration(out);
+        branchManipulator.writeForwardDeclaration(out);
         super.visit(n);
     }
 
@@ -36,7 +37,8 @@ public class InstrumentationVisitor extends SimpleTreeDumper {
         n.nodeOptional1.accept(this);
         if(isMain) {
             out.println("{");
-            out.println("/*CodeCover_reset(); Not need because the arrays have a static storarage duration, which means that they are initialized to 0. */");
+            // Not need because the arrays have a static storarage duration, which means that they are initialized to 0.
+            //out.println("CodeCover_reset();");
             out.println("atexit(CodeCover_dump);");
         }
         n.compoundStatement.accept(this);
@@ -53,30 +55,20 @@ public class InstrumentationVisitor extends SimpleTreeDumper {
 
     @Override
     public void visit(IfStatement n) {
-        boolean braces = !(n.statement.nodeChoice.choice instanceof CompoundStatement);
-
         n.nodeToken.accept(this);
         n.nodeToken1.accept(this);
         n.expression.accept(this);
         n.nodeToken2.accept(this);
-        if(braces)
-            out.println("{");
+        out.println("{");
+        branchManipulator.visit(out, n);
         n.statement.accept(this);
-        if(braces)
-            out.println("}");
-        n.nodeOptional.accept(this);
-    }
-
-    @Override
-    public void visit(ElseStatement n) {
-        boolean braces = !(n.statement.nodeChoice.choice instanceof CompoundStatement);
-
-        n.nodeToken.accept(this);
-        if(braces)
-            out.println("{");
-        n.statement.accept(this);
-        if(braces)
-            out.println("}");
+        out.println("} else {");
+        branchManipulator.visitElse(out, n);
+        if ( n.nodeOptional.present() ) {
+            // skip the else and visit the else body directly
+            ((NodeSequence)n.nodeOptional.node).elementAt(1).accept(this);
+        }
+        out.println("}");
     }
 
     @Override

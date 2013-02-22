@@ -570,7 +570,7 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
     * expression -> Expression()
     * nodeToken2 -> ")"
     * statement -> Statement()
-    * nodeOptional -> [ ElseStatement() ]
+    * nodeOptional -> [ &lt;ELSE&gt; Statement() ]
     * </PRE>
     */
    public R visit(IfStatement n) {
@@ -599,19 +599,6 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
       n.nodeToken1.accept(this);
       n.expression.accept(this);
       n.nodeToken2.accept(this);
-      n.statement.accept(this);
-      return _ret;
-   }
-
-   /**
-    * <PRE>
-    * nodeToken -> &lt;ELSE&gt;
-    * statement -> Statement()
-    * </PRE>
-    */
-   public R visit(ElseStatement n) {
-      R _ret=null;
-      n.nodeToken.accept(this);
       n.statement.accept(this);
       return _ret;
    }

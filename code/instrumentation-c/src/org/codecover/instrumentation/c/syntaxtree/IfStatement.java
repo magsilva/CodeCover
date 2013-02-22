@@ -12,7 +12,7 @@ package org.codecover.instrumentation.c.syntaxtree;
  * expression -> Expression()
  * nodeToken2 -> ")"
  * statement -> Statement()
- * nodeOptional -> [ ElseStatement() ]
+ * nodeOptional -> [ &lt;ELSE&gt; Statement() ]
  * </PRE>
  */
 public class IfStatement extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
