@@ -1,6 +1,7 @@
 package org.codecover.instrumentation.c;
 
 import org.codecover.instrumentation.c.manipulators.BranchManipulator;
+import org.codecover.instrumentation.c.manipulators.ConditionManipulator;
 import org.codecover.instrumentation.c.manipulators.LoopManipulator;
 import org.codecover.instrumentation.c.manipulators.StatementManipulator;
 import org.codecover.instrumentation.c.syntaxtree.*;
@@ -12,15 +13,18 @@ public class InstrumentationVisitor extends SimpleTreeDumper {
     private StatementManipulator statementManipulator;
     private BranchManipulator branchManipulator;
     private LoopManipulator loopManipulator;
+    private ConditionManipulator conditionManipulator;
 
     public InstrumentationVisitor(Writer writer,
                                   StatementManipulator statementManipulator,
                                   BranchManipulator branchManipulator,
-                                  LoopManipulator loopManipulator) {
+                                  LoopManipulator loopManipulator,
+                                  ConditionManipulator conditionManipulator) {
         super(writer);
         this.statementManipulator = statementManipulator;
         this.branchManipulator = branchManipulator;
         this.loopManipulator = loopManipulator;
+        this.conditionManipulator = conditionManipulator;
     }
 
     @Override

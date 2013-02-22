@@ -41,7 +41,7 @@ public class InstrumenterDescriptor extends org.codecover.instrumentation.Instru
         super.addSupportedCriteria(StatementCoverage.getInstance());
         super.addSupportedCriteria(BranchCoverage.getInstance());
         super.addSupportedCriteria(LoopCoverage.getInstance());
-        //super.addSupportedCriteria(ConditionCoverage.getInstance());
+        super.addSupportedCriteria(ConditionCoverage.getInstance());
     }
 
     @Override

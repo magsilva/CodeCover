@@ -14,6 +14,7 @@ import org.codecover.model.mast.SourceFile;
 import org.codecover.model.utils.criteria.BranchCoverage;
 import org.codecover.model.utils.criteria.LoopCoverage;
 import org.codecover.model.utils.criteria.StatementCoverage;
+import org.codecover.model.utils.criteria.ConditionCoverage;
 import org.codecover.model.utils.file.SourceTargetContainer;
 
 import java.io.*;
@@ -46,7 +47,8 @@ public class Instrumenter extends org.codecover.instrumentation.Instrumenter {
                 new InstrumentationVisitor(target,
                         isCriterionSet(StatementCoverage.getInstance()) ? new DefaultStatementManipulator(cm) : new DummyStatementManipulator(),
                         isCriterionSet(BranchCoverage.getInstance()) ? new DefaultBranchManipulator(cm) : new DummyBranchManipulator(),
-                        isCriterionSet(LoopCoverage.getInstance()) ? new DefaultLoopManipulator(cm) : new DummyLoopManipulator()
+                        isCriterionSet(LoopCoverage.getInstance()) ? new DefaultLoopManipulator(cm) : new DummyLoopManipulator(),
+                        isCriterionSet(ConditionCoverage.getInstance()) ? new DefaultConditionManipulator(cm) : new DummyConditionManipulator()
                 );
 
 
