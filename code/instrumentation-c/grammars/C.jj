@@ -195,11 +195,11 @@ void StringLiteral() : {}
 // 6.5.1
 void PrimaryExpression() : {}
 {
-	(  <IDENTIFIER> | // That's OK
-	  Constant() |
-	  StringLiteral() |
-	  "(" Expression() ")" ) |
-	  GenericSelection()
+    <IDENTIFIER> | // That's OK
+	Constant() |
+	StringLiteral() |
+	"(" Expression() ")" ) |
+	GenericSelection()
 }
 
 // 6.5.1.1
