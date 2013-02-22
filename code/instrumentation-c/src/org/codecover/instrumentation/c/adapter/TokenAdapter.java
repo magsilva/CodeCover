@@ -36,7 +36,7 @@ public class TokenAdapter extends PreprocessorListener implements TokenManager {
     @Override
     public void handleSourceChange(Source source, String event) {
         if(source != null)
-            System.err.println(source.toString() + ": " +  event);
+           ;// System.err.println(source.toString() + ": " +  event);
     }
 
     @Override
@@ -269,14 +269,14 @@ public class TokenAdapter extends PreprocessorListener implements TokenManager {
         if("volatile".equals(image)) { return CParserConstants.VOLATILE; }
         if("while".equals(image)) { return CParserConstants.WHILE; }
         if("_Alignas".equals(image)) { return CParserConstants.ALIGNAS; }
-        if("_Atomic\n".equals(image)) { return CParserConstants.ATOMIC; }
-        if("_Bool\n".equals(image)) { return CParserConstants.BOOL; }
-        if("_Complex\n".equals(image)) { return CParserConstants.COMPLEX; }
-        if("_Generic\n".equals(image)) { return CParserConstants.GENERIC; }
-        if("_Imaginary\n".equals(image)) { return CParserConstants.IMAGINARY; }
-        if("_Noreturn\n".equals(image)) { return CParserConstants.NORETURN; }
-        if("_Static_assert\n".equals(image)) { return CParserConstants.STATICASSERT; }
-        if("_Thread_local\n".equals(image)) { return CParserConstants.THREADLOCAL; }
+        if("_Atomic".equals(image)) { return CParserConstants.ATOMIC; }
+        if("_Bool".equals(image)) { return CParserConstants.BOOL; }
+        if("_Complex".equals(image)) { return CParserConstants.COMPLEX; }
+        if("_Generic".equals(image)) { return CParserConstants.GENERIC; }
+        if("_Imaginary".equals(image)) { return CParserConstants.IMAGINARY; }
+        if("_Noreturn".equals(image)) { return CParserConstants.NORETURN; }
+        if("_Static_assert".equals(image)) { return CParserConstants.STATICASSERT; }
+        if("_Thread_local".equals(image)) { return CParserConstants.THREADLOCAL; }
         else { return CParserConstants.IDENTIFIER;
         }
     }
