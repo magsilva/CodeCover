@@ -18,9 +18,9 @@ public class CExpressionParser extends GJNoArguDepthFirst<InstrBooleanTerm> impl
 
         // If there is a list of expressions separated by commas, the return value
         // of the list is the return value of the last expression
-        AssignmentExpression lastExpression = (AssignmentExpression) n.nodeListOptional.elementAt(n.nodeListOptional.size() - 1);
+        NodeSequence seq = (NodeSequence) n.nodeListOptional.elementAt(n.nodeListOptional.size() - 1);
 
-        return lastExpression.accept(this);
+        return (seq.elementAt(1)).accept(this);
     }
 
     @Override
