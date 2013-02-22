@@ -56,8 +56,8 @@ public class TokenAdapter implements TokenManager {
         tt.endColumn = t.getText() != null ? t.getText().length() + tt.beginColumn - 1 : tt.beginColumn;
         tt.beginLine = tt.endLine = t.getLine();
 
-        tt.beginOffset = t.offset + 1;
-        tt.endOffset = t.getText() != null ? t.getText().length() + tt.beginOffset - 1 : tt.beginOffset;
+        tt.beginOffset = t.offset;
+        tt.endOffset = t.getText() != null ? t.getText().length() + tt.beginOffset : tt.beginOffset;
 
         return tt;
     }
