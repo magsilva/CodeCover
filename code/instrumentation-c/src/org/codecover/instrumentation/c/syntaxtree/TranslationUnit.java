@@ -7,6 +7,7 @@ package org.codecover.instrumentation.c.syntaxtree;
 /**
  * Grammar production:
  * <PRE>
+
  * nodeList -> ( ExternalDeclaration() )+
  * </PRE>
  */

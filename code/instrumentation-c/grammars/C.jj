@@ -47,22 +47,47 @@ import java.util.*;
 
 public class CParser
 {
-    // Hastable for storing typedef types
-    private Set types = new HashSet();
+    // Stack of scopes, defined to be true if an identifier is a typename
+    private SCOPESTACK_TYPE types = new SCOPESTACK_TYPE();
 
-    // Stack for determining when the parser
-    // is parsing a typdef definition.
-    private Stack typedefParsingStack = new Stack();
-
-    // Returns true if the given string is
-    // a typedef type.
-    private boolean isType(String type) {
-        return types.contains(type);
+    // Add builtin scope
+    {
+        startScope();
     }
 
-    // Add a typedef type to those already defined
-    public void addType(String type) {
-        types.add(type);
+    // Used to filter for stuff like:
+    // typedef int type;
+    // {
+    // type  // type still refers to ::type
+    // type; // variable declared, this shadows ::type
+    // }
+    String lastType;
+
+    private TYPEDEFPARSINGSTACK_TYPE typedefParsingStack = new TYPEDEFPARSINGSTACK_TYPE();
+
+    private boolean isType(String type)
+    {
+       // Search the scopes in reverse order
+       for(int i = types.size() - 1; i >= 0; i--) {
+           Boolean ret = types.get(i).get(type);
+           if(ret != null)
+               return ret;
+       }
+
+       return false;
+    }
+
+    public void addDecl(String name, boolean isType)
+    {
+       types.get(types.size() - 1).put(name, isType);
+    }
+
+    public void startScope() {
+       types.add(new SCOPEENTRY_TYPE());
+    }
+
+    public void endScope() {
+       types.remove(types.size() - 1);
     }
 }
 
@@ -369,7 +394,14 @@ void ConstantExpression() : {}
 // 6.7
 void Declaration() : {}
 {
-    ( DeclarationSpecifiers() [ InitDeclaratorList() ] ";" |
+    ( DeclarationSpecifiers() {lastType=null;} [ InitDeclaratorList() ]
+        {
+            // Finished with a typedefDeclaration??
+            if(!(typedefParsingStack.empty()) && (typedefParsingStack.peek())){
+                typedefParsingStack.pop();
+            }
+        }
+        ";" |
       Static_AssertDeclaration() )
 }
 
@@ -393,12 +425,6 @@ void DeclarationSpecifiers() : {}
 void InitDeclaratorList() : {}
 {
 	InitDeclarator() ("," InitDeclarator())*
-	{
-		// Finished with a typedefDeclaration??
-		if(!(typedefParsingStack.empty()) && (typedefParsingStack.peek())){
-		   	typedefParsingStack.pop();
-	  }
-	}
 }
 
 // 6.7
@@ -422,14 +448,15 @@ void TypeSpecifier() : {}
     ( <VOID> | <CHAR> | <SHORT> | <INT> | <LONG> | <FLOAT> | <DOUBLE> |
 	  <SIGNED> | <UNSIGNED> | <BOOL> | <COMPLEX> |
 	  AtomicSpecifier() | StructOrUnionSpecifier() | EnumSpecifier() |
-	  LOOKAHEAD( { isType(getToken(1).image) } ) TypedefName() )
+	  LOOKAHEAD( { (lastType == null || !lastType.equals(getToken(1).image)) && isType(getToken(1).image)} )
+	    TypedefName() {lastType = getToken(0).image; } )
 }
 
 // 6.7.2.1
 void StructOrUnionSpecifier() : {}
 {
 	{
-			typedefParsingStack.push(false);
+		typedefParsingStack.push(false);
 	}
 
 	StructOrUnion() ( LOOKAHEAD(2) [ <IDENTIFIER> ] "{" StructDeclarationList() "}" | <IDENTIFIER> )
@@ -454,7 +481,7 @@ void StructDeclarationList() : {}
 // 6.7.2.1
 void StructDeclaration() : {}
 {
-    ( SpecifierQualifierList() [ StructDeclaratorList() ] ";" |
+    ( SpecifierQualifierList() {lastType=null;} [ StructDeclaratorList() ] ";" |
       Static_AssertDeclaration() )
 }
 
@@ -535,9 +562,8 @@ void Declarator() : {}
 void DirectDeclarator() : { Token t;}
 {
 	( t = <IDENTIFIER>
-	{ if(!(typedefParsingStack.empty()) && (typedefParsingStack.peek())){
-				addType(t.image);
-	  }
+	{
+	    addDecl(t.image, !(typedefParsingStack.empty()) && (typedefParsingStack.peek()));
 	}
 	| "(" Declarator() ")" )
   
@@ -582,7 +608,7 @@ void ParameterList() : {}
 // 6.7.6
 void ParameterDeclaration() : {}
 {
-	DeclarationSpecifiers() ( LOOKAHEAD(Declarator()) Declarator() | [ AbstractDeclarator() ] )
+	DeclarationSpecifiers() {lastType=null;} ( LOOKAHEAD(Declarator()) Declarator() | [ AbstractDeclarator() ] )
 }
 
 // 6.7.6
@@ -594,7 +620,7 @@ void IdentifierList() : {}
 // 6.7.7
 void TypeName() : {}
 {
-	SpecifierQualifierList() [ AbstractDeclarator() ]
+	SpecifierQualifierList() {lastType=null;} [ AbstractDeclarator() ]
 }
 
 // 6.7.7
@@ -710,7 +736,7 @@ void DefaultStatement() : {}
 // 6.8.2
 void CompoundStatement() : {}
 {
-    "{" [BlockItemList()] "}"
+    "{" {startScope();} [BlockItemList()] {endScope();} "}"
 }
 
 // 6.8.2
@@ -788,19 +814,21 @@ void ReturnStatement() : {}
 // 6.9
 void TranslationUnit() : {}
 {
+    { startScope(); }
     (ExternalDeclaration())+
+    { endScope(); }
 }
 
 // 6.9
 void ExternalDeclaration() : {}
 {
-    ( LOOKAHEAD( FunctionDefinition() ) FunctionDefinition() | Declaration())
+    ( LOOKAHEAD( Declaration() ) Declaration() | FunctionDefinition() )
 }
 
 // 6.9.1
 void FunctionDefinition() : {}
 {
-    [LOOKAHEAD(DeclarationSpecifiers()) DeclarationSpecifiers()] Declarator() [ DeclarationList() ]
+    [LOOKAHEAD(DeclarationSpecifiers()) DeclarationSpecifiers() {lastType=null;}] Declarator() [ DeclarationList() ]
     CompoundStatement()
 }
 

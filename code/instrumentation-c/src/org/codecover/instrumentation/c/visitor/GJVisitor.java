@@ -715,6 +715,7 @@ public interface GJVisitor<R,A> {
 
    /**
     * <PRE>
+
     * nodeList -> ( ExternalDeclaration() )+
     * </PRE>
     */
@@ -722,7 +723,7 @@ public interface GJVisitor<R,A> {
 
    /**
     * <PRE>
-    * nodeChoice -> ( FunctionDefinition() | Declaration() )
+    * nodeChoice -> ( Declaration() | FunctionDefinition() )
     * </PRE>
     */
    public R visit(ExternalDeclaration n, A argu);

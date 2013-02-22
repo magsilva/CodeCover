@@ -983,6 +983,7 @@ public class DepthFirstVisitor implements Visitor {
 
    /**
     * <PRE>
+
     * nodeList -> ( ExternalDeclaration() )+
     * </PRE>
     */
@@ -992,7 +993,7 @@ public class DepthFirstVisitor implements Visitor {
 
    /**
     * <PRE>
-    * nodeChoice -> ( FunctionDefinition() | Declaration() )
+    * nodeChoice -> ( Declaration() | FunctionDefinition() )
     * </PRE>
     */
    public void visit(ExternalDeclaration n) {

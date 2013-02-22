@@ -7,7 +7,7 @@ package org.codecover.instrumentation.c.syntaxtree;
 /**
  * Grammar production:
  * <PRE>
- * nodeChoice -> ( FunctionDefinition() | Declaration() )
+ * nodeChoice -> ( Declaration() | FunctionDefinition() )
  * </PRE>
  */
 public class ExternalDeclaration extends org.codecover.instrumentation.c.adapter.CCNode implements Node {

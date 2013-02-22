@@ -5,6 +5,7 @@ import org.codecover.instrumentation.c.adapter.TokenAdapter;
 import org.codecover.instrumentation.c.counter.CounterManager;
 import org.codecover.instrumentation.c.manipulators.*;
 import org.codecover.instrumentation.c.parser.CParser;
+import org.codecover.instrumentation.c.parser.CParserConstants;
 import org.codecover.instrumentation.c.parser.DebugCParser;
 import org.codecover.instrumentation.c.syntaxtree.TranslationUnit;
 import org.codecover.instrumentation.exceptions.InstrumentationException;
@@ -48,13 +49,13 @@ public class Instrumenter extends org.codecover.instrumentation.Instrumenter {
             if ((Boolean)instrumenterDirectives.get(InstrumenterDescriptor.Debug.KEY)) {
                 DebugCParser cParser = new DebugCParser(new TokenAdapter(currentSourceFile, Arrays.asList(includeDirs), Arrays.asList(defines), true));
                 for(String type : (String[])instrumenterDirectives.get(InstrumenterDescriptor.Types.KEY)) {
-                    cParser.addType(type);
+                    cParser.addDecl(type, true);
                 }
                 translationUnit = cParser.TranslationUnit();
             } else {
                 CParser cParser = new CParser(new TokenAdapter(currentSourceFile, Arrays.asList(includeDirs), Arrays.asList(defines), false));
                 for(String type : (String[])instrumenterDirectives.get(InstrumenterDescriptor.Types.KEY)) {
-                    cParser.addType(type);
+                    cParser.addDecl(type, true);
                 }
                 translationUnit = cParser.TranslationUnit();
             }

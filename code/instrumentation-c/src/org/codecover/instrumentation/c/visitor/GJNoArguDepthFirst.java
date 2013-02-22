@@ -1165,6 +1165,7 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
 
    /**
     * <PRE>
+
     * nodeList -> ( ExternalDeclaration() )+
     * </PRE>
     */
@@ -1176,7 +1177,7 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
 
    /**
     * <PRE>
-    * nodeChoice -> ( FunctionDefinition() | Declaration() )
+    * nodeChoice -> ( Declaration() | FunctionDefinition() )
     * </PRE>
     */
    public R visit(ExternalDeclaration n) {

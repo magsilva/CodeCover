@@ -715,6 +715,7 @@ public interface GJNoArguVisitor<R> {
 
    /**
     * <PRE>
+
     * nodeList -> ( ExternalDeclaration() )+
     * </PRE>
     */
@@ -722,7 +723,7 @@ public interface GJNoArguVisitor<R> {
 
    /**
     * <PRE>
-    * nodeChoice -> ( FunctionDefinition() | Declaration() )
+    * nodeChoice -> ( Declaration() | FunctionDefinition() )
     * </PRE>
     */
    public R visit(ExternalDeclaration n);

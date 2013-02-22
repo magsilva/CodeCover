@@ -20,15 +20,33 @@ import java.util.Vector;
 
 public class CParser 
 {
-   private Set types = new HashSet();
-   private Stack typedefParsingStack = new Stack();
+   private SCOPESTACK_TYPE types = new SCOPESTACK_TYPE();
+   {
+      startScope();
+   }
+   String lastType;
+   private TYPEDEFPARSINGSTACK_TYPE typedefParsingStack = new TYPEDEFPARSINGSTACK_TYPE();
    private boolean isType(String type)
    {
-      return types.contains(type);
+      for ( int i = types.size() - 1; i >= 0; i-- )
+      {
+         Boolean ret = types.get(i).get(type);
+         if ( ret != null )
+            return ret;
+      }
+      return false;
    }
-   public void addType(String type)
+   public void addDecl(String name,boolean isType)
    {
-      types.add(type);
+      types.get(types.size() - 1).put(name,isType);
+   }
+   public void startScope()
+   {
+      types.add(new SCOPEENTRY_TYPE());
+   }
+   public void endScope()
+   {
+      types.remove(types.size() - 1);
    }
 }
 
@@ -1180,14 +1198,27 @@ Declaration Declaration() :
 {
    (
       (
-         { n1 = new NodeSequence(3); }
+         { n1 = new NodeSequence(5); }
          n2=DeclarationSpecifiers()
          { n1.addNode(n2); }
+         
+         {
+            lastType = null;
+         }
+         
          (
             n4=InitDeclaratorList()
             { n3.addNode(n4); }
          )?
          { n1.addNode(n3); }
+         
+         {
+            if ( !(typedefParsingStack.empty()) && (typedefParsingStack.peek()) )
+            {
+               typedefParsingStack.pop();
+            }
+         }
+         
          n6=";" { n5 = JTBToolkit.makeNodeToken(n6); }
          { n1.addNode(n5); }
          { n0 = new NodeChoice(n1, 0); }
@@ -1311,14 +1342,6 @@ InitDeclaratorList InitDeclaratorList() :
       { n1.addNode(n2); }
    )*
    { n1.nodes.trimToSize(); }
-   
-   {
-      if ( !(typedefParsingStack.empty()) && (typedefParsingStack.peek()) )
-      {
-         typedefParsingStack.pop();
-      }
-   }
-   
    
    { return new InitDeclaratorList(n0,n1); }
 }
@@ -1475,8 +1498,13 @@ TypeSpecifier TypeSpecifier() :
          n25=EnumSpecifier()
          { n0 = new NodeChoice(n25, 13); }
       |
-         LOOKAHEAD({ isType(getToken(1).image) })
+         LOOKAHEAD({ (lastType == null || !lastType.equals(getToken(1).image)) && isType(getToken(1).image) })
          n26=TypedefName()
+         
+         {
+            lastType = getToken(0).image;
+         }
+         
          { n0 = new NodeChoice(n26, 14); }
       )
       
@@ -1599,9 +1627,14 @@ StructDeclaration StructDeclaration() :
 {
    (
       (
-         { n1 = new NodeSequence(3); }
+         { n1 = new NodeSequence(4); }
          n2=SpecifierQualifierList()
          { n1.addNode(n2); }
+         
+         {
+            lastType = null;
+         }
+         
          (
             n4=StructDeclaratorList()
             { n3.addNode(n4); }
@@ -2034,10 +2067,7 @@ DirectDeclarator DirectDeclarator() :
          t=<IDENTIFIER> { n1 = JTBToolkit.makeNodeToken(n2); }
          
          {
-            if ( !(typedefParsingStack.empty()) && (typedefParsingStack.peek()) )
-            {
-               addType(t.image);
-            }
+            addDecl(t.image,!(typedefParsingStack.empty()) && (typedefParsingStack.peek()));
          }
          
          { n0 = new NodeChoice(n1, 0); }
@@ -2258,6 +2288,11 @@ ParameterDeclaration ParameterDeclaration() :
 }
 {
    n0=DeclarationSpecifiers()
+   
+   {
+      lastType = null;
+   }
+   
    (
       (
          LOOKAHEAD(Declarator())
@@ -2314,6 +2349,11 @@ TypeName TypeName() :
 }
 {
    n0=SpecifierQualifierList()
+   
+   {
+      lastType = null;
+   }
+   
    (
       n2=AbstractDeclarator()
       { n1.addNode(n2); }
@@ -2910,10 +2950,20 @@ CompoundStatement CompoundStatement() :
 }
 {
    n1="{" { n0 = JTBToolkit.makeNodeToken(n1); }
+   
+   {
+      startScope();
+   }
+   
    (
       n3=BlockItemList()
       { n2.addNode(n3); }
    )?
+   
+   {
+      endScope();
+   }
+   
    n5="}" { n4 = JTBToolkit.makeNodeToken(n5); }
    
    { return new CompoundStatement(n0,n2,n4); }
@@ -3248,11 +3298,21 @@ TranslationUnit TranslationUnit() :
    
 }
 {
+   
+   {
+      startScope();
+   }
+   
    (
       n1=ExternalDeclaration()
       { n0.addNode(n1); }
    )+
    { n0.nodes.trimToSize(); }
+   
+   {
+      endScope();
+   }
+   
    
    { return new TranslationUnit(n0); }
 }
@@ -3260,19 +3320,19 @@ TranslationUnit TranslationUnit() :
 ExternalDeclaration ExternalDeclaration() :
 {
    NodeChoice n0;
-   FunctionDefinition n1;
-   Declaration n2;
+   Declaration n1;
+   FunctionDefinition n2;
 
    
 }
 {
    (
       (
-         LOOKAHEAD(FunctionDefinition())
-         n1=FunctionDefinition()
+         LOOKAHEAD(Declaration())
+         n1=Declaration()
          { n0 = new NodeChoice(n1, 0); }
       |
-         n2=Declaration()
+         n2=FunctionDefinition()
          { n0 = new NodeChoice(n2, 1); }
       )
       
@@ -3296,6 +3356,11 @@ FunctionDefinition FunctionDefinition() :
    (
       LOOKAHEAD(DeclarationSpecifiers())
       n1=DeclarationSpecifiers()
+      
+      {
+         lastType = null;
+      }
+      
       { n0.addNode(n1); }
    )?
    n2=Declarator()

@@ -715,6 +715,7 @@ public interface GJVoidVisitor<A> {
 
    /**
     * <PRE>
+
     * nodeList -> ( ExternalDeclaration() )+
     * </PRE>
     */
@@ -722,7 +723,7 @@ public interface GJVoidVisitor<A> {
 
    /**
     * <PRE>
-    * nodeChoice -> ( FunctionDefinition() | Declaration() )
+    * nodeChoice -> ( Declaration() | FunctionDefinition() )
     * </PRE>
     */
    public void visit(ExternalDeclaration n, A argu);

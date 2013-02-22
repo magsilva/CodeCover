@@ -13,8 +13,9 @@ mv debug/CParser.java DebugCParser.java
 sed -i 's/public class CParser implements CParserConstants/public class DebugCParser implements CParserConstants/g' DebugCParser.java
 sed -i 's/public CParser(TokenManager tm)/public DebugCParser(TokenManager tm)/g' DebugCParser.java
 sed -i 's/class JTBToolkit/class DebugJTBToolkit/g' DebugCParser.java
-sed -i 's/private Set types = new HashSet();/private Set<String> types = new HashSet();/g' CParser.java DebugCParser.java
-sed -i 's/private Stack typedefParsingStack = new Stack();/private Stack<Boolean> typedefParsingStack = new Stack();/g' CParser.java DebugCParser.java
+sed -i 's/SCOPESTACK_TYPE/ArrayList<HashMap<String, Boolean>>/g' CParser.java DebugCParser.java
+sed -i 's/SCOPEENTRY_TYPE/HashMap<String, Boolean>/g' CParser.java DebugCParser.java
+sed -i 's/TYPEDEFPARSINGSTACK_TYPE/Stack<Boolean>/g' CParser.java DebugCParser.java
 sed -i 's/t = jj_consume_token(IDENTIFIER);/t = n2 = jj_consume_token(IDENTIFIER);/g' CParser.java DebugCParser.java
 sed -i 's/return new NodeToken(t\.image\.intern(), t\.kind, t\.beginLine, t\.beginColumn, t\.endLine, t\.endColumn);/NodeToken n = new NodeToken(t\.image\.intern(), t\.kind, t\.beginLine, t\.beginColumn, t\.endLine, t\.endColumn);\
         n\.beginOffset = t\.beginOffset;\
