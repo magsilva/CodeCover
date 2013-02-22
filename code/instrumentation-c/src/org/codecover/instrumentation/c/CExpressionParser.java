@@ -6,6 +6,8 @@ import org.codecover.instrumentation.c.syntaxtree.*;
 import org.codecover.instrumentation.c.visitor.GJNoArguDepthFirst;
 import org.codecover.instrumentation.c.visitor.GJNoArguVisitor;
 
+import java.util.ArrayList;
+
 public class CExpressionParser extends GJNoArguDepthFirst<InstrBooleanTerm> implements GJNoArguVisitor<InstrBooleanTerm> {
     @Override
     public InstrBooleanTerm visit(Expression n) {
@@ -36,8 +38,20 @@ public class CExpressionParser extends GJNoArguDepthFirst<InstrBooleanTerm> impl
     public InstrBooleanTerm visit(ConditionalExpression n) {
         // Actually an conditional expression
         if(n.nodeOptional.present()) {
-            // Give up TODO: fix
-            return InstrBasicBooleanVisitor.convertToInstrBasicBoolean(n);
+            NodeSequence seq = (NodeSequence) n.nodeOptional.node;
+            NodeToken firstOp = (NodeToken) seq.nodes.get(0);
+            NodeToken secOp = (NodeToken) seq.nodes.get(2);
+
+            ArrayList<InstrBooleanTerm> operands = new ArrayList<InstrBooleanTerm>(3);
+
+            operands.add(n.logicalORExpression.accept(this));
+            operands.add(seq.elementAt(1).accept(this));
+            operands.add(seq.elementAt(3).accept(this));
+
+            return new InstrOperatorTerm(
+                    CBooleanExpressions.conditionalOperator, operands,
+                    new int[]{firstOp.beginOffset, firstOp.endOffset,
+                            secOp.beginOffset, secOp.endOffset});
         } else {
             return n.logicalORExpression.accept(this);
         }
@@ -203,34 +217,14 @@ public class CExpressionParser extends GJNoArguDepthFirst<InstrBooleanTerm> impl
     @Override
     public InstrBooleanTerm visit(PrimaryExpression n) {
         // Generic Selection
-        if(n.nodeChoice.which == 1) {
-            return InstrBasicBooleanVisitor.convertToInstrBasicBoolean(n);
-        } else {
-            NodeChoice choice = (NodeChoice) n.nodeChoice.choice;
-            if(choice.which == 4) {
-                // Nested Expression
-                NodeSequence seq = (NodeSequence) choice.choice;
-                return seq.elementAt(1).accept(this);
-            } else if (choice.which == 1) {
-                // Constant
-                Constant c = (Constant) choice.choice;
-                // number
-                if (c.nodeChoice.which == 0) {
-                    NodeToken t = (NodeToken) c.nodeChoice.choice;
-                    if(Integer.parseInt(t.tokenImage) == 0) {
-                        return new InstrOperatorTerm(CBooleanExpressions.falseOperator,
-                                t.beginOffset, t.endOffset);
-                    } else {
-                        return new InstrOperatorTerm(CBooleanExpressions.trueOperator,
-                                t.beginOffset, t.endOffset);
-                    }
-                } else {
-                    return InstrBasicBooleanVisitor.convertToInstrBasicBoolean(n);
-                }
-                // TODO treat identiefers named "true" and "false" as booleans
-            } else {
+        switch (n.nodeChoice.which) {
+            case 4:
                 return InstrBasicBooleanVisitor.convertToInstrBasicBoolean(n);
-            }
+            case 3:
+                NodeSequence seq = (NodeSequence) n.nodeChoice.choice;
+                return seq.elementAt(1).accept(this);
+            default:
+                return InstrBasicBooleanVisitor.convertToInstrBasicBoolean(n);
         }
     }
 }

@@ -5,7 +5,6 @@ import org.codecover.instrumentation.booleanterms.InstrBooleanTerm;
 import org.codecover.instrumentation.booleanterms.InstrBracketTerm;
 import org.codecover.instrumentation.booleanterms.InstrOperatorTerm;
 import org.codecover.instrumentation.c.CBooleanExpressions;
-import org.codecover.instrumentation.c.CExpressionParser;
 import org.codecover.instrumentation.c.adapter.CCNode;
 import org.codecover.instrumentation.c.counter.CounterManager;
 
