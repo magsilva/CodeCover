@@ -117,103 +117,105 @@ public interface CParserConstants {
   /** RegularExpression Id. */
   int THREADLOCAL = 53;
   /** RegularExpression Id. */
-  int IDENTIFIER = 54;
+  int ATTRIBUTE = 54;
   /** RegularExpression Id. */
-  int LETTER = 55;
+  int IDENTIFIER = 55;
   /** RegularExpression Id. */
-  int DIGIT = 56;
+  int LETTER = 56;
   /** RegularExpression Id. */
-  int INC = 57;
+  int DIGIT = 57;
   /** RegularExpression Id. */
-  int DEC = 58;
+  int INC = 58;
   /** RegularExpression Id. */
-  int LAND = 59;
+  int DEC = 59;
   /** RegularExpression Id. */
-  int LOR = 60;
+  int LAND = 60;
   /** RegularExpression Id. */
-  int RBL = 61;
+  int LOR = 61;
   /** RegularExpression Id. */
-  int RBR = 62;
+  int RBL = 62;
   /** RegularExpression Id. */
-  int CBL = 63;
+  int RBR = 63;
   /** RegularExpression Id. */
-  int CBR = 64;
+  int CBL = 64;
   /** RegularExpression Id. */
-  int SBL = 65;
+  int CBR = 65;
   /** RegularExpression Id. */
-  int SBR = 66;
+  int SBL = 66;
   /** RegularExpression Id. */
-  int STAR = 67;
+  int SBR = 67;
   /** RegularExpression Id. */
-  int SLASH = 68;
+  int STAR = 68;
   /** RegularExpression Id. */
-  int MOD = 69;
+  int SLASH = 69;
   /** RegularExpression Id. */
-  int PLUS = 70;
+  int MOD = 70;
   /** RegularExpression Id. */
-  int MINUS = 71;
+  int PLUS = 71;
   /** RegularExpression Id. */
-  int EXCL = 72;
+  int MINUS = 72;
   /** RegularExpression Id. */
-  int AMP = 73;
+  int EXCL = 73;
   /** RegularExpression Id. */
-  int QEM = 74;
+  int AMP = 74;
   /** RegularExpression Id. */
-  int TILDE = 75;
+  int QEM = 75;
   /** RegularExpression Id. */
-  int CARE = 76;
+  int TILDE = 76;
   /** RegularExpression Id. */
-  int PIPE = 77;
+  int CARE = 77;
   /** RegularExpression Id. */
-  int COMMA = 78;
+  int PIPE = 78;
   /** RegularExpression Id. */
-  int SEMICOLON = 79;
+  int COMMA = 79;
   /** RegularExpression Id. */
-  int COLON = 80;
+  int SEMICOLON = 80;
   /** RegularExpression Id. */
-  int ASSIGNMENT = 81;
+  int COLON = 81;
   /** RegularExpression Id. */
-  int DOT = 82;
+  int ASSIGNMENT = 82;
   /** RegularExpression Id. */
-  int LESS = 83;
+  int DOT = 83;
   /** RegularExpression Id. */
-  int GREATER = 84;
+  int LESS = 84;
   /** RegularExpression Id. */
-  int ARROW = 85;
+  int GREATER = 85;
   /** RegularExpression Id. */
-  int LSH = 86;
+  int ARROW = 86;
   /** RegularExpression Id. */
-  int RSH = 87;
+  int LSH = 87;
   /** RegularExpression Id. */
-  int LE = 88;
+  int RSH = 88;
   /** RegularExpression Id. */
-  int GE = 89;
+  int LE = 89;
   /** RegularExpression Id. */
-  int EQ = 90;
+  int GE = 90;
   /** RegularExpression Id. */
-  int NE = 91;
+  int EQ = 91;
   /** RegularExpression Id. */
-  int MULT_EQ = 92;
+  int NE = 92;
   /** RegularExpression Id. */
-  int DIV_EQ = 93;
+  int MULT_EQ = 93;
   /** RegularExpression Id. */
-  int MOD_EQ = 94;
+  int DIV_EQ = 94;
   /** RegularExpression Id. */
-  int PLUS_EQ = 95;
+  int MOD_EQ = 95;
   /** RegularExpression Id. */
-  int SUB_EQ = 96;
+  int PLUS_EQ = 96;
   /** RegularExpression Id. */
-  int LSH_EQ = 97;
+  int SUB_EQ = 97;
   /** RegularExpression Id. */
-  int RSH_EQ = 98;
+  int LSH_EQ = 98;
   /** RegularExpression Id. */
-  int AND_EQ = 99;
+  int RSH_EQ = 99;
   /** RegularExpression Id. */
-  int XOR_EQ = 100;
+  int AND_EQ = 100;
   /** RegularExpression Id. */
-  int OR_EQ = 101;
+  int XOR_EQ = 101;
   /** RegularExpression Id. */
-  int ELLIPSIS = 102;
+  int OR_EQ = 102;
+  /** RegularExpression Id. */
+  int ELLIPSIS = 103;
 
   /** Literal token values. */
   String[] tokenImage = {
@@ -271,6 +273,7 @@ public interface CParserConstants {
     "\"_Noreturn\"",
     "\"_Static_assert\"",
     "\"_Thread_local\"",
+    "\"__attribute__\"",
     "<IDENTIFIER>",
     "<LETTER>",
     "<DIGIT>",

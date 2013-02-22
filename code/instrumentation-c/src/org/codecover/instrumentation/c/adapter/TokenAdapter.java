@@ -280,6 +280,7 @@ public class TokenAdapter extends PreprocessorListener implements TokenManager {
         if("_Noreturn".equals(image)) { return CParserConstants.NORETURN; }
         if("_Static_assert".equals(image)) { return CParserConstants.STATICASSERT; }
         if("_Thread_local".equals(image)) { return CParserConstants.THREADLOCAL; }
+        if("__attribute__".equals(image)) { return CParserConstants.ATTRIBUTE; }
         else { return CParserConstants.IDENTIFIER;
         }
     }

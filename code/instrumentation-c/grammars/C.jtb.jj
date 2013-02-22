@@ -122,6 +122,7 @@ TOKEN :
    | <NORETURN: "_Noreturn">
    | <STATICASSERT: "_Static_assert">
    | <THREADLOCAL: "_Thread_local">
+   | <ATTRIBUTE: "__attribute__">
 }
 
 TOKEN :
