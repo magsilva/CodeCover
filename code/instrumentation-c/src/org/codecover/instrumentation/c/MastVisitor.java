@@ -186,11 +186,11 @@ public class MastVisitor extends DepthFirstVisitor {
         // We don't need ids for all kinds of statements
         // We want nice inscreasing IDs so we assign the ID before we visit the other nodes
         if(n.nodeChoice.which > 1)
-            n.stmtNum = cm.newStmtID();
+            n.stmtID = cm.newStmtID();
         super.visit(n);
         if(n.nodeChoice.choice instanceof ExpressionStatement ||
                 n.nodeChoice.choice instanceof JumpStatement) {
-            createBasicStatement(n, cm.stmtID(n.stmtNum));
+            createBasicStatement(n, cm.stmtID(n.stmtID));
         }
     }
 
@@ -219,7 +219,7 @@ public class MastVisitor extends DepthFirstVisitor {
     @Override
     public void visit(IfStatement n) {
         List<Branch> branchList = new ArrayList<Branch>(2);
-        n.branchNum = cm.newBranchID();
+        n.branchID = cm.newBranchID();
         // another ID for the else part
         cm.newBranchID();
 
@@ -230,7 +230,7 @@ public class MastVisitor extends DepthFirstVisitor {
 
         pushStatementLevel();
         n.statement.accept(this);
-        branchList.add(createBranch(cm.branchID(n.branchNum),
+        branchList.add(createBranch(cm.branchID(n.branchID),
                 BeginOffset.getStartOffset(n.statement), lastEndOffset, -1, -1, false));
 
         pushStatementLevel();
@@ -238,17 +238,17 @@ public class MastVisitor extends DepthFirstVisitor {
         if(n.nodeOptional.present()) {
             n.nodeOptional.accept(this);
             NodeToken elseNode = (NodeToken) ((NodeSequence)n.nodeOptional.node).elementAt(0);
-            branchList.add(createBranch(cm.branchID(n.branchNum+1),
+            branchList.add(createBranch(cm.branchID(n.branchID +1),
                     BeginOffset.getStartOffset(n.nodeOptional), lastEndOffset,
                     elseNode.beginOffset, elseNode.endOffset,
                     false));
         } else {
-            branchList.add(createBranch(cm.branchID(n.branchNum+1),
+            branchList.add(createBranch(cm.branchID(n.branchID +1),
                     -1,-1, -1,-1, true));
         }
 
         createConditionalStatement(
-                cm.stmtID(((Statement)n.getParent().getParent()).stmtNum),
+                cm.stmtID(((Statement)n.getParent().getParent()).stmtID),
                 n.nodeToken.beginOffset, lastEndOffset,
                 null, branchList,
                 n.nodeToken.beginOffset, n.nodeToken.endOffset
@@ -270,18 +270,18 @@ public class MastVisitor extends DepthFirstVisitor {
 
         List<Branch> branches = branchesStack.pop();
 
-        // Misuse the branchNum field of the SwitchStatement so that we can pass the ID of the implicit default branch.
+        // Misuse the branchID field of the SwitchStatement so that we can pass the ID of the implicit default branch.
         if(!hasDefaultStack.pop()) {
-            n.branchNum = cm.newBranchID();
+            n.branchID = cm.newBranchID();
             // We need another statement level, so that the branch can pop one
             pushStatementLevel();
-            branches.add(createBranch(cm.branchID(n.branchNum),-1,-1,-1,-1, true));
+            branches.add(createBranch(cm.branchID(n.branchID),-1,-1,-1,-1, true));
         } else {
-            n.branchNum = -1;
+            n.branchID = -1;
         }
 
         createConditionalStatement(
-                cm.stmtID(((Statement) n.getParent().getParent()).stmtNum),
+                cm.stmtID(((Statement) n.getParent().getParent()).stmtID),
                 n.nodeToken.beginOffset, lastEndOffset,
                 null, branches,
                 n.nodeToken.beginOffset, n.nodeToken.endOffset
@@ -292,7 +292,7 @@ public class MastVisitor extends DepthFirstVisitor {
 
     @Override
     public void visit(CaseStatement n) {
-        n.branchNum = cm.newBranchID();
+        n.branchID = cm.newBranchID();
 
         n.nodeToken.accept(this);
         n.constantExpression.accept(this);
@@ -301,20 +301,20 @@ public class MastVisitor extends DepthFirstVisitor {
         pushStatementLevel();
         n.statement.accept(this);
 
-        branchesStack.peek().add(createBranch(cm.branchID(n.branchNum),
+        branchesStack.peek().add(createBranch(cm.branchID(n.branchID),
                 n.nodeToken.beginOffset, lastEndOffset, n.nodeToken.beginOffset, decisionEnd, false));
     }
 
     @Override
     public void visit(DefaultStatement n) {
-        n.branchNum = cm.newBranchID();
+        n.branchID = cm.newBranchID();
 
         n.nodeToken.accept(this);
         n.nodeToken1.accept(this);
         pushStatementLevel();
         n.statement.accept(this);
 
-        branchesStack.peek().add(createBranch(cm.branchID(n.branchNum),
+        branchesStack.peek().add(createBranch(cm.branchID(n.branchID),
                 n.nodeToken.beginOffset, lastEndOffset,
                 n.nodeToken.beginOffset, n.nodeToken.endOffset,
                 false));
@@ -329,12 +329,12 @@ public class MastVisitor extends DepthFirstVisitor {
         pushStatementLevel();
         n.statement.accept(this);
 
-        n.loopNum = cm.newloopID();
+        n.loopID = cm.newloopID();
 
         createLoop(
                 n.nodeToken.beginOffset, lastEndOffset,
                 n.nodeToken.beginOffset, n.nodeToken.endOffset,
-                n.loopNum, true);
+                n.loopID, true);
     }
 
     @Override
@@ -348,12 +348,12 @@ public class MastVisitor extends DepthFirstVisitor {
         n.nodeToken3.accept(this);
         n.nodeToken4.accept(this);
 
-        n.loopNum = cm.newloopID();
+        n.loopID = cm.newloopID();
 
         createLoop(
                 n.nodeToken.beginOffset, n.nodeToken4.endOffset,
                 n.nodeToken.beginOffset, n.nodeToken.endOffset,
-                n.loopNum, false);
+                n.loopID, false);
     }
 
     @Override
@@ -367,12 +367,12 @@ public class MastVisitor extends DepthFirstVisitor {
         pushStatementLevel();
         n.statement.accept(this);
 
-        n.loopNum = cm.newloopID();
+        n.loopID = cm.newloopID();
 
         createLoop(
                 n.nodeToken.beginOffset, lastEndOffset,
                 n.nodeToken.beginOffset, n.nodeToken.endOffset,
-                n.loopNum, true);
+                n.loopID, true);
     }
 
     @Override

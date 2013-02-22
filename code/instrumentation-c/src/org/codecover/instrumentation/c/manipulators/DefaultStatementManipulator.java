@@ -19,6 +19,6 @@ public class DefaultStatementManipulator implements StatementManipulator {
 
     @Override
     public void visit(PrintWriter out, Statement n) {
-        out.format("%s[%d]++;\n", cm.stmtVarName(), n.stmtNum);
+        out.format("%s[%d]++;\n", cm.stmtVarName(), n.stmtID);
     }
 }

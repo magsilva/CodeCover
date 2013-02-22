@@ -19,11 +19,11 @@ public class DefaultBranchManipulator implements BranchManipulator {
 
     @Override
     public void visit(PrintWriter out, CCNode n) {
-        out.format("%s[%d]++;\n", cm.branchVarName(), n.branchNum);
+        out.format("%s[%d]++;\n", cm.branchVarName(), n.branchID);
     }
 
     @Override
     public void visitElse(PrintWriter out, CCNode n) {
-        out.format("%s[%d]++;\n", cm.branchVarName(), n.branchNum + 1);
+        out.format("%s[%d]++;\n", cm.branchVarName(), n.branchID + 1);
     }
 }

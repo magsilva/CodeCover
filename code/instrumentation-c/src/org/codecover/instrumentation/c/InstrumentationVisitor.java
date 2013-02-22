@@ -101,7 +101,7 @@ public class InstrumentationVisitor extends SimpleTreeDumper {
         n.nodeToken2.accept(this);
         out.println("{");
         // Put the default to the beginning so that it doesn't get executed by mistake
-        if(n.branchNum != -1) {
+        if(n.branchID != -1) {
             out.print("default:");
             branchManipulator.visit(out, n);
         }
