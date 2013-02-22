@@ -29,6 +29,8 @@ public class TokenAdapter extends PreprocessorListener implements TokenManager {
 
         pp.addMacro("__STDC__");
 
+        this.debug = debug;
+
         pp.setListener(this);
         //pp.addFeature(Feature.VERBOSE);
         //pp.addFeature(Feature.DEBUG);
@@ -37,7 +39,7 @@ public class TokenAdapter extends PreprocessorListener implements TokenManager {
     @Override
     public void handleSourceChange(Source source, String event) {
         if(debug && source != null)
-            System.err.println(source.toString() + ": " +  event);
+            System.out.println(source.toString() + ": " +  event);
     }
 
     @Override
