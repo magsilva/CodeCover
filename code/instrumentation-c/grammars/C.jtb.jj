@@ -24,7 +24,7 @@ public class CParser
    {
       return types.contains(type);
    }
-   private void addType(String type)
+   public void addType(String type)
    {
       types.add(type);
    }
@@ -499,13 +499,13 @@ UnaryExpression UnaryExpression() :
    NodeToken n15;
    Token n16;
    NodeChoice n17;
-   UnaryExpression n18;
-   NodeSequence n19;
-   NodeToken n20;
-   Token n21;
-   TypeName n22;
-   NodeToken n23;
-   Token n24;
+   NodeSequence n18;
+   NodeToken n19;
+   Token n20;
+   TypeName n21;
+   NodeToken n22;
+   Token n23;
+   UnaryExpression n24;
    NodeSequence n25;
    NodeToken n26;
    Token n27;
@@ -551,18 +551,18 @@ UnaryExpression UnaryExpression() :
             { n14.addNode(n15); }
             (
                (
-                  LOOKAHEAD(UnaryExpression())
-                  n18=UnaryExpression()
+                  LOOKAHEAD(3)
+                  { n18 = new NodeSequence(4); }
+                  n20="(" { n19 = JTBToolkit.makeNodeToken(n20); }
+                  { n18.addNode(n19); }
+                  n21=TypeName()
+                  { n18.addNode(n21); }
+                  n23=")" { n22 = JTBToolkit.makeNodeToken(n23); }
+                  { n18.addNode(n22); }
                   { n17 = new NodeChoice(n18, 0); }
                |
-                  { n19 = new NodeSequence(3); }
-                  n21="(" { n20 = JTBToolkit.makeNodeToken(n21); }
-                  { n19.addNode(n20); }
-                  n22=TypeName()
-                  { n19.addNode(n22); }
-                  n24=")" { n23 = JTBToolkit.makeNodeToken(n24); }
-                  { n19.addNode(n23); }
-                  { n17 = new NodeChoice(n19, 1); }
+                  n24=UnaryExpression()
+                  { n17 = new NodeChoice(n24, 1); }
                )
                
             )
@@ -1517,7 +1517,7 @@ StructOrUnionSpecifier StructOrUnionSpecifier() :
    n0=StructOrUnion()
    (
       (
-         LOOKAHEAD(3)
+         LOOKAHEAD(2)
          { n2 = new NodeSequence(5); }
          (
             n5=<IDENTIFIER> { n4 = JTBToolkit.makeNodeToken(n5); }
@@ -1697,36 +1697,42 @@ StructDeclaratorList StructDeclaratorList() :
 StructDeclarator StructDeclarator() :
 {
    NodeChoice n0;
-   Declarator n1;
-   NodeSequence n2;
+   NodeSequence n1;
+   Declarator n2;
    NodeOptional n3 = new NodeOptional();
-   Declarator n4;
+   NodeSequence n4;
    NodeToken n5;
    Token n6;
    ConstantExpression n7;
+   NodeSequence n8;
+   NodeToken n9;
+   Token n10;
+   ConstantExpression n11;
 
    
 }
 {
    (
+      { n1 = new NodeSequence(2); }
+      n2=Declarator()
+      { n1.addNode(n2); }
       (
-         LOOKAHEAD(3)
-         n1=Declarator()
-         { n0 = new NodeChoice(n1, 0); }
-      |
-         { n2 = new NodeSequence(3); }
-         (
-            n4=Declarator()
-            { n3.addNode(n4); }
-         )?
-         { n2.addNode(n3); }
+         { n4 = new NodeSequence(2); }
          n6=":" { n5 = JTBToolkit.makeNodeToken(n6); }
-         { n2.addNode(n5); }
+         { n4.addNode(n5); }
          n7=ConstantExpression()
-         { n2.addNode(n7); }
-         { n0 = new NodeChoice(n2, 1); }
-      )
-      
+         { n4.addNode(n7); }
+         { n3.addNode(n4); }
+      )?
+      { n1.addNode(n3); }
+      { n0 = new NodeChoice(n1, 0); }
+   |
+      { n8 = new NodeSequence(2); }
+      n10=":" { n9 = JTBToolkit.makeNodeToken(n10); }
+      { n8.addNode(n9); }
+      n11=ConstantExpression()
+      { n8.addNode(n11); }
+      { n0 = new NodeChoice(n8, 1); }
    )
    
    { return new StructDeclarator(n0); }

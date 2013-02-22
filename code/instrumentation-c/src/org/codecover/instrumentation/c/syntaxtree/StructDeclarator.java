@@ -7,7 +7,8 @@ package org.codecover.instrumentation.c.syntaxtree;
 /**
  * Grammar production:
  * <PRE>
- * nodeChoice -> ( Declarator() | [ Declarator() ] ":" ConstantExpression() )
+ * nodeChoice -> Declarator() [ ":" ConstantExpression() ]
+ *       | ":" ConstantExpression()
  * </PRE>
  */
 public class StructDeclarator extends org.codecover.instrumentation.c.adapter.CCNode implements Node {

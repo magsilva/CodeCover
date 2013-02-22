@@ -186,7 +186,7 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
 
    /**
     * <PRE>
-    * nodeChoice -> ( PostfixExpression() | "++" UnaryExpression() | "--" UnaryExpression() | UnaryOperator() CastExpression() | &lt;SIZEOF&gt; ( UnaryExpression() | "(" TypeName() ")" ) )
+    * nodeChoice -> ( PostfixExpression() | "++" UnaryExpression() | "--" UnaryExpression() | UnaryOperator() CastExpression() | &lt;SIZEOF&gt; ( "(" TypeName() ")" | UnaryExpression() ) )
     *       | &lt;ALIGNOF&gt; "(" TypeName() ")"
     * </PRE>
     */
@@ -583,7 +583,8 @@ public class GJDepthFirst<R,A> implements GJVisitor<R,A> {
 
    /**
     * <PRE>
-    * nodeChoice -> ( Declarator() | [ Declarator() ] ":" ConstantExpression() )
+    * nodeChoice -> Declarator() [ ":" ConstantExpression() ]
+    *       | ":" ConstantExpression()
     * </PRE>
     */
    public R visit(StructDeclarator n, A argu) {

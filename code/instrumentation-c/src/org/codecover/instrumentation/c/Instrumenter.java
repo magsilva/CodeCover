@@ -15,9 +15,7 @@ import org.codecover.model.utils.criteria.*;
 import org.codecover.model.utils.file.SourceTargetContainer;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 
 public class Instrumenter extends org.codecover.instrumentation.Instrumenter {
     private ArrayList<CounterManager> counterManagers = new ArrayList<CounterManager>();
@@ -40,27 +38,36 @@ public class Instrumenter extends org.codecover.instrumentation.Instrumenter {
                                   HierarchyLevelContainer rootContainer,
                                   String testSessionContainerUID,
                                   Map<String, Object> instrumenterDirectives) throws ParseException, IOException {
-        CParser cParser = new CParser(new TokenAdapter(currentSourceFile));
-        TranslationUnit translationUnit = cParser.TranslationUnit();
-        CounterManager cm = new CounterManager(Integer.toString(maxId++), sourceFile.getFileName());
+        try {
+            String[] includeDirs = (String[])instrumenterDirectives.get(InstrumenterDescriptor.IncludeDirs.KEY);
+            String[] defines = (String[])instrumenterDirectives.get(InstrumenterDescriptor.Defines.KEY);
+            CParser cParser = new CParser(new TokenAdapter(currentSourceFile, Arrays.asList(includeDirs), Arrays.asList(defines)));
+            for(String type : (String[])instrumenterDirectives.get(InstrumenterDescriptor.Types.KEY)) {
+                cParser.addType(type);
+            }
+            TranslationUnit translationUnit = cParser.TranslationUnit();
+            CounterManager cm = new CounterManager(Integer.toString(maxId++), sourceFile.getFileName());
 
-        MastVisitor mastVisitor = new MastVisitor(builder, sourceFile, rootContainer, cm);
+            MastVisitor mastVisitor = new MastVisitor(builder, sourceFile, rootContainer, cm);
 
-        mastVisitor.visit(translationUnit);
+            mastVisitor.visit(translationUnit);
 
-        InstrumentationVisitor instrumentationVisitor =
-                new InstrumentationVisitor(target,
-                        isCriterionSet(StatementCoverage.getInstance()) ? new DefaultStatementManipulator(cm) : new DummyStatementManipulator(),
-                        isCriterionSet(BranchCoverage.getInstance()) ? new DefaultBranchManipulator(cm) : new DummyBranchManipulator(),
-                        isCriterionSet(LoopCoverage.getInstance()) ? new DefaultLoopManipulator(cm) : new DummyLoopManipulator(),
-                        isCriterionSet(ConditionCoverage.getInstance()) ? new DefaultConditionManipulator(cm) : new DummyConditionManipulator(),
-                        isCriterionSet(QMOCoverage.getInstance()) ? new DefaultQMOManipulator(cm) : new DummyQMOManipulator()
-                );
+            InstrumentationVisitor instrumentationVisitor =
+                    new InstrumentationVisitor(target,
+                            isCriterionSet(StatementCoverage.getInstance()) ? new DefaultStatementManipulator(cm) : new DummyStatementManipulator(),
+                            isCriterionSet(BranchCoverage.getInstance()) ? new DefaultBranchManipulator(cm) : new DummyBranchManipulator(),
+                            isCriterionSet(LoopCoverage.getInstance()) ? new DefaultLoopManipulator(cm) : new DummyLoopManipulator(),
+                            isCriterionSet(ConditionCoverage.getInstance()) ? new DefaultConditionManipulator(cm) : new DummyConditionManipulator(),
+                            isCriterionSet(QMOCoverage.getInstance()) ? new DefaultQMOManipulator(cm) : new DummyQMOManipulator()
+                    );
 
 
-        instrumentationVisitor.visit(translationUnit);
+            instrumentationVisitor.visit(translationUnit);
 
-        counterManagers.add(cm);
+            counterManagers.add(cm);
+        } catch(Exception e) {
+            throw new ParseException(e.getMessage());
+        }
     }
 
     @Override

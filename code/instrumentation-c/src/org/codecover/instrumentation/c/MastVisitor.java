@@ -221,7 +221,7 @@ public class MastVisitor extends DepthFirstVisitor {
         pushHierarchy();
         super.visit(n);
         popHierachy(HierachyLevelTypes.getSourceFileType(builder), sourceFile.getFileName(),
-                BeginOffset.getStartOffset(n), lastEndOffset, -1, -1);
+                0, Math.min(lastEndOffset, sourceFile.getContent().length()), -1, -1);
         // TODO find fix
         if(!qmoSet.isEmpty()) {
             String loc = "";

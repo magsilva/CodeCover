@@ -7,7 +7,7 @@ package org.codecover.instrumentation.c.syntaxtree;
 /**
  * Grammar production:
  * <PRE>
- * nodeChoice -> ( PostfixExpression() | "++" UnaryExpression() | "--" UnaryExpression() | UnaryOperator() CastExpression() | &lt;SIZEOF&gt; ( UnaryExpression() | "(" TypeName() ")" ) )
+ * nodeChoice -> ( PostfixExpression() | "++" UnaryExpression() | "--" UnaryExpression() | UnaryOperator() CastExpression() | &lt;SIZEOF&gt; ( "(" TypeName() ")" | UnaryExpression() ) )
  *       | &lt;ALIGNOF&gt; "(" TypeName() ")"
  * </PRE>
  */

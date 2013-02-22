@@ -106,7 +106,7 @@ public interface Visitor {
 
    /**
     * <PRE>
-    * nodeChoice -> ( PostfixExpression() | "++" UnaryExpression() | "--" UnaryExpression() | UnaryOperator() CastExpression() | &lt;SIZEOF&gt; ( UnaryExpression() | "(" TypeName() ")" ) )
+    * nodeChoice -> ( PostfixExpression() | "++" UnaryExpression() | "--" UnaryExpression() | UnaryOperator() CastExpression() | &lt;SIZEOF&gt; ( "(" TypeName() ")" | UnaryExpression() ) )
     *       | &lt;ALIGNOF&gt; "(" TypeName() ")"
     * </PRE>
     */
@@ -360,7 +360,8 @@ public interface Visitor {
 
    /**
     * <PRE>
-    * nodeChoice -> ( Declarator() | [ Declarator() ] ":" ConstantExpression() )
+    * nodeChoice -> Declarator() [ ":" ConstantExpression() ]
+    *       | ":" ConstantExpression()
     * </PRE>
     */
    public void visit(StructDeclarator n);

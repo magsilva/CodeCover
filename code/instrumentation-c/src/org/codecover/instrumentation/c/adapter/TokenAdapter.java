@@ -1,20 +1,41 @@
 package org.codecover.instrumentation.c.adapter;
 
 import org.anarres.cpp.*;
+import org.codecover.instrumentation.c.InstrumenterDescriptor;
 import org.codecover.instrumentation.c.parser.CParserConstants;
 import org.codecover.instrumentation.c.parser.TokenManager;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.List;
 
-public class TokenAdapter implements TokenManager {
+public class TokenAdapter extends PreprocessorListener implements TokenManager {
     CCPreprocessor pp;
 
-    public TokenAdapter(File source) throws IOException {
+    public TokenAdapter(File source, List<String> includeDirs, List<String> defines) throws IOException, LexerException {
         pp = new CCPreprocessor(source);
+        pp.setQuoteIncludePath(includeDirs);
+        pp.setSystemIncludePath(includeDirs);
+        for(String d : defines) {
+            int i = d.indexOf('=');
+            if(i == -1) {
+                pp.addMacro(d);
+            } else {
+                pp.addMacro(d.substring(0,i-1), d.substring(i));
+            }
+
+        }
+
+        pp.setListener(this);
         //pp.addFeature(Feature.VERBOSE);
         //pp.addFeature(Feature.DEBUG);
+    }
+
+    @Override
+    public void handleSourceChange(Source source, String event) {
+        //if(source != null)
+        //    System.err.println(source.toString() + ": " +  event);
     }
 
     @Override

@@ -59,7 +59,7 @@ public class CParser
     }
 
     // Add a typedef type to those already defined
-    private void addType(String type) {
+    public void addType(String type) {
         types.add(type);
     }
 }
@@ -246,7 +246,7 @@ void UnaryExpression() : {}
 	  "++" UnaryExpression() |
 	  "--" UnaryExpression() |
 	  UnaryOperator() CastExpression() |
-	  <SIZEOF> ( LOOKAHEAD(UnaryExpression() ) UnaryExpression() | "(" TypeName() ")" ) ) |
+	  <SIZEOF> ( LOOKAHEAD(3) "(" TypeName() ")" | UnaryExpression() ) ) |
 	  <ALIGNOF> "(" TypeName() ")"
 }
 
@@ -430,7 +430,7 @@ void StructOrUnionSpecifier() : {}
 			typedefParsingStack.push(false);
 	}
 
-	StructOrUnion() ( LOOKAHEAD(3) [ <IDENTIFIER> ] "{" StructDeclarationList() "}" | <IDENTIFIER> )
+	StructOrUnion() ( LOOKAHEAD(2) [ <IDENTIFIER> ] "{" StructDeclarationList() "}" | <IDENTIFIER> )
 
 	{
 		typedefParsingStack.pop();
@@ -475,7 +475,8 @@ void StructDeclaratorList() : {}
 // 6.7.2.1
 void StructDeclarator() : {}
 {
-	( LOOKAHEAD(3) Declarator() | [ Declarator() ] ":" ConstantExpression() )
+    Declarator() [":" ConstantExpression() ] |
+    ":" ConstantExpression()
 }
 
 // 6.7.2.2
