@@ -11,7 +11,9 @@ import org.codecover.model.mast.Statement;
 import java.util.*;
 
 public class MastVisitor extends DepthFirstVisitor {
-    private Stack<List<Statement>> statementStack = new Stack<List<org.codecover.model.mast.Statement>>();
+    private Stack<List<Statement>> statementStack = new Stack<List<Statement>>();
+    private Stack<List<HierarchyLevel>> hierarchyStack = new Stack<List<HierarchyLevel>>();
+
     private MASTBuilder builder;
     private SourceFile sourceFile;
     private HierarchyLevelContainer rootContainer;
@@ -27,11 +29,11 @@ public class MastVisitor extends DepthFirstVisitor {
     }
 
     private void pushStatementLevel() {
-        this.statementStack.push(new ArrayList<Statement>());
+        statementStack.push(new ArrayList<Statement>());
     }
 
-    private StatementSequence createStatementSequence() {
-        List<org.codecover.model.mast.Statement> statementList = this.statementStack.pop();
+    private StatementSequence popStatementLevel() {
+        List<org.codecover.model.mast.Statement> statementList = statementStack.pop();
         List<Location> locationsOfSequence = new Vector<Location>(statementList.size());
         for (org.codecover.model.mast.Statement thisStatement : statementList) {
             locationsOfSequence.addAll(thisStatement.getLocation().getLocations());
@@ -43,7 +45,7 @@ public class MastVisitor extends DepthFirstVisitor {
     }
 
     private List<StatementSequence> createStatementSequenceList() {
-        StatementSequence statementSequence = createStatementSequence();
+        StatementSequence statementSequence = popStatementLevel();
 
         if (statementSequence.getStatements().isEmpty()) {
             return Collections.emptyList();
@@ -75,25 +77,26 @@ public class MastVisitor extends DepthFirstVisitor {
         return null;
     }
 
-    private void popTopLevelHieraryLevels(int start,
-                                                   int end,
-                                                   int headerStartOffset,
-                                                   int headerEndOffset) {
-        if (statementStack.size() != 1) {
-            String message = "this.statementAttic.size() != 1";
-            Exception exception = new IllegalStateException(message);
-            builder.getLogger().fatal(message, exception);
-        }
+    private void pushHierarchy() {
+        hierarchyStack.push(new ArrayList<HierarchyLevel>());
+        pushStatementLevel();
+    }
 
+    private void popHierachy(HierarchyLevelType type, String name,
+                             int start, int end,
+                             int headerStart, int headerEnd) {
         List<StatementSequence> programStatements = createStatementSequenceList();
-        HierarchyLevel programHL = builder.createHierarchyLevel(
+        HierarchyLevel level = builder.createHierarchyLevel(
                 createLocationList(start, end),
-                sourceFile.getFileName(),
-                createLocationList(headerStartOffset, headerEndOffset),
-                HierachyLevelTypes.getSourceFileType(builder),
-                Collections.<HierarchyLevel>emptyList(),
+                name,
+                createLocationList(headerStart, headerEnd),
+                type,
+                hierarchyStack.pop(),
                 programStatements);
-        rootContainer.addHierarchyLevelToRoot(programHL);
+        if(hierarchyStack.empty())
+            rootContainer.addHierarchyLevelToRoot(level);
+        else
+            hierarchyStack.peek().add(level);
     }
 
     private CoverableItem createCoverableItem(String id) {
@@ -122,14 +125,26 @@ public class MastVisitor extends DepthFirstVisitor {
         }
     }
 
+    public void visit(FunctionDefinition n) {
+        int headerStart = BeginOffset.getStartOffset(n);
+        n.nodeOptional.accept(this);
+        n.declarator.accept(this);
+        n.nodeOptional1.accept(this);
+        int headerEnd = lastEndOffset;
+        int start = BeginOffset.getStartOffset(n.compoundStatement);
+        pushHierarchy();
+        n.compoundStatement.accept(this);
+        int end = lastEndOffset;
+        popHierachy(HierachyLevelTypes.getFunctionType(builder), Helper.findFunctionName(n),
+                start, end, headerStart, headerEnd);
+    }
+
     @Override
     public void visit(TranslationUnit n) {
-        int headerStartOffset = 0;
-        int headerEndOffset = BeginOffset.getStartOffset(n);
-        pushStatementLevel();
+        pushHierarchy();
         super.visit(n);
-        popTopLevelHieraryLevels(headerEndOffset, lastEndOffset, headerStartOffset, headerEndOffset);
-
+        popHierachy(HierachyLevelTypes.getProgramType(builder), sourceFile.getFileName(),
+                BeginOffset.getStartOffset(n), lastEndOffset, -1, -1);
     }
 
     @Override

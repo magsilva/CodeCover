@@ -31,10 +31,7 @@ public class InstrumentationVisitor extends SimpleTreeDumper {
 
     public void visit(FunctionDefinition n) {
         n.nodeOptional.accept(this);
-        if(n.declarator.directDeclarator.nodeChoice.which == 0) {
-            String name = ((NodeToken) n.declarator.directDeclarator.nodeChoice.choice).tokenImage;
-            isMain = "main".equals(name);
-        }
+        isMain = "main".equals(Helper.findFunctionName(n));
         n.declarator.accept(this);
         n.nodeOptional1.accept(this);
         n.compoundStatement.accept(this);
