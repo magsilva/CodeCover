@@ -9,8 +9,6 @@ public interface StatementManipulator {
 
     void writeForwardDeclaration(PrintWriter out);
 
-    void writeDefinition(PrintWriter out);
-
     void visit(PrintWriter out, JumpStatement n);
 
     void visit(PrintWriter out, SelectionStatement n);

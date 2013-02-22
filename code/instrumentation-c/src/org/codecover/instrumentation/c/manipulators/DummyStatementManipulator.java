@@ -17,10 +17,6 @@ public class DummyStatementManipulator implements StatementManipulator {
     }
 
     @Override
-    public void writeDefinition(PrintWriter out) {
-    }
-
-    @Override
     public void visit(PrintWriter out, JumpStatement n) {
 
     }

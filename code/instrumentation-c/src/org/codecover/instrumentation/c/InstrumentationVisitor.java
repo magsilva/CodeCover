@@ -10,20 +10,17 @@ import java.io.Writer;
 
 public class InstrumentationVisitor extends SimpleTreeDumper {
     private MASTBuilder builder;
-    private SourceFile sourceFile;
     private HierarchyLevelContainer hierarchyLevelContainer;
     private String testSessionContainerUID;
     private StatementManipulator statementManipulator;
 
     public InstrumentationVisitor(Writer writer,
                                   MASTBuilder builder,
-                                  SourceFile sourceFile,
                                   HierarchyLevelContainer hierarchyLevelContainer,
                                   String testSessionContainerUID) {
         super(writer);
 
         this.builder = builder;
-        this.sourceFile = sourceFile;
         this.hierarchyLevelContainer = hierarchyLevelContainer;
         this.testSessionContainerUID = testSessionContainerUID;
     }
@@ -34,12 +31,41 @@ public class InstrumentationVisitor extends SimpleTreeDumper {
 
     @Override
     public void visit(TranslationUnit n) {
+        out.println("void CodeCover_reset();");
+        out.println("void CodeCover_dump();");
         statementManipulator.writeForwardDeclaration(out);
         super.visit(n);
-        statementManipulator.writeDefinition(out);
     }
 
     boolean addBraces = false;
+    boolean isMain = false;
+
+    public void visit(FunctionDefinition n) {
+        n.f0.accept(this);
+        if(n.f1.f1.f0.which == 0) {
+            String name = ((NodeToken) n.f1.f1.f0.choice).tokenImage;
+            isMain = "main".equals(name);
+        }
+        n.f1.accept(this);
+        n.f2.accept(this);
+        n.f3.accept(this);
+        isMain = false;
+    }
+
+    @Override
+    public void visit(CompoundStatement n) {
+        boolean tmp = isMain;
+        isMain = false;
+        if(tmp) {
+            out.println("{");
+            out.println("CodeCover_reset();");
+            out.println("atexit(CodeCover_dump);");
+        }
+        super.visit(n);
+        if(tmp)
+            out.println("}");
+
+    }
 
     @Override
     public void visit(Statement n) {

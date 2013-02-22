@@ -2,20 +2,27 @@ package org.codecover.instrumentation.c;
 
 import org.codecover.instrumentation.HierarchyLevelContainer;
 import org.codecover.instrumentation.c.adapter.TokenAdapter;
+import org.codecover.instrumentation.c.counter.CounterManager;
 import org.codecover.instrumentation.c.manipulators.DefaultStatementManipulator;
 import org.codecover.instrumentation.c.manipulators.DummyStatementManipulator;
 import org.codecover.instrumentation.c.parser.CParser;
 import org.codecover.instrumentation.c.syntaxtree.TranslationUnit;
+import org.codecover.instrumentation.exceptions.InstrumentationException;
 import org.codecover.instrumentation.exceptions.ParseException;
 import org.codecover.model.MASTBuilder;
 import org.codecover.model.mast.HierarchyLevelType;
 import org.codecover.model.mast.SourceFile;
 import org.codecover.model.utils.criteria.StatementCoverage;
+import org.codecover.model.utils.file.SourceTargetContainer;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
 
 public class Instrumenter extends org.codecover.instrumentation.Instrumenter {
+    private ArrayList<CounterManager> counterManagers = new ArrayList<CounterManager>();
+
     @Override
     protected void instrumentThis(Reader source,
                                   Writer target,
@@ -27,18 +34,69 @@ public class Instrumenter extends org.codecover.instrumentation.Instrumenter {
         CParser cParser = new CParser(new TokenAdapter(source));
         TranslationUnit translationUnit = cParser.TranslationUnit();
         InstrumentationVisitor instrumentationVisitor = new InstrumentationVisitor(
-                target, builder, sourceFile, rootContainer,
+                target, builder, rootContainer,
                 testSessionContainerUID);
+
+        CounterManager cm = new CounterManager();
 
         if (super.isCriterionSet(StatementCoverage.getInstance())) {
             instrumentationVisitor.setStatementManipulator(
-                    new DefaultStatementManipulator());
+                    new DefaultStatementManipulator(cm));
         } else {
             instrumentationVisitor.setStatementManipulator(
                     new DummyStatementManipulator());
         }
 
         instrumentationVisitor.visit(translationUnit);
+
+        counterManagers.add(cm);
+    }
+
+    @Override
+    protected void notifyEnd(File rootFolder,
+                             File targetFolder,
+                             Collection<SourceTargetContainer> jobs,
+                             HierarchyLevelContainer rootHierarchyLevelContainer,
+                             MASTBuilder builder, String testSessionContainerUID,
+                             Map<String, Object> instrumenterDirectives) throws InstrumentationException {
+        try {
+            writeMeasurementFile(new File(targetFolder, "CodeCover.c"), testSessionContainerUID);
+        } catch (IOException e) {
+            throw new InstrumentationException(e);
+        }
+    }
+
+    private void writeMeasurementFile(File file, String testSessionContainerUID) throws IOException {
+        PrintWriter out = new PrintWriter(new FileWriter(file));
+
+        out.println("#include <stdio.h>");
+
+        for(CounterManager cm : counterManagers) {
+            out.format("int %s[%d];\n", cm.stmtCntName(), cm.getStmtCnt());
+        }
+
+        out.println("void CodeCover_reset() {");
+        out.println("int i;");
+        for(CounterManager cm : counterManagers) {
+            out.format("for(i=0; i<%d; ++i) {\n", cm.getStmtCnt());
+            out.format("%s[i] = 0;\n", cm.stmtCntName());
+            out.println("}");
+        }
+        out.println("}");
+
+        out.println("void CodeCover_dump() {");
+        out.println("int i; FILE* f;");
+        out.println("f = fopen(\"coverage_log.clf\", \"w\");");
+        out.format("fprintf(f, \"TEST_SESSION_CONTAINER \\\"%s\\\"\\n\");\n", testSessionContainerUID);
+        for(CounterManager cm : counterManagers) {
+            out.format("for(i=0; i<%d; ++i) {\n", cm.getStmtCnt());
+            out.format("fprintf(f, \"%s%%i %%i\\n\", i, %s[i]);\n", cm.stmtCntName(), cm.stmtCntName());
+            out.println("}");
+        }
+        out.println("fclose(f);");
+        out.println("}");
+
+        out.close();
     }
 
     @Override

@@ -1,42 +1,39 @@
 package org.codecover.instrumentation.c.manipulators;
 
-import org.codecover.instrumentation.c.syntaxtree.ExpressionStatement;
-import org.codecover.instrumentation.c.syntaxtree.IterationStatement;
-import org.codecover.instrumentation.c.syntaxtree.JumpStatement;
-import org.codecover.instrumentation.c.syntaxtree.SelectionStatement;
+import org.codecover.instrumentation.c.counter.CounterManager;
+import org.codecover.instrumentation.c.syntaxtree.*;
 
 import java.io.PrintWriter;
 
 public class DefaultStatementManipulator implements StatementManipulator {
-    private int counter=0;
+    private CounterManager cm;
 
-    @Override
-    public void visit(PrintWriter out, ExpressionStatement n) {
-        out.format("CodeCover_StmtCounter[%d]++;\n", counter++);
+    public DefaultStatementManipulator(CounterManager cm) {
+        this.cm = cm;
     }
 
     @Override
     public void writeForwardDeclaration(PrintWriter out) {
-        out.write("extern int CodeCover_StmtCounter[];\n");
+        out.format("extern int %s[];\n", cm.stmtCntName());
     }
 
     @Override
-    public void writeDefinition(PrintWriter out) {
-        out.format("int CodeCover_StmtCounter[%d];\n", counter);
+    public void visit(PrintWriter out, ExpressionStatement n) {
+        out.format("%s[%d]++;\n", cm.stmtCntName(), cm.newStmtID());
     }
 
     @Override
     public void visit(PrintWriter out, JumpStatement n) {
-        out.format("CodeCover_StmtCounter[%d]++;\n", counter++);
+        out.format("%s[%d]++;\n", cm.stmtCntName(), cm.newStmtID());
     }
 
     @Override
     public void visit(PrintWriter out, SelectionStatement n) {
-        out.format("CodeCover_StmtCounter[%d]++;\n", counter++);
+        out.format("%s[%d]++;\n", cm.stmtCntName(), cm.newStmtID());
     }
 
     @Override
     public void visit(PrintWriter out, IterationStatement n) {
-        out.format("CodeCover_StmtCounter[%d]++;\n", counter++);
+        out.format("%s[%d]++;\n", cm.stmtCntName(), cm.newStmtID());
     }
 }
