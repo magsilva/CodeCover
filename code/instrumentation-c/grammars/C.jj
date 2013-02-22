@@ -526,21 +526,24 @@ void Declarator() : {}
 void DirectDeclarator() : { Token t;}
 {
 	( t = <IDENTIFIER>
-
 	{ if(!(typedefParsingStack.empty()) && (typedefParsingStack.peek())){
 				addType(t.image);
 	  }
 	}
-	 | "(" Declarator() ")" )
-
-	 // TODO
+	| "(" Declarator() ")" )
   
-  { typedefParsingStack.push( false ); }
+    { typedefParsingStack.push( false ); }
 
-	( "[" [ ConstantExpression() ] "]" |
-	    LOOKAHEAD(3) "(" ParameterTypeList() ")" |
-	    "(" [ IdentifierList() ] ")" )*
-      { typedefParsingStack.pop(); }
+	(  "[" ( <STATIC> [ TypeQualifierList() ] AssignmentExpression() |
+	         LOOKAHEAD(TypeQualifierList() <STATIC>) TypeQualifierList() <STATIC> AssignmentExpression() |
+	         LOOKAHEAD(2) [ TypeQualifierList() ] "*" "]" |
+	         [ ConstantExpression() ]
+	         ) "]" |
+
+	   LOOKAHEAD(3) "(" ParameterTypeList() ")" |
+	   "(" [ IdentifierList() ] ")" )*
+
+    { typedefParsingStack.pop(); }
 }
 
 // 6.7.6
@@ -595,13 +598,22 @@ void AbstractDeclarator() : {}
 // 6.7.7
 void DirectAbstractDeclarator() : {}
 {
-
-// TODO
 	( LOOKAHEAD(2) "(" AbstractDeclarator() ")" |
-	               "[" [ConstantExpression()] "]" |
-	               "(" [ParameterTypeList()] ")" )
+	               "(" [ParameterTypeList()] ")" |
+	               "[" ( <STATIC> [ TypeQualifierList() ] AssignmentExpression() |
+                               LOOKAHEAD(TypeQualifierList() <STATIC>) TypeQualifierList() <STATIC> AssignmentExpression() |
+                               LOOKAHEAD(2) "*" |
+                               [ TypeQualifierList() ] AssignmentExpression()
+                             ) "]"
+	)
 
-	  ( "[" [ ConstantExpression() ] "]" | "(" [ ParameterTypeList() ] ")" )*
+    ( "(" [ParameterTypeList()] ")" |
+      "[" ( <STATIC> [ TypeQualifierList() ] AssignmentExpression() |
+            LOOKAHEAD(TypeQualifierList() <STATIC>) TypeQualifierList() <STATIC> AssignmentExpression() |
+            LOOKAHEAD(2) "*" |
+            [ TypeQualifierList() ] AssignmentExpression()
+          ) "]"
+    )*
 }
 
 // 6.7.8

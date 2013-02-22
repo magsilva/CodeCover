@@ -1994,23 +1994,42 @@ DirectDeclarator DirectDeclarator() :
    NodeSequence n11;
    NodeToken n12;
    Token n13;
-   NodeOptional n14;
-   ConstantExpression n15;
+   NodeChoice n14;
+   NodeSequence n15;
    NodeToken n16;
    Token n17;
-   NodeSequence n18;
-   NodeToken n19;
-   Token n20;
-   ParameterTypeList n21;
-   NodeToken n22;
-   Token n23;
-   NodeSequence n24;
-   NodeToken n25;
-   Token n26;
+   NodeOptional n18;
+   TypeQualifierList n19;
+   AssignmentExpression n20;
+   NodeSequence n21;
+   TypeQualifierList n22;
+   NodeToken n23;
+   Token n24;
+   AssignmentExpression n25;
+   NodeSequence n26;
    NodeOptional n27;
-   IdentifierList n28;
+   TypeQualifierList n28;
    NodeToken n29;
    Token n30;
+   NodeToken n31;
+   Token n32;
+   NodeOptional n33;
+   ConstantExpression n34;
+   NodeToken n35;
+   Token n36;
+   NodeSequence n37;
+   NodeToken n38;
+   Token n39;
+   ParameterTypeList n40;
+   NodeToken n41;
+   Token n42;
+   NodeSequence n43;
+   NodeToken n44;
+   Token n45;
+   NodeOptional n46;
+   IdentifierList n47;
+   NodeToken n48;
+   Token n49;
 
    Token t;
 }
@@ -2045,42 +2064,85 @@ DirectDeclarator DirectDeclarator() :
    }
    
    (
-      { n14 = new NodeOptional(); }
+      { n18 = new NodeOptional(); }
       { n27 = new NodeOptional(); }
+      { n33 = new NodeOptional(); }
+      { n46 = new NodeOptional(); }
       (
          { n11 = new NodeSequence(3); }
          n13="[" { n12 = JTBToolkit.makeNodeToken(n13); }
          { n11.addNode(n12); }
          (
-            n15=ConstantExpression()
-            { n14.addNode(n15); }
-         )?
+            (
+               { n15 = new NodeSequence(3); }
+               n17=<STATIC> { n16 = JTBToolkit.makeNodeToken(n17); }
+               { n15.addNode(n16); }
+               (
+                  n19=TypeQualifierList()
+                  { n18.addNode(n19); }
+               )?
+               { n15.addNode(n18); }
+               n20=AssignmentExpression()
+               { n15.addNode(n20); }
+               { n14 = new NodeChoice(n15, 0); }
+            |
+               LOOKAHEAD(TypeQualifierList() <STATIC>)
+               { n21 = new NodeSequence(4); }
+               n22=TypeQualifierList()
+               { n21.addNode(n22); }
+               n24=<STATIC> { n23 = JTBToolkit.makeNodeToken(n24); }
+               { n21.addNode(n23); }
+               n25=AssignmentExpression()
+               { n21.addNode(n25); }
+               { n14 = new NodeChoice(n21, 1); }
+            |
+               LOOKAHEAD(2)
+               { n26 = new NodeSequence(4); }
+               (
+                  n28=TypeQualifierList()
+                  { n27.addNode(n28); }
+               )?
+               { n26.addNode(n27); }
+               n30="*" { n29 = JTBToolkit.makeNodeToken(n30); }
+               { n26.addNode(n29); }
+               n32="]" { n31 = JTBToolkit.makeNodeToken(n32); }
+               { n26.addNode(n31); }
+               { n14 = new NodeChoice(n26, 2); }
+            |
+               (
+                  n34=ConstantExpression()
+                  { n33.addNode(n34); }
+               )?
+               { n14 = new NodeChoice(n33, 3); }
+            )
+            
+         )
          { n11.addNode(n14); }
-         n17="]" { n16 = JTBToolkit.makeNodeToken(n17); }
-         { n11.addNode(n16); }
+         n36="]" { n35 = JTBToolkit.makeNodeToken(n36); }
+         { n11.addNode(n35); }
          { n10 = new NodeChoice(n11, 0); }
       |
          LOOKAHEAD(3)
-         { n18 = new NodeSequence(4); }
-         n20="(" { n19 = JTBToolkit.makeNodeToken(n20); }
-         { n18.addNode(n19); }
-         n21=ParameterTypeList()
-         { n18.addNode(n21); }
-         n23=")" { n22 = JTBToolkit.makeNodeToken(n23); }
-         { n18.addNode(n22); }
-         { n10 = new NodeChoice(n18, 1); }
+         { n37 = new NodeSequence(4); }
+         n39="(" { n38 = JTBToolkit.makeNodeToken(n39); }
+         { n37.addNode(n38); }
+         n40=ParameterTypeList()
+         { n37.addNode(n40); }
+         n42=")" { n41 = JTBToolkit.makeNodeToken(n42); }
+         { n37.addNode(n41); }
+         { n10 = new NodeChoice(n37, 1); }
       |
-         { n24 = new NodeSequence(3); }
-         n26="(" { n25 = JTBToolkit.makeNodeToken(n26); }
-         { n24.addNode(n25); }
+         { n43 = new NodeSequence(3); }
+         n45="(" { n44 = JTBToolkit.makeNodeToken(n45); }
+         { n43.addNode(n44); }
          (
-            n28=IdentifierList()
-            { n27.addNode(n28); }
+            n47=IdentifierList()
+            { n46.addNode(n47); }
          )?
-         { n24.addNode(n27); }
-         n30=")" { n29 = JTBToolkit.makeNodeToken(n30); }
-         { n24.addNode(n29); }
-         { n10 = new NodeChoice(n24, 2); }
+         { n43.addNode(n46); }
+         n49=")" { n48 = JTBToolkit.makeNodeToken(n49); }
+         { n43.addNode(n48); }
+         { n10 = new NodeChoice(n43, 2); }
       )
       { n9.addNode(n10); }
    )*
@@ -2312,32 +2374,64 @@ DirectAbstractDeclarator DirectAbstractDeclarator() :
    NodeToken n8;
    Token n9;
    NodeOptional n10 = new NodeOptional();
-   ConstantExpression n11;
+   ParameterTypeList n11;
    NodeToken n12;
    Token n13;
    NodeSequence n14;
    NodeToken n15;
    Token n16;
-   NodeOptional n17 = new NodeOptional();
-   ParameterTypeList n18;
+   NodeChoice n17;
+   NodeSequence n18;
    NodeToken n19;
    Token n20;
-   NodeListOptional n21 = new NodeListOptional();
-   NodeChoice n22;
-   NodeSequence n23;
-   NodeToken n24;
-   Token n25;
-   NodeOptional n26;
-   ConstantExpression n27;
-   NodeToken n28;
-   Token n29;
-   NodeSequence n30;
-   NodeToken n31;
-   Token n32;
-   NodeOptional n33;
-   ParameterTypeList n34;
+   NodeOptional n21 = new NodeOptional();
+   TypeQualifierList n22;
+   AssignmentExpression n23;
+   NodeSequence n24;
+   TypeQualifierList n25;
+   NodeToken n26;
+   Token n27;
+   AssignmentExpression n28;
+   NodeToken n29;
+   Token n30;
+   NodeSequence n31;
+   NodeOptional n32 = new NodeOptional();
+   TypeQualifierList n33;
+   AssignmentExpression n34;
    NodeToken n35;
    Token n36;
+   NodeListOptional n37 = new NodeListOptional();
+   NodeChoice n38;
+   NodeSequence n39;
+   NodeToken n40;
+   Token n41;
+   NodeOptional n42;
+   ParameterTypeList n43;
+   NodeToken n44;
+   Token n45;
+   NodeSequence n46;
+   NodeToken n47;
+   Token n48;
+   NodeChoice n49;
+   NodeSequence n50;
+   NodeToken n51;
+   Token n52;
+   NodeOptional n53;
+   TypeQualifierList n54;
+   AssignmentExpression n55;
+   NodeSequence n56;
+   TypeQualifierList n57;
+   NodeToken n58;
+   Token n59;
+   AssignmentExpression n60;
+   NodeToken n61;
+   Token n62;
+   NodeSequence n63;
+   NodeOptional n64;
+   TypeQualifierList n65;
+   AssignmentExpression n66;
+   NodeToken n67;
+   Token n68;
 
    
 }
@@ -2355,64 +2449,137 @@ DirectAbstractDeclarator DirectAbstractDeclarator() :
          { n0 = new NodeChoice(n1, 0); }
       |
          { n7 = new NodeSequence(3); }
-         n9="[" { n8 = JTBToolkit.makeNodeToken(n9); }
+         n9="(" { n8 = JTBToolkit.makeNodeToken(n9); }
          { n7.addNode(n8); }
          (
-            n11=ConstantExpression()
+            n11=ParameterTypeList()
             { n10.addNode(n11); }
          )?
          { n7.addNode(n10); }
-         n13="]" { n12 = JTBToolkit.makeNodeToken(n13); }
+         n13=")" { n12 = JTBToolkit.makeNodeToken(n13); }
          { n7.addNode(n12); }
          { n0 = new NodeChoice(n7, 1); }
       |
          { n14 = new NodeSequence(3); }
-         n16="(" { n15 = JTBToolkit.makeNodeToken(n16); }
+         n16="[" { n15 = JTBToolkit.makeNodeToken(n16); }
          { n14.addNode(n15); }
          (
-            n18=ParameterTypeList()
-            { n17.addNode(n18); }
-         )?
+            (
+               { n18 = new NodeSequence(3); }
+               n20=<STATIC> { n19 = JTBToolkit.makeNodeToken(n20); }
+               { n18.addNode(n19); }
+               (
+                  n22=TypeQualifierList()
+                  { n21.addNode(n22); }
+               )?
+               { n18.addNode(n21); }
+               n23=AssignmentExpression()
+               { n18.addNode(n23); }
+               { n17 = new NodeChoice(n18, 0); }
+            |
+               LOOKAHEAD(TypeQualifierList() <STATIC>)
+               { n24 = new NodeSequence(4); }
+               n25=TypeQualifierList()
+               { n24.addNode(n25); }
+               n27=<STATIC> { n26 = JTBToolkit.makeNodeToken(n27); }
+               { n24.addNode(n26); }
+               n28=AssignmentExpression()
+               { n24.addNode(n28); }
+               { n17 = new NodeChoice(n24, 1); }
+            |
+               LOOKAHEAD(2)
+               n30="*" { n29 = JTBToolkit.makeNodeToken(n30); }
+               { n17 = new NodeChoice(n29, 2); }
+            |
+               { n31 = new NodeSequence(2); }
+               (
+                  n33=TypeQualifierList()
+                  { n32.addNode(n33); }
+               )?
+               { n31.addNode(n32); }
+               n34=AssignmentExpression()
+               { n31.addNode(n34); }
+               { n17 = new NodeChoice(n31, 3); }
+            )
+            
+         )
          { n14.addNode(n17); }
-         n20=")" { n19 = JTBToolkit.makeNodeToken(n20); }
-         { n14.addNode(n19); }
+         n36="]" { n35 = JTBToolkit.makeNodeToken(n36); }
+         { n14.addNode(n35); }
          { n0 = new NodeChoice(n14, 2); }
       )
       
    )
    (
-      { n26 = new NodeOptional(); }
-      { n33 = new NodeOptional(); }
+      { n42 = new NodeOptional(); }
+      { n53 = new NodeOptional(); }
+      { n64 = new NodeOptional(); }
       (
-         { n23 = new NodeSequence(3); }
-         n25="[" { n24 = JTBToolkit.makeNodeToken(n25); }
-         { n23.addNode(n24); }
+         { n39 = new NodeSequence(3); }
+         n41="(" { n40 = JTBToolkit.makeNodeToken(n41); }
+         { n39.addNode(n40); }
          (
-            n27=ConstantExpression()
-            { n26.addNode(n27); }
+            n43=ParameterTypeList()
+            { n42.addNode(n43); }
          )?
-         { n23.addNode(n26); }
-         n29="]" { n28 = JTBToolkit.makeNodeToken(n29); }
-         { n23.addNode(n28); }
-         { n22 = new NodeChoice(n23, 0); }
+         { n39.addNode(n42); }
+         n45=")" { n44 = JTBToolkit.makeNodeToken(n45); }
+         { n39.addNode(n44); }
+         { n38 = new NodeChoice(n39, 0); }
       |
-         { n30 = new NodeSequence(3); }
-         n32="(" { n31 = JTBToolkit.makeNodeToken(n32); }
-         { n30.addNode(n31); }
+         { n46 = new NodeSequence(3); }
+         n48="[" { n47 = JTBToolkit.makeNodeToken(n48); }
+         { n46.addNode(n47); }
          (
-            n34=ParameterTypeList()
-            { n33.addNode(n34); }
-         )?
-         { n30.addNode(n33); }
-         n36=")" { n35 = JTBToolkit.makeNodeToken(n36); }
-         { n30.addNode(n35); }
-         { n22 = new NodeChoice(n30, 1); }
+            (
+               { n50 = new NodeSequence(3); }
+               n52=<STATIC> { n51 = JTBToolkit.makeNodeToken(n52); }
+               { n50.addNode(n51); }
+               (
+                  n54=TypeQualifierList()
+                  { n53.addNode(n54); }
+               )?
+               { n50.addNode(n53); }
+               n55=AssignmentExpression()
+               { n50.addNode(n55); }
+               { n49 = new NodeChoice(n50, 0); }
+            |
+               LOOKAHEAD(TypeQualifierList() <STATIC>)
+               { n56 = new NodeSequence(4); }
+               n57=TypeQualifierList()
+               { n56.addNode(n57); }
+               n59=<STATIC> { n58 = JTBToolkit.makeNodeToken(n59); }
+               { n56.addNode(n58); }
+               n60=AssignmentExpression()
+               { n56.addNode(n60); }
+               { n49 = new NodeChoice(n56, 1); }
+            |
+               LOOKAHEAD(2)
+               n62="*" { n61 = JTBToolkit.makeNodeToken(n62); }
+               { n49 = new NodeChoice(n61, 2); }
+            |
+               { n63 = new NodeSequence(2); }
+               (
+                  n65=TypeQualifierList()
+                  { n64.addNode(n65); }
+               )?
+               { n63.addNode(n64); }
+               n66=AssignmentExpression()
+               { n63.addNode(n66); }
+               { n49 = new NodeChoice(n63, 3); }
+            )
+            
+         )
+         { n46.addNode(n49); }
+         n68="]" { n67 = JTBToolkit.makeNodeToken(n68); }
+         { n46.addNode(n67); }
+         { n38 = new NodeChoice(n46, 1); }
       )
-      { n21.addNode(n22); }
+      { n37.addNode(n38); }
    )*
-   { n21.nodes.trimToSize(); }
+   { n37.nodes.trimToSize(); }
    
-   { return new DirectAbstractDeclarator(n0,n21); }
+   { return new DirectAbstractDeclarator(n0,n37); }
 }
 
 TypedefName TypedefName() :
