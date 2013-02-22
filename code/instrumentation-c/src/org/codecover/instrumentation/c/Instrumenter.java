@@ -64,46 +64,10 @@ public class Instrumenter extends org.codecover.instrumentation.Instrumenter {
                              MASTBuilder builder, String testSessionContainerUID,
                              Map<String, Object> instrumenterDirectives) throws InstrumentationException {
         try {
-            writeMeasurementFile(new File(targetFolder, "CodeCover.c"), testSessionContainerUID);
+            Helper.writeMeasurementFile(counterManagers, new File(targetFolder, "CodeCover.c"), testSessionContainerUID);
         } catch (IOException e) {
             throw new InstrumentationException(e);
         }
-    }
-
-    private void writeMeasurementFile(File file, String testSessionContainerUID) throws IOException {
-        PrintWriter out = new PrintWriter(new FileWriter(file));
-
-        out.println("#include <stdio.h>");
-
-        for(CounterManager cm : counterManagers) {
-            out.format("int %s[%d];\n", cm.stmtVarName(), cm.getStmtCnt());
-        }
-
-        out.println("void CodeCover_reset() {");
-        out.println("int i;");
-        for(CounterManager cm : counterManagers) {
-            out.format("for(i=0; i<%d; ++i) {\n", cm.getStmtCnt());
-            out.format("%s[i] = 0;\n", cm.stmtVarName());
-            out.println("}");
-        }
-        out.println("}");
-
-        out.println("void CodeCover_dump() {");
-        out.println("int i; FILE* f;");
-        out.println("f = fopen(\"coverage_log.clf\", \"w\");");
-        out.format("fprintf(f, \"TEST_SESSION_CONTAINER \\\"%s\\\"\\n\");\n", testSessionContainerUID);
-        out.println("fprintf(f, \"START_TEST_CASE \\\"Single Test Case\\\"\\n\");");
-        for(CounterManager cm : counterManagers) {
-            out.format("fprintf(f, \"START_SECTION \\\"%s\\\"\\n\");\n", cm.getFileName());
-            out.format("for(i=0; i<%d; ++i) {\n", cm.getStmtCnt());
-            out.format("fprintf(f, \"%s%%i %%i\\n\", i, %s[i]);\n", cm.stmtPrefix(), cm.stmtVarName());
-            out.println("}");
-        }
-        out.println("fprintf(f, \"END_TEST_CASE \\\"Single Test Case\\\"\\n\");");
-        out.println("fclose(f);");
-        out.println("}");
-
-        out.close();
     }
 
     @Override
