@@ -3,10 +3,10 @@ package org.codecover.instrumentation.c;
 import org.codecover.instrumentation.c.counter.CounterManager;
 import org.codecover.instrumentation.c.syntaxtree.*;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
+import java.nio.channels.Channels;
+import java.nio.channels.FileChannel;
+import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 
 public class Helper {
@@ -20,6 +20,29 @@ public class Helper {
         return ((NodeToken) d.nodeChoice.choice).tokenImage;
     }
 
+    public static void copyFile(InputStream srcStream, File destFile) throws IOException {
+        if(!destFile.exists()) {
+            destFile.createNewFile();
+        }
+
+        ReadableByteChannel source = null;
+        FileChannel destination = null;
+
+        try {
+            source = Channels.newChannel(srcStream);
+            destination = new FileOutputStream(destFile).getChannel();
+            destination.transferFrom(source, 0, Long.MAX_VALUE);
+        }
+        finally {
+            if(source != null) {
+                source.close();
+            }
+            if(destination != null) {
+                destination.close();
+            }
+        }
+    }
+
     // TODO close out on exception
     public static void writeMeasurementFile(ArrayList<CounterManager> counterManagers, File file, String testSessionContainerUID) throws IOException {
         PrintWriter out = new PrintWriter(new FileWriter(file));
@@ -27,7 +50,7 @@ public class Helper {
         out.println("#include <stdio.h>");
         out.println("#include <string.h>");
         out.println("#include <stdlib.h>");
-        out.println("#include \"tree.h\"");
+        out.println("#include \"CodeCover.h\"");
 
         out.println("struct CodeCover_ConditionCounter {\n" +
                 "    SPLAY_ENTRY(CodeCover_ConditionCounter) linkage;\n" +

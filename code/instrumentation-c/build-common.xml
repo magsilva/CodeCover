@@ -20,12 +20,15 @@
            includeAntRuntime="false">
       <compilerarg value="-Xlint:{all,-serial}" />
     </javac>
+    <copy todir="${bin-dir}/org/codecover/instrumentation/c/res/">
+      <fileset dir="src/org/codecover/instrumentation/c/res/"/>
+    </copy>
   </target>
 
   <target name="jar" depends="compiletest,compile">
     <jar destfile="${jarfile}"
          basedir="${bin-dir}"
-         includes="**/*.class"
+         includes="**/*.class,org/codecover/instrumentation/c/res/*"
          excludes="**/*Test.class **/*Test$*.class **/*Tests.class **/*Tests$*.class **/*SpecialTestHarness.class **/UtilsForTesting*.class org/codecover/instrumentation/ada*/*.class" />
   </target>
 

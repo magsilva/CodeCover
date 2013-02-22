@@ -15,6 +15,7 @@ import org.codecover.model.utils.criteria.*;
 import org.codecover.model.utils.file.SourceTargetContainer;
 
 import java.io.*;
+import java.net.URISyntaxException;
 import java.util.*;
 
 public class Instrumenter extends org.codecover.instrumentation.Instrumenter {
@@ -79,6 +80,7 @@ public class Instrumenter extends org.codecover.instrumentation.Instrumenter {
                              Map<String, Object> instrumenterDirectives) throws InstrumentationException {
         try {
             Helper.writeMeasurementFile(counterManagers, new File(targetFolder, "CodeCover.c"), testSessionContainerUID);
+            Helper.copyFile(this.getClass().getResourceAsStream("/org/codecover/instrumentation/c/res/tree.h"), new File(targetFolder, "CodeCover.h"));
         } catch (IOException e) {
             throw new InstrumentationException(e);
         }
