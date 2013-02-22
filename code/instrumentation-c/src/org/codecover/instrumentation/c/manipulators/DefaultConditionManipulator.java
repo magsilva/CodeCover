@@ -8,7 +8,6 @@ import org.codecover.instrumentation.c.CBooleanExpressions;
 import org.codecover.instrumentation.c.CExpressionParser;
 import org.codecover.instrumentation.c.counter.CounterManager;
 import org.codecover.instrumentation.c.syntaxtree.Expression;
-import org.codecover.instrumentation.c.InstrCommaTerm;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
