@@ -7,7 +7,7 @@ package org.codecover.instrumentation.c.syntaxtree;
 /**
  * Grammar production:
  * <PRE>
- * nodeChoice -> ( &lt;VOID&gt; | &lt;CHAR&gt; | &lt;SHORT&gt; | &lt;INT&gt; | &lt;LONG&gt; | &lt;FLOAT&gt; | &lt;DOUBLE&gt; | &lt;SIGNED&gt; | &lt;UNSIGNED&gt; | &lt;BOOL&gt; | &lt;COMPLEX&gt; | AtomicSpecifier() | StructOrUnionSpecifier() | EnumSpecifier() | TypedefName() )
+ * nodeChoice -> ( &lt;VOID&gt; | &lt;CHAR&gt; | &lt;SHORT&gt; | &lt;INT&gt; | &lt;LONG&gt; | &lt;FLOAT&gt; | &lt;DOUBLE&gt; | &lt;SIGNED&gt; | &lt;UNSIGNED&gt; | &lt;BOOL&gt; | &lt;COMPLEX&gt; | &lt;EXTENSION&gt; | AtomicSpecifier() | StructOrUnionSpecifier() | EnumSpecifier() | TypedefName() )
  * </PRE>
  */
 public class TypeSpecifier extends org.codecover.instrumentation.c.adapter.CCNode implements Node {

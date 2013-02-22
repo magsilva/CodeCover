@@ -375,7 +375,7 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
 
    /**
     * <PRE>
-    * nodeChoice -> ( DeclarationSpecifiers() [ InitDeclaratorList() ] ";" | Static_AssertDeclaration() )
+    * nodeChoice -> ( DeclarationSpecifiers() [ InitDeclaratorList() ] [ AttributeSpecifierList() ] ";" | Static_AssertDeclaration() )
     * </PRE>
     */
    public void visit(Declaration n, A argu) {
@@ -388,7 +388,7 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
     *       | TypeSpecifier() [ DeclarationSpecifiers() ]
     *       | TypeQualifier() [ DeclarationSpecifiers() ]
     *       | FunctionSpecifier() [ DeclarationSpecifiers() ]
-    *       | AlignmentSpecifier() [ DeclarationSpecifiers() ]
+    *       | AlignmentSpecifier() [ DeclarationSpecifiers() ] AttributeSpecifier() [ DeclarationSpecifiers() ]
     * </PRE>
     */
    public void visit(DeclarationSpecifiers n, A argu) {
@@ -428,7 +428,7 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
 
    /**
     * <PRE>
-    * nodeChoice -> ( &lt;VOID&gt; | &lt;CHAR&gt; | &lt;SHORT&gt; | &lt;INT&gt; | &lt;LONG&gt; | &lt;FLOAT&gt; | &lt;DOUBLE&gt; | &lt;SIGNED&gt; | &lt;UNSIGNED&gt; | &lt;BOOL&gt; | &lt;COMPLEX&gt; | AtomicSpecifier() | StructOrUnionSpecifier() | EnumSpecifier() | TypedefName() )
+    * nodeChoice -> ( &lt;VOID&gt; | &lt;CHAR&gt; | &lt;SHORT&gt; | &lt;INT&gt; | &lt;LONG&gt; | &lt;FLOAT&gt; | &lt;DOUBLE&gt; | &lt;SIGNED&gt; | &lt;UNSIGNED&gt; | &lt;BOOL&gt; | &lt;COMPLEX&gt; | &lt;EXTENSION&gt; | AtomicSpecifier() | StructOrUnionSpecifier() | EnumSpecifier() | TypedefName() )
     * </PRE>
     */
    public void visit(TypeSpecifier n, A argu) {
@@ -770,9 +770,9 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
     * nodeToken1 -> "("
     * constantExpression -> ConstantExpression()
     * nodeToken2 -> ","
-    * nodeToken3 -> &lt;STRING_LITERAL&gt;
-    * nodeToken4 -> ")"
-    * nodeToken5 -> ";"
+    * stringLiteral -> StringLiteral()
+    * nodeToken3 -> ")"
+    * nodeToken4 -> ";"
     * </PRE>
     */
    public void visit(Static_AssertDeclaration n, A argu) {
@@ -780,9 +780,9 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
       n.nodeToken1.accept(this, argu);
       n.constantExpression.accept(this, argu);
       n.nodeToken2.accept(this, argu);
+      n.stringLiteral.accept(this, argu);
       n.nodeToken3.accept(this, argu);
       n.nodeToken4.accept(this, argu);
-      n.nodeToken5.accept(this, argu);
    }
 
    /**
@@ -796,7 +796,7 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
 
    /**
     * <PRE>
-    * nodeChoice -> ( &lt;IDENTIFIER&gt; ":" Statement() | CaseStatement() | DefaultStatement() )
+    * nodeChoice -> ( &lt;IDENTIFIER&gt; ":" [ AttributeSpecifierList() ] Statement() | CaseStatement() | DefaultStatement() )
     * </PRE>
     */
    public void visit(LabeledStatement n, A argu) {
@@ -1032,6 +1032,115 @@ public class GJVoidDepthFirst<A> implements GJVoidVisitor<A> {
     */
    public void visit(DeclarationList n, A argu) {
       n.nodeList.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * nodeList -> ( AttributeSpecifier() )+
+    * </PRE>
+    */
+   public void visit(AttributeSpecifierList n, A argu) {
+      n.nodeList.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * nodeChoice -> ( &lt;ATTRIBUTE&gt; | &lt;NONNULL&gt; ) "(" "(" AttributeList() ")" ")"
+    *       | Asm()
+    * </PRE>
+    */
+   public void visit(AttributeSpecifier n, A argu) {
+      n.nodeChoice.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * nodeToken -> &lt;ASM&gt;
+    * nodeToken1 -> "("
+    * stringLiteral -> StringLiteral()
+    * nodeToken2 -> ")"
+    * </PRE>
+    */
+   public void visit(Asm n, A argu) {
+      n.nodeToken.accept(this, argu);
+      n.nodeToken1.accept(this, argu);
+      n.stringLiteral.accept(this, argu);
+      n.nodeToken2.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * nodeOptional -> [ Attribute() ]
+    * nodeListOptional -> ( "," [ Attribute() ] )*
+    * </PRE>
+    */
+   public void visit(AttributeList n, A argu) {
+      n.nodeOptional.accept(this, argu);
+      n.nodeListOptional.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * word -> Word()
+    * nodeOptional -> [ "(" Expression() ")" ]
+    * </PRE>
+    */
+   public void visit(Attribute n, A argu) {
+      n.word.accept(this, argu);
+      n.nodeOptional.accept(this, argu);
+   }
+
+   /**
+    * <PRE>
+    * nodeChoice -> &lt;IDENTIFIER&gt;
+    *       | &lt;ALIGNOF&gt;
+    *       | &lt;AUTO&gt;
+    *       | &lt;BREAK&gt;
+    *       | &lt;CASE&gt;
+    *       | &lt;CHAR&gt;
+    *       | &lt;CONST&gt;
+    *       | &lt;CONTINUE&gt;
+    *       | &lt;DFAULT&gt;
+    *       | &lt;DO&gt;
+    *       | &lt;DOUBLE&gt;
+    *       | &lt;ELSE&gt;
+    *       | &lt;ENUM&gt;
+    *       | &lt;EXTERN&gt;
+    *       | &lt;FLOAT&gt;
+    *       | &lt;FOR&gt;
+    *       | &lt;GOTO&gt;
+    *       | &lt;IF&gt;
+    *       | &lt;INLINE&gt;
+    *       | &lt;INT&gt;
+    *       | &lt;LONG&gt;
+    *       | &lt;REGISTER&gt;
+    *       | &lt;RESTRICT&gt;
+    *       | &lt;RETURN&gt;
+    *       | &lt;SHORT&gt;
+    *       | &lt;SIGNED&gt;
+    *       | &lt;SIZEOF&gt;
+    *       | &lt;STATIC&gt;
+    *       | &lt;STRUCT&gt;
+    *       | &lt;SWITCH&gt;
+    *       | &lt;TYPEDEF&gt;
+    *       | &lt;UNION&gt;
+    *       | &lt;UNSIGNED&gt;
+    *       | &lt;VOID&gt;
+    *       | &lt;VOLATILE&gt;
+    *       | &lt;WHILE&gt;
+    *       | &lt;ALIGNAS&gt;
+    *       | &lt;ATOMIC&gt;
+    *       | &lt;BOOL&gt;
+    *       | &lt;COMPLEX&gt;
+    *       | &lt;GENERIC&gt;
+    *       | &lt;IMAGINARY&gt;
+    *       | &lt;NORETURN&gt;
+    *       | &lt;STATICASSERT&gt;
+    *       | &lt;THREADLOCAL&gt;
+    * </PRE>
+    */
+   public void visit(Word n, A argu) {
+      n.nodeChoice.accept(this, argu);
    }
 
 }

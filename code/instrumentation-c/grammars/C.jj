@@ -154,7 +154,10 @@ TOKEN : {
     <NORETURN: "_Noreturn"> |
     <STATICASSERT: "_Static_assert"> |
     <THREADLOCAL: "_Thread_local"> |
-    <ATTRIBUTE: "__attribute__">
+    <ATTRIBUTE: "__attribute__"> |
+    <EXTENSION: "__extension__"> |
+    <NONNULL: "__nonnull"> |
+    <ASM: "__asm__">
 }
 
 TOKEN : {
@@ -395,7 +398,7 @@ void ConstantExpression() : {}
 // 6.7
 void Declaration() : {}
 {
-    ( DeclarationSpecifiers() {lastType=null;} [ InitDeclaratorList() ]
+    ( DeclarationSpecifiers() {lastType=null;} [ InitDeclaratorList() ] [AttributeSpecifierList()]
         {
             // Finished with a typedefDeclaration??
             if(!(typedefParsingStack.empty()) && (typedefParsingStack.peek())){
@@ -419,6 +422,8 @@ void DeclarationSpecifiers() : {}
     FunctionSpecifier() [ LOOKAHEAD(DeclarationSpecifiers())
         DeclarationSpecifiers() ] |
     AlignmentSpecifier() [ LOOKAHEAD(DeclarationSpecifiers())
+        DeclarationSpecifiers() ]
+    AttributeSpecifier() [ LOOKAHEAD(DeclarationSpecifiers())
         DeclarationSpecifiers() ]
 }
 
@@ -447,7 +452,7 @@ void StorageClassSpecifier() : {}
 void TypeSpecifier() : {}
 {
     ( <VOID> | <CHAR> | <SHORT> | <INT> | <LONG> | <FLOAT> | <DOUBLE> |
-	  <SIGNED> | <UNSIGNED> | <BOOL> | <COMPLEX> |
+	  <SIGNED> | <UNSIGNED> | <BOOL> | <COMPLEX> | <EXTENSION> |
 	  AtomicSpecifier() | StructOrUnionSpecifier() | EnumSpecifier() |
 	  LOOKAHEAD( { (lastType == null || !lastType.equals(getToken(1).image)) && isType(getToken(1).image)} )
 	    TypedefName() {lastType = getToken(0).image; } )
@@ -693,7 +698,7 @@ void Designator() : {}
 // 6.7.10
 void Static_AssertDeclaration() : {}
 {
-    <STATICASSERT> "(" ConstantExpression() "," <STRING_LITERAL> ")"  ";"
+    <STATICASSERT> "(" ConstantExpression() "," StringLiteral() ")"  ";"
 }
 
 ///////////////////
@@ -717,7 +722,7 @@ void Statement() : {}
 // 6.8.1
 void LabeledStatement() : {}
 {
-	( <IDENTIFIER> ":" Statement() |
+	( <IDENTIFIER> ":" [AttributeSpecifierList()] Statement() |
 	  CaseStatement() |
 	  DefaultStatement() )
 }
@@ -839,3 +844,78 @@ void DeclarationList() : {}
     ( LOOKAHEAD(Declaration()) Declaration() )+
 }
 
+// GCC specific, see: http://gcc.gnu.org/onlinedocs/gcc/Attribute-Syntax.html
+void AttributeSpecifierList() : {}
+{
+    (AttributeSpecifier())+
+}
+
+void AttributeSpecifier() : {}
+{
+    (<ATTRIBUTE> | <NONNULL>) "(" "(" AttributeList() ")" ")" |
+    Asm()
+}
+
+void Asm() : {}
+{
+    <ASM> "(" StringLiteral() ")"
+}
+
+void AttributeList() : {}
+{
+    [Attribute()] ("," [Attribute()])*
+}
+
+void Attribute() : {}
+{
+    Word() ["(" Expression() ")"]
+}
+
+void Word() : {}
+{
+    <IDENTIFIER> |
+    <ALIGNOF> |
+    <AUTO> |
+    <BREAK> |
+    <CASE> |
+    <CHAR> |
+    <CONST> |
+    <CONTINUE> |
+    <DFAULT> |
+    <DO> |
+    <DOUBLE> |
+    <ELSE> |
+    <ENUM> |
+    <EXTERN> |
+    <FLOAT> |
+    <FOR> |
+    <GOTO> |
+    <IF> |
+    <INLINE> |
+    <INT> |
+    <LONG> |
+    <REGISTER> |
+    <RESTRICT> |
+    <RETURN> |
+    <SHORT> |
+    <SIGNED> |
+    <SIZEOF> |
+    <STATIC> |
+    <STRUCT> |
+    <SWITCH> |
+    <TYPEDEF> |
+    <UNION> |
+    <UNSIGNED> |
+    <VOID> |
+    <VOLATILE> |
+    <WHILE> |
+    <ALIGNAS> |
+    <ATOMIC> |
+    <BOOL> |
+    <COMPLEX> |
+    <GENERIC> |
+    <IMAGINARY> |
+    <NORETURN> |
+    <STATICASSERT> |
+    <THREADLOCAL>
+}

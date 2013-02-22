@@ -11,7 +11,7 @@ package org.codecover.instrumentation.c.syntaxtree;
  *       | TypeSpecifier() [ DeclarationSpecifiers() ]
  *       | TypeQualifier() [ DeclarationSpecifiers() ]
  *       | FunctionSpecifier() [ DeclarationSpecifiers() ]
- *       | AlignmentSpecifier() [ DeclarationSpecifiers() ]
+ *       | AlignmentSpecifier() [ DeclarationSpecifiers() ] AttributeSpecifier() [ DeclarationSpecifiers() ]
  * </PRE>
  */
 public class DeclarationSpecifiers extends org.codecover.instrumentation.c.adapter.CCNode implements Node {

@@ -441,7 +441,7 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
 
    /**
     * <PRE>
-    * nodeChoice -> ( DeclarationSpecifiers() [ InitDeclaratorList() ] ";" | Static_AssertDeclaration() )
+    * nodeChoice -> ( DeclarationSpecifiers() [ InitDeclaratorList() ] [ AttributeSpecifierList() ] ";" | Static_AssertDeclaration() )
     * </PRE>
     */
    public R visit(Declaration n) {
@@ -456,7 +456,7 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
     *       | TypeSpecifier() [ DeclarationSpecifiers() ]
     *       | TypeQualifier() [ DeclarationSpecifiers() ]
     *       | FunctionSpecifier() [ DeclarationSpecifiers() ]
-    *       | AlignmentSpecifier() [ DeclarationSpecifiers() ]
+    *       | AlignmentSpecifier() [ DeclarationSpecifiers() ] AttributeSpecifier() [ DeclarationSpecifiers() ]
     * </PRE>
     */
    public R visit(DeclarationSpecifiers n) {
@@ -504,7 +504,7 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
 
    /**
     * <PRE>
-    * nodeChoice -> ( &lt;VOID&gt; | &lt;CHAR&gt; | &lt;SHORT&gt; | &lt;INT&gt; | &lt;LONG&gt; | &lt;FLOAT&gt; | &lt;DOUBLE&gt; | &lt;SIGNED&gt; | &lt;UNSIGNED&gt; | &lt;BOOL&gt; | &lt;COMPLEX&gt; | AtomicSpecifier() | StructOrUnionSpecifier() | EnumSpecifier() | TypedefName() )
+    * nodeChoice -> ( &lt;VOID&gt; | &lt;CHAR&gt; | &lt;SHORT&gt; | &lt;INT&gt; | &lt;LONG&gt; | &lt;FLOAT&gt; | &lt;DOUBLE&gt; | &lt;SIGNED&gt; | &lt;UNSIGNED&gt; | &lt;BOOL&gt; | &lt;COMPLEX&gt; | &lt;EXTENSION&gt; | AtomicSpecifier() | StructOrUnionSpecifier() | EnumSpecifier() | TypedefName() )
     * </PRE>
     */
    public R visit(TypeSpecifier n) {
@@ -910,9 +910,9 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
     * nodeToken1 -> "("
     * constantExpression -> ConstantExpression()
     * nodeToken2 -> ","
-    * nodeToken3 -> &lt;STRING_LITERAL&gt;
-    * nodeToken4 -> ")"
-    * nodeToken5 -> ";"
+    * stringLiteral -> StringLiteral()
+    * nodeToken3 -> ")"
+    * nodeToken4 -> ";"
     * </PRE>
     */
    public R visit(Static_AssertDeclaration n) {
@@ -921,9 +921,9 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
       n.nodeToken1.accept(this);
       n.constantExpression.accept(this);
       n.nodeToken2.accept(this);
+      n.stringLiteral.accept(this);
       n.nodeToken3.accept(this);
       n.nodeToken4.accept(this);
-      n.nodeToken5.accept(this);
       return _ret;
    }
 
@@ -940,7 +940,7 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
 
    /**
     * <PRE>
-    * nodeChoice -> ( &lt;IDENTIFIER&gt; ":" Statement() | CaseStatement() | DefaultStatement() )
+    * nodeChoice -> ( &lt;IDENTIFIER&gt; ":" [ AttributeSpecifierList() ] Statement() | CaseStatement() | DefaultStatement() )
     * </PRE>
     */
    public R visit(LabeledStatement n) {
@@ -1211,6 +1211,127 @@ public class GJNoArguDepthFirst<R> implements GJNoArguVisitor<R> {
    public R visit(DeclarationList n) {
       R _ret=null;
       n.nodeList.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * nodeList -> ( AttributeSpecifier() )+
+    * </PRE>
+    */
+   public R visit(AttributeSpecifierList n) {
+      R _ret=null;
+      n.nodeList.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * nodeChoice -> ( &lt;ATTRIBUTE&gt; | &lt;NONNULL&gt; ) "(" "(" AttributeList() ")" ")"
+    *       | Asm()
+    * </PRE>
+    */
+   public R visit(AttributeSpecifier n) {
+      R _ret=null;
+      n.nodeChoice.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * nodeToken -> &lt;ASM&gt;
+    * nodeToken1 -> "("
+    * stringLiteral -> StringLiteral()
+    * nodeToken2 -> ")"
+    * </PRE>
+    */
+   public R visit(Asm n) {
+      R _ret=null;
+      n.nodeToken.accept(this);
+      n.nodeToken1.accept(this);
+      n.stringLiteral.accept(this);
+      n.nodeToken2.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * nodeOptional -> [ Attribute() ]
+    * nodeListOptional -> ( "," [ Attribute() ] )*
+    * </PRE>
+    */
+   public R visit(AttributeList n) {
+      R _ret=null;
+      n.nodeOptional.accept(this);
+      n.nodeListOptional.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * word -> Word()
+    * nodeOptional -> [ "(" Expression() ")" ]
+    * </PRE>
+    */
+   public R visit(Attribute n) {
+      R _ret=null;
+      n.word.accept(this);
+      n.nodeOptional.accept(this);
+      return _ret;
+   }
+
+   /**
+    * <PRE>
+    * nodeChoice -> &lt;IDENTIFIER&gt;
+    *       | &lt;ALIGNOF&gt;
+    *       | &lt;AUTO&gt;
+    *       | &lt;BREAK&gt;
+    *       | &lt;CASE&gt;
+    *       | &lt;CHAR&gt;
+    *       | &lt;CONST&gt;
+    *       | &lt;CONTINUE&gt;
+    *       | &lt;DFAULT&gt;
+    *       | &lt;DO&gt;
+    *       | &lt;DOUBLE&gt;
+    *       | &lt;ELSE&gt;
+    *       | &lt;ENUM&gt;
+    *       | &lt;EXTERN&gt;
+    *       | &lt;FLOAT&gt;
+    *       | &lt;FOR&gt;
+    *       | &lt;GOTO&gt;
+    *       | &lt;IF&gt;
+    *       | &lt;INLINE&gt;
+    *       | &lt;INT&gt;
+    *       | &lt;LONG&gt;
+    *       | &lt;REGISTER&gt;
+    *       | &lt;RESTRICT&gt;
+    *       | &lt;RETURN&gt;
+    *       | &lt;SHORT&gt;
+    *       | &lt;SIGNED&gt;
+    *       | &lt;SIZEOF&gt;
+    *       | &lt;STATIC&gt;
+    *       | &lt;STRUCT&gt;
+    *       | &lt;SWITCH&gt;
+    *       | &lt;TYPEDEF&gt;
+    *       | &lt;UNION&gt;
+    *       | &lt;UNSIGNED&gt;
+    *       | &lt;VOID&gt;
+    *       | &lt;VOLATILE&gt;
+    *       | &lt;WHILE&gt;
+    *       | &lt;ALIGNAS&gt;
+    *       | &lt;ATOMIC&gt;
+    *       | &lt;BOOL&gt;
+    *       | &lt;COMPLEX&gt;
+    *       | &lt;GENERIC&gt;
+    *       | &lt;IMAGINARY&gt;
+    *       | &lt;NORETURN&gt;
+    *       | &lt;STATICASSERT&gt;
+    *       | &lt;THREADLOCAL&gt;
+    * </PRE>
+    */
+   public R visit(Word n) {
+      R _ret=null;
+      n.nodeChoice.accept(this);
       return _ret;
    }
 

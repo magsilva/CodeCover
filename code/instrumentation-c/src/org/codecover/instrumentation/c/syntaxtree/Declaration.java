@@ -7,7 +7,7 @@ package org.codecover.instrumentation.c.syntaxtree;
 /**
  * Grammar production:
  * <PRE>
- * nodeChoice -> ( DeclarationSpecifiers() [ InitDeclaratorList() ] ";" | Static_AssertDeclaration() )
+ * nodeChoice -> ( DeclarationSpecifiers() [ InitDeclaratorList() ] [ AttributeSpecifierList() ] ";" | Static_AssertDeclaration() )
  * </PRE>
  */
 public class Declaration extends org.codecover.instrumentation.c.adapter.CCNode implements Node {

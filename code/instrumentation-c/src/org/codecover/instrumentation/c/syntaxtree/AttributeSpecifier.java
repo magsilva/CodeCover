@@ -7,14 +7,15 @@ package org.codecover.instrumentation.c.syntaxtree;
 /**
  * Grammar production:
  * <PRE>
- * nodeChoice -> ( &lt;IDENTIFIER&gt; ":" [ AttributeSpecifierList() ] Statement() | CaseStatement() | DefaultStatement() )
+ * nodeChoice -> ( &lt;ATTRIBUTE&gt; | &lt;NONNULL&gt; ) "(" "(" AttributeList() ")" ")"
+ *       | Asm()
  * </PRE>
  */
-public class LabeledStatement extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
+public class AttributeSpecifier extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
    private Node parent;
    public NodeChoice nodeChoice;
 
-   public LabeledStatement(NodeChoice n0) {
+   public AttributeSpecifier(NodeChoice n0) {
       nodeChoice = n0;
       if ( nodeChoice != null ) nodeChoice.setParent(this);
    }

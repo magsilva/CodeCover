@@ -7,16 +7,20 @@ package org.codecover.instrumentation.c.syntaxtree;
 /**
  * Grammar production:
  * <PRE>
- * nodeChoice -> ( &lt;IDENTIFIER&gt; ":" [ AttributeSpecifierList() ] Statement() | CaseStatement() | DefaultStatement() )
+ * nodeOptional -> [ Attribute() ]
+ * nodeListOptional -> ( "," [ Attribute() ] )*
  * </PRE>
  */
-public class LabeledStatement extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
+public class AttributeList extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
    private Node parent;
-   public NodeChoice nodeChoice;
+   public NodeOptional nodeOptional;
+   public NodeListOptional nodeListOptional;
 
-   public LabeledStatement(NodeChoice n0) {
-      nodeChoice = n0;
-      if ( nodeChoice != null ) nodeChoice.setParent(this);
+   public AttributeList(NodeOptional n0, NodeListOptional n1) {
+      nodeOptional = n0;
+      if ( nodeOptional != null ) nodeOptional.setParent(this);
+      nodeListOptional = n1;
+      if ( nodeListOptional != null ) nodeListOptional.setParent(this);
    }
 
    public void accept(org.codecover.instrumentation.c.visitor.Visitor v) {

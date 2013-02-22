@@ -365,7 +365,7 @@ public class DepthFirstVisitor implements Visitor {
 
    /**
     * <PRE>
-    * nodeChoice -> ( DeclarationSpecifiers() [ InitDeclaratorList() ] ";" | Static_AssertDeclaration() )
+    * nodeChoice -> ( DeclarationSpecifiers() [ InitDeclaratorList() ] [ AttributeSpecifierList() ] ";" | Static_AssertDeclaration() )
     * </PRE>
     */
    public void visit(Declaration n) {
@@ -378,7 +378,7 @@ public class DepthFirstVisitor implements Visitor {
     *       | TypeSpecifier() [ DeclarationSpecifiers() ]
     *       | TypeQualifier() [ DeclarationSpecifiers() ]
     *       | FunctionSpecifier() [ DeclarationSpecifiers() ]
-    *       | AlignmentSpecifier() [ DeclarationSpecifiers() ]
+    *       | AlignmentSpecifier() [ DeclarationSpecifiers() ] AttributeSpecifier() [ DeclarationSpecifiers() ]
     * </PRE>
     */
    public void visit(DeclarationSpecifiers n) {
@@ -418,7 +418,7 @@ public class DepthFirstVisitor implements Visitor {
 
    /**
     * <PRE>
-    * nodeChoice -> ( &lt;VOID&gt; | &lt;CHAR&gt; | &lt;SHORT&gt; | &lt;INT&gt; | &lt;LONG&gt; | &lt;FLOAT&gt; | &lt;DOUBLE&gt; | &lt;SIGNED&gt; | &lt;UNSIGNED&gt; | &lt;BOOL&gt; | &lt;COMPLEX&gt; | AtomicSpecifier() | StructOrUnionSpecifier() | EnumSpecifier() | TypedefName() )
+    * nodeChoice -> ( &lt;VOID&gt; | &lt;CHAR&gt; | &lt;SHORT&gt; | &lt;INT&gt; | &lt;LONG&gt; | &lt;FLOAT&gt; | &lt;DOUBLE&gt; | &lt;SIGNED&gt; | &lt;UNSIGNED&gt; | &lt;BOOL&gt; | &lt;COMPLEX&gt; | &lt;EXTENSION&gt; | AtomicSpecifier() | StructOrUnionSpecifier() | EnumSpecifier() | TypedefName() )
     * </PRE>
     */
    public void visit(TypeSpecifier n) {
@@ -760,9 +760,9 @@ public class DepthFirstVisitor implements Visitor {
     * nodeToken1 -> "("
     * constantExpression -> ConstantExpression()
     * nodeToken2 -> ","
-    * nodeToken3 -> &lt;STRING_LITERAL&gt;
-    * nodeToken4 -> ")"
-    * nodeToken5 -> ";"
+    * stringLiteral -> StringLiteral()
+    * nodeToken3 -> ")"
+    * nodeToken4 -> ";"
     * </PRE>
     */
    public void visit(Static_AssertDeclaration n) {
@@ -770,9 +770,9 @@ public class DepthFirstVisitor implements Visitor {
       n.nodeToken1.accept(this);
       n.constantExpression.accept(this);
       n.nodeToken2.accept(this);
+      n.stringLiteral.accept(this);
       n.nodeToken3.accept(this);
       n.nodeToken4.accept(this);
-      n.nodeToken5.accept(this);
    }
 
    /**
@@ -786,7 +786,7 @@ public class DepthFirstVisitor implements Visitor {
 
    /**
     * <PRE>
-    * nodeChoice -> ( &lt;IDENTIFIER&gt; ":" Statement() | CaseStatement() | DefaultStatement() )
+    * nodeChoice -> ( &lt;IDENTIFIER&gt; ":" [ AttributeSpecifierList() ] Statement() | CaseStatement() | DefaultStatement() )
     * </PRE>
     */
    public void visit(LabeledStatement n) {
@@ -1022,6 +1022,115 @@ public class DepthFirstVisitor implements Visitor {
     */
    public void visit(DeclarationList n) {
       n.nodeList.accept(this);
+   }
+
+   /**
+    * <PRE>
+    * nodeList -> ( AttributeSpecifier() )+
+    * </PRE>
+    */
+   public void visit(AttributeSpecifierList n) {
+      n.nodeList.accept(this);
+   }
+
+   /**
+    * <PRE>
+    * nodeChoice -> ( &lt;ATTRIBUTE&gt; | &lt;NONNULL&gt; ) "(" "(" AttributeList() ")" ")"
+    *       | Asm()
+    * </PRE>
+    */
+   public void visit(AttributeSpecifier n) {
+      n.nodeChoice.accept(this);
+   }
+
+   /**
+    * <PRE>
+    * nodeToken -> &lt;ASM&gt;
+    * nodeToken1 -> "("
+    * stringLiteral -> StringLiteral()
+    * nodeToken2 -> ")"
+    * </PRE>
+    */
+   public void visit(Asm n) {
+      n.nodeToken.accept(this);
+      n.nodeToken1.accept(this);
+      n.stringLiteral.accept(this);
+      n.nodeToken2.accept(this);
+   }
+
+   /**
+    * <PRE>
+    * nodeOptional -> [ Attribute() ]
+    * nodeListOptional -> ( "," [ Attribute() ] )*
+    * </PRE>
+    */
+   public void visit(AttributeList n) {
+      n.nodeOptional.accept(this);
+      n.nodeListOptional.accept(this);
+   }
+
+   /**
+    * <PRE>
+    * word -> Word()
+    * nodeOptional -> [ "(" Expression() ")" ]
+    * </PRE>
+    */
+   public void visit(Attribute n) {
+      n.word.accept(this);
+      n.nodeOptional.accept(this);
+   }
+
+   /**
+    * <PRE>
+    * nodeChoice -> &lt;IDENTIFIER&gt;
+    *       | &lt;ALIGNOF&gt;
+    *       | &lt;AUTO&gt;
+    *       | &lt;BREAK&gt;
+    *       | &lt;CASE&gt;
+    *       | &lt;CHAR&gt;
+    *       | &lt;CONST&gt;
+    *       | &lt;CONTINUE&gt;
+    *       | &lt;DFAULT&gt;
+    *       | &lt;DO&gt;
+    *       | &lt;DOUBLE&gt;
+    *       | &lt;ELSE&gt;
+    *       | &lt;ENUM&gt;
+    *       | &lt;EXTERN&gt;
+    *       | &lt;FLOAT&gt;
+    *       | &lt;FOR&gt;
+    *       | &lt;GOTO&gt;
+    *       | &lt;IF&gt;
+    *       | &lt;INLINE&gt;
+    *       | &lt;INT&gt;
+    *       | &lt;LONG&gt;
+    *       | &lt;REGISTER&gt;
+    *       | &lt;RESTRICT&gt;
+    *       | &lt;RETURN&gt;
+    *       | &lt;SHORT&gt;
+    *       | &lt;SIGNED&gt;
+    *       | &lt;SIZEOF&gt;
+    *       | &lt;STATIC&gt;
+    *       | &lt;STRUCT&gt;
+    *       | &lt;SWITCH&gt;
+    *       | &lt;TYPEDEF&gt;
+    *       | &lt;UNION&gt;
+    *       | &lt;UNSIGNED&gt;
+    *       | &lt;VOID&gt;
+    *       | &lt;VOLATILE&gt;
+    *       | &lt;WHILE&gt;
+    *       | &lt;ALIGNAS&gt;
+    *       | &lt;ATOMIC&gt;
+    *       | &lt;BOOL&gt;
+    *       | &lt;COMPLEX&gt;
+    *       | &lt;GENERIC&gt;
+    *       | &lt;IMAGINARY&gt;
+    *       | &lt;NORETURN&gt;
+    *       | &lt;STATICASSERT&gt;
+    *       | &lt;THREADLOCAL&gt;
+    * </PRE>
+    */
+   public void visit(Word n) {
+      n.nodeChoice.accept(this);
    }
 
 }

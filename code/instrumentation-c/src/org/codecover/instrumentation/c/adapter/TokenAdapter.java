@@ -243,6 +243,7 @@ public class TokenAdapter extends PreprocessorListener implements TokenManager {
         if("case".equals(image)) { return CParserConstants.CASE; }
         if("char".equals(image)) { return CParserConstants.CHAR; }
         if("const".equals(image)) { return CParserConstants.CONST; }
+        if("__const".equals(image)) { return CParserConstants.CONST; } // GCC specific
         if("continue".equals(image)) { return CParserConstants.CONTINUE; }
         if("default".equals(image)) { return CParserConstants.DFAULT; }
         if("do".equals(image)) { return CParserConstants.DO; }
@@ -258,6 +259,8 @@ public class TokenAdapter extends PreprocessorListener implements TokenManager {
         if("int".equals(image)) { return CParserConstants.INT; }
         if("long".equals(image)) { return CParserConstants.LONG; }
         if("register".equals(image)) { return CParserConstants.REGISTER; }
+        if("restrict".equals(image)) { return CParserConstants.RESTRICT; }
+        if("__restrict".equals(image)) { return CParserConstants.RESTRICT; } // GCC specific
         if("return".equals(image)) { return CParserConstants.RETURN; }
         if("short".equals(image)) { return CParserConstants.SHORT; }
         if("signed".equals(image)) { return CParserConstants.SIGNED; }
@@ -281,6 +284,9 @@ public class TokenAdapter extends PreprocessorListener implements TokenManager {
         if("_Static_assert".equals(image)) { return CParserConstants.STATICASSERT; }
         if("_Thread_local".equals(image)) { return CParserConstants.THREADLOCAL; }
         if("__attribute__".equals(image)) { return CParserConstants.ATTRIBUTE; }
+        if("__extension__".equals(image)) { return CParserConstants.EXTENSION; }
+        if("__nonnull".equals(image)) { return CParserConstants.NONNULL; }
+        if("__asm__".equals(image)) { return CParserConstants.ASM; }
         else { return CParserConstants.IDENTIFIER;
         }
     }

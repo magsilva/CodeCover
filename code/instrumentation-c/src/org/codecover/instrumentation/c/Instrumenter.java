@@ -46,6 +46,18 @@ public class Instrumenter extends org.codecover.instrumentation.Instrumenter {
 
             String[] includeDirs = (String[])instrumenterDirectives.get(InstrumenterDescriptor.IncludeDirs.KEY);
             String[] defines = (String[])instrumenterDirectives.get(InstrumenterDescriptor.Defines.KEY);
+
+            if(false) {
+                TokenAdapter adapter = new TokenAdapter(currentSourceFile, Arrays.asList(includeDirs), Arrays.asList(defines), false);
+                org.codecover.instrumentation.c.parser.Token t = adapter.getNextToken();
+                while (t.kind != CParserConstants.EOF) {
+                    target.write(t.image);
+                    target.write("\n");
+                    t = adapter.getNextToken();
+                }
+                return;
+            }
+
             if ((Boolean)instrumenterDirectives.get(InstrumenterDescriptor.Debug.KEY)) {
                 DebugCParser cParser = new DebugCParser(new TokenAdapter(currentSourceFile, Arrays.asList(includeDirs), Arrays.asList(defines), true));
                 for(String type : (String[])instrumenterDirectives.get(InstrumenterDescriptor.Types.KEY)) {

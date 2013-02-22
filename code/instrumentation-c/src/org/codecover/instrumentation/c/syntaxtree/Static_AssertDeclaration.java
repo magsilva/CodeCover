@@ -11,9 +11,9 @@ package org.codecover.instrumentation.c.syntaxtree;
  * nodeToken1 -> "("
  * constantExpression -> ConstantExpression()
  * nodeToken2 -> ","
- * nodeToken3 -> &lt;STRING_LITERAL&gt;
- * nodeToken4 -> ")"
- * nodeToken5 -> ";"
+ * stringLiteral -> StringLiteral()
+ * nodeToken3 -> ")"
+ * nodeToken4 -> ";"
  * </PRE>
  */
 public class Static_AssertDeclaration extends org.codecover.instrumentation.c.adapter.CCNode implements Node {
@@ -22,11 +22,11 @@ public class Static_AssertDeclaration extends org.codecover.instrumentation.c.ad
    public NodeToken nodeToken1;
    public ConstantExpression constantExpression;
    public NodeToken nodeToken2;
+   public StringLiteral stringLiteral;
    public NodeToken nodeToken3;
    public NodeToken nodeToken4;
-   public NodeToken nodeToken5;
 
-   public Static_AssertDeclaration(NodeToken n0, NodeToken n1, ConstantExpression n2, NodeToken n3, NodeToken n4, NodeToken n5, NodeToken n6) {
+   public Static_AssertDeclaration(NodeToken n0, NodeToken n1, ConstantExpression n2, NodeToken n3, StringLiteral n4, NodeToken n5, NodeToken n6) {
       nodeToken = n0;
       if ( nodeToken != null ) nodeToken.setParent(this);
       nodeToken1 = n1;
@@ -35,15 +35,15 @@ public class Static_AssertDeclaration extends org.codecover.instrumentation.c.ad
       if ( constantExpression != null ) constantExpression.setParent(this);
       nodeToken2 = n3;
       if ( nodeToken2 != null ) nodeToken2.setParent(this);
-      nodeToken3 = n4;
+      stringLiteral = n4;
+      if ( stringLiteral != null ) stringLiteral.setParent(this);
+      nodeToken3 = n5;
       if ( nodeToken3 != null ) nodeToken3.setParent(this);
-      nodeToken4 = n5;
+      nodeToken4 = n6;
       if ( nodeToken4 != null ) nodeToken4.setParent(this);
-      nodeToken5 = n6;
-      if ( nodeToken5 != null ) nodeToken5.setParent(this);
    }
 
-   public Static_AssertDeclaration(ConstantExpression n0) {
+   public Static_AssertDeclaration(ConstantExpression n0, StringLiteral n1) {
       nodeToken = new NodeToken("_Static_assert");
       if ( nodeToken != null ) nodeToken.setParent(this);
       nodeToken1 = new NodeToken("(");
@@ -52,12 +52,12 @@ public class Static_AssertDeclaration extends org.codecover.instrumentation.c.ad
       if ( constantExpression != null ) constantExpression.setParent(this);
       nodeToken2 = new NodeToken(",");
       if ( nodeToken2 != null ) nodeToken2.setParent(this);
-      nodeToken3 = new NodeToken("\"");
+      stringLiteral = n1;
+      if ( stringLiteral != null ) stringLiteral.setParent(this);
+      nodeToken3 = new NodeToken(")");
       if ( nodeToken3 != null ) nodeToken3.setParent(this);
-      nodeToken4 = new NodeToken(")");
+      nodeToken4 = new NodeToken(";");
       if ( nodeToken4 != null ) nodeToken4.setParent(this);
-      nodeToken5 = new NodeToken(";");
-      if ( nodeToken5 != null ) nodeToken5.setParent(this);
    }
 
    public void accept(org.codecover.instrumentation.c.visitor.Visitor v) {
