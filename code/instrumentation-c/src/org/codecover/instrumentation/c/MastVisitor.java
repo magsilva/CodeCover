@@ -125,10 +125,10 @@ public class MastVisitor extends DepthFirstVisitor {
     @Override
     public void visit(TranslationUnit n) {
         int headerStartOffset = 0;
-        int headerEndOffset = 0;
+        int headerEndOffset = BeginOffset.getStartOffset(n);
         pushStatementLevel();
         super.visit(n);
-        popTopLevelHieraryLevels(BeginOffset.getStartOffset(n), lastEndOffset, headerStartOffset, headerEndOffset);
+        popTopLevelHieraryLevels(headerEndOffset, lastEndOffset, headerStartOffset, headerEndOffset);
 
     }
 
