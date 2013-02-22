@@ -24,12 +24,16 @@ public class Helper {
         PrintWriter out = new PrintWriter(new FileWriter(file));
 
         out.println("#include <stdio.h>");
+        out.println("#include \"tree.h\"");
+
+        out.println(getCondDefinitions());
 
         for(CounterManager cm : counterManagers) {
             out.format("int %s[%d];\n", cm.stmtVarName(), cm.getStmtCnt());
             out.format("int %s[%d];\n", cm.branchVarName(), cm.getBranchCnt());
             out.format("int %s[%d];\n", cm.loopVarName(), cm.getloopCnt());
             out.format("int %s[%d];\n", cm.loopTmpName(), cm.getloopTmpCnt());
+            out.format("%s %s[%d];\n", getCondTypeName(), cm.condVarName(), cm.getCondCnt());
         }
 
         /*out.println("void CodeCover_reset() {");
@@ -63,5 +67,13 @@ public class Helper {
         out.println("}");
 
         out.close();
+    }
+
+    public static String getCondDefinitions() {
+        return getCondTypeName() + " {};\nvoid CCCondAdd(struct CCCond*, unsigned char[], int);";
+    }
+
+    public static String getCondTypeName() {
+        return "struct CCCond";
     }
 }

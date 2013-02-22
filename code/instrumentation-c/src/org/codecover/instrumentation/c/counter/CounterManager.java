@@ -124,7 +124,7 @@ public class CounterManager {
         return condCounter++;
     }
 
-    public int condCnt() {
+    public int getCondCnt() {
         return condCounter;
     }
 

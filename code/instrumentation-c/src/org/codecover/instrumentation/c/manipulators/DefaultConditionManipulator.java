@@ -8,7 +8,6 @@ import org.codecover.instrumentation.c.CBooleanExpressions;
 import org.codecover.instrumentation.c.CExpressionParser;
 import org.codecover.instrumentation.c.adapter.CCNode;
 import org.codecover.instrumentation.c.counter.CounterManager;
-import org.codecover.instrumentation.c.syntaxtree.Expression;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -26,9 +25,8 @@ public class DefaultConditionManipulator implements ConditionManipulator {
 
     @Override
     public void writeForwardDeclaration(PrintWriter out) {
-        out.println("struct CCCond {};");
-        out.println("void CCCondAdd(struct CCCond*, unsigned char[], int);");
-        out.format("extern struct CCCond %s[];\n", cm.condVarName());
+        out.println(org.codecover.instrumentation.c.Helper.getCondDefinitions());
+        out.format("extern %s %s[];\n", org.codecover.instrumentation.c.Helper.getCondTypeName(), cm.condVarName());
     }
 
     @Override
