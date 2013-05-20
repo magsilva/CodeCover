@@ -116,6 +116,7 @@ public final class LogMessage {
         int localStackFramesToDiscard = 0;
         while (localStackFramesToDiscard < stackTrace.length
                  && (stackTrace[localStackFramesToDiscard].getClassName().equals(LogMessage.class.getName())
+                     || stackTrace[localStackFramesToDiscard].getClassName().equals(SimpleLogger.class.getName())
                      || stackTrace[localStackFramesToDiscard].getClassName().equals(Logger.class.getName())
                      || stackTrace[localStackFramesToDiscard].getClassName().equals(Thread.class.getName()))) {
 	    localStackFramesToDiscard++;
@@ -202,7 +203,18 @@ public final class LogMessage {
             final StringWriter sw = new StringWriter();
             final PrintWriter out = new PrintWriter(sw);
             getException().printStackTrace(out);
-            final String stackTrace = new String(sw.getBuffer());
+            final StringBuffer sb = sw.getBuffer();
+            for (int i = sb.length() - 1; i > 0; i--) {
+            	char c = sb.charAt(i);
+            	if (c == '\n' || c == '\r')
+            		continue;
+            	else {
+            		sb.setLength(i);
+            		break;
+            	}
+            }
+            
+            final String stackTrace = new String(sb);
 
             return "[" + getLevel() + "] " + getMessage() + position + ": "
                     + stackTrace;

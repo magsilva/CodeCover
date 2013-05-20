@@ -210,9 +210,8 @@ public abstract class Logger {
      *            The message to write at the fatal level.
      * @param exception
      *            the given exception
-     * @throws FatalException always thrown, contains the message.
      */
-    public void fatal(String message, Exception exception) throws FatalException {
+    public void fatal(String message, Exception exception) {
         log(LogLevel.FATAL, message, exception);
     }
 

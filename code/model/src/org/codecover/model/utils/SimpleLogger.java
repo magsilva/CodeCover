@@ -13,6 +13,8 @@
 package org.codecover.model.utils;
 
 import java.io.PrintStream;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Steffen Kieß
@@ -20,6 +22,8 @@ import java.io.PrintStream;
  */
 public class SimpleLogger extends Logger {
     private static LogLevel defaultLogLevel = LogLevel.INFO;
+    
+    private static final List<StackTraceElement> emptyStackTrace = Collections.emptyList();
 
     private final PrintStream output;
 
@@ -129,6 +133,17 @@ public class SimpleLogger extends Logger {
         }
     }
 
+    @Override
+    public void log(LogLevel level, String message, Exception exception) {
+        synchronized (this.lock) {
+        	if (getShowPosition()) {
+        		log(new LogMessage(level, message, exception));
+        	} else {
+        		log(new LogMessage(level, message, exception, emptyStackTrace));
+        	}
+        }
+    }
+    
     /**
      * Writes a given {@link LogMessage}, if its LogLevel is &lt;=
      * {@link #getLogLevel()}
@@ -137,7 +152,7 @@ public class SimpleLogger extends Logger {
      *            the given {@link LogMessage}
      */
     @Override
-    public void writeLogMessage(LogMessage message) {
+    public void writeLogMessage(LogMessage message) { //MAYDO: make this protected as in super class
         if (message == null) {
             throw new NullPointerException("message == null");
         }
