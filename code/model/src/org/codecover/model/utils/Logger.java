@@ -79,24 +79,37 @@ public abstract class Logger {
     }
 
     /**
-     * Writes an fatal message.<br>
+     * Writes a fatal message.<br>
      * <br>
-     * This is a message, that are used for fatal outputs even in the the
-     * <code>quiet</code> mode of the batch commands. This will throw a
+     * This is a message used for fatal outputs even in the the
+     * <code>quiet</code> mode of batch commands. This will throw a
      * {@link FatalException}
      * 
      * @param message
      *            The message to write at the fatal level.
+     * @throws FatalException always thrown, contains the message.
      */
-    public void fatal(String message) {
+    public void fatal(String message) throws FatalException {
         log(LogLevel.FATAL, message);
+    }
+
+    /**
+     * Writes a fatal message caused by an exception.<br>
+     * <br>
+     * 
+     * @param exception
+     *            An exception that is to be logged.
+     * @throws FatalException always thrown, contains the message.
+     */
+    public void fatal(Exception exception) throws FatalException {
+        log(LogLevel.FATAL, "Caught exception", exception);
     }
 
     /**
      * Writes an error message.<br>
      * <br>
-     * This is a message, that are used for error outputs even in the the
-     * <code>quiet</code> mode of the batch commands.
+     * This is a message used for error outputs even in the the
+     * <code>quiet</code> mode of batch commands.
      * 
      * @param message
      *            The message to write at the error level.
@@ -106,9 +119,20 @@ public abstract class Logger {
     }
 
     /**
+     * Writes an error message caused by an exception.<br>
+     * <br>
+     * 
+     * @param exception
+     *            An exception that is to be logged.
+     */
+    public void error(Exception exception) {
+        log(LogLevel.ERROR, "Caught exception", exception);
+    }
+
+    /**
      * Writes a warning message.<br>
      * <br>
-     * This is the level for messages of the <code>normal</code> mode of the
+     * This is the level for messages of the <code>normal</code> mode of
      * batch commands.
      * 
      * @param message
@@ -119,9 +143,20 @@ public abstract class Logger {
     }
 
     /**
+     * Writes a warning message caused by an exception.<br>
+     * <br>
+     * 
+     * @param exception
+     *            An exception that is to be logged.
+     */
+    public void warning(Exception exception) {
+        log(LogLevel.WARNING, "Caught exception", exception);
+    }
+
+    /**
      * Writes an info message.<br>
      * <br>
-     * This is the level for messages of the <code>verbose</code> mode of the
+     * This is the level for messages of the <code>verbose</code> mode of
      * batch commands.
      * 
      * @param message
@@ -131,8 +166,20 @@ public abstract class Logger {
         log(LogLevel.INFO, message);
     }
 
+
     /**
-     * Writes an debug message.<br>
+     * Writes an info message caused by an exception.<br>
+     * <br>
+     * 
+     * @param exception
+     *            An exception that is to be logged.
+     */
+    public void info(Exception exception) {
+        log(LogLevel.INFO, "Caught exception", exception);
+    }
+
+    /**
+     * Writes a debug message.<br>
      * 
      * @param message
      *            The message to write at the debug level.
@@ -142,26 +189,38 @@ public abstract class Logger {
     }
 
     /**
-     * Writes an fatal message.<br>
+     * Writes a debug message caused by an exception.<br>
      * <br>
-     * This is a message, that are used for fatal outputs even in the the
-     * <code>quiet</code> mode of the batch commands. This will throw a
+     * 
+     * @param exception
+     *            An exception that is to be logged.
+     */
+    public void debug(Exception exception) {
+        log(LogLevel.DEBUG, "Caught exception", exception);
+    }
+
+    /**
+     * Writes a fatal message.<br>
+     * <br>
+     * This is a message used for fatal outputs even in the the
+     * <code>quiet</code> mode of batch commands. This will throw a
      * {@link FatalException}
      * 
      * @param message
      *            The message to write at the fatal level.
      * @param exception
      *            the given exception
+     * @throws FatalException always thrown, contains the message.
      */
-    public void fatal(String message, Exception exception) {
+    public void fatal(String message, Exception exception) throws FatalException {
         log(LogLevel.FATAL, message, exception);
     }
 
     /**
      * Writes an error message.<br>
      * <br>
-     * This is a message, that are used for error outputs even in the the
-     * <code>quiet</code> mode of the batch commands.
+     * This is a message used for error outputs even in the the
+     * <code>quiet</code> mode of batch commands.
      * 
      * @param message
      *            The message to write at the error level.
@@ -203,7 +262,7 @@ public abstract class Logger {
     }
 
     /**
-     * Writes an debug message.<br>
+     * Writes a debug message.<br>
      * 
      * @param message
      *            The message to write at the debug level.

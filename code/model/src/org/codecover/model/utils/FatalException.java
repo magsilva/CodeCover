@@ -13,7 +13,7 @@
 package org.codecover.model.utils;
 
 /**
- * This exception will be throw wenn a message with a {@link LogLevel} of
+ * This exception will be thrown when a message with a {@link LogLevel} of
  * {@link LogLevel#FATAL FATAL} is being logged.
  * 
  * @author Steffen Kieß

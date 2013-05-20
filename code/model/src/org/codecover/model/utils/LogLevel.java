@@ -13,7 +13,7 @@
 package org.codecover.model.utils;
 
 /**
- * An {@code enum} indication the importance of a {@link LogMessage}.
+ * An {@code enum} indicating the importance of a {@link LogMessage}.
  *
  * @author Steffen Kieß
  * @version 1.0 ($Id$)

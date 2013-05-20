@@ -114,11 +114,12 @@ public final class LogMessage {
         final List<StackTraceElement> stackTraceList = new ArrayList<StackTraceElement>();
 
         int localStackFramesToDiscard = 0;
-        for (; localStackFramesToDiscard < stackTrace.length
+        while (localStackFramesToDiscard < stackTrace.length
                  && (stackTrace[localStackFramesToDiscard].getClassName().equals(LogMessage.class.getName())
                      || stackTrace[localStackFramesToDiscard].getClassName().equals(Logger.class.getName())
-                     || stackTrace[localStackFramesToDiscard].getClassName().equals(Thread.class.getName())); localStackFramesToDiscard++) {
-            /*FIXME is this empty loop intended?*/
+                     || stackTrace[localStackFramesToDiscard].getClassName().equals(Thread.class.getName()))) {
+	    localStackFramesToDiscard++;
+            /* MAYDO tricky loop find out if we want to do more here ... */
         }
 
         for (int i = localStackFramesToDiscard; i < stackTrace.length; i++) {
