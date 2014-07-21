@@ -70,7 +70,9 @@ public class HelperMethods {
     public static String[] removeMethodsOption(String[] args) {
         ArrayList list = new ArrayList(args.length);
         for (int i = 0; i < args.length; i++) {
-            list.add(args[i]);
+            if (!METHODS_OPTION.equals(args[i])){
+                list.add(args[i]);
+            }
         }
         return (String[]) list.toArray(new String[list.size()]);
     }
