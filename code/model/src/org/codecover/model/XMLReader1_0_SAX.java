@@ -1103,22 +1103,10 @@ class XMLReader1_0_SAX extends XMLReaderBase implements XMLNames1_0 {
      * @param attributes
      */
     protected void handleStartElementTestSessionContainer(Attributes attributes) {
-        final String namespaceURI = attributes.getValue(NAMESPACE_IDENTIFIER);
         final String versionString = attributes.getValue(VERSION);
         final String containerId = attributes
                 .getValue(TEST_SESSION_CONTAINER_ID);
         final Date date = new Date(Long.parseLong(attributes.getValue(DATE)));
-
-        if (namespaceURI == null) {
-            throw new IllegalArgumentException("Expected namespace "
-                    + "Attribute, but found none.");
-        }
-
-        if (!namespaceURI.equals(NAMESPACE_TEST_SESSION_CONTAINER)) {
-            throw new IllegalArgumentException("Expected namespace "
-                    + NAMESPACE_TEST_SESSION_CONTAINER + ", got "
-                    + namespaceURI);
-        }
 
         if (versionString == null) {
             throw new IllegalArgumentException("No version information");

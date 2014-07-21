@@ -55,17 +55,18 @@ public class SAXFileReader {
             XMLReaderBase readerBase) throws ParserConfigurationException,
             SAXException, IOException {
         final SAXParserFactory factory = SAXParserFactory.newInstance();
+        factory.setNamespaceAware(true);
 
         final SchemaFactory schemaFactory = SchemaFactory
                 .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
         final InputStream schemaInputStream = SAXFileReader.class
                 .getResourceAsStream("resources/testSessionContainerSchema.xsd");
-        
+
         if (schemaInputStream == null) {
             throw new RuntimeException("Cannot find schema resource");
         }
-        
+
         final Schema schema = schemaFactory.newSchema(new SAXSource(
                 new InputSource(schemaInputStream)));
 

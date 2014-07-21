@@ -3,7 +3,7 @@
 <!--
 This schema can be used to validate the 1.0 test session container xml format.
 -->
-<xsd:schema elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.codecover.org/xml/testsession-container" xmlns="http://www.codecover.org/xml/testsession-container" elementFormDefault="qualified"> 
 	<xsd:element name="TestSessionContainer">
 		<xsd:complexType>
 			<xsd:choice maxOccurs="unbounded" minOccurs="0">
