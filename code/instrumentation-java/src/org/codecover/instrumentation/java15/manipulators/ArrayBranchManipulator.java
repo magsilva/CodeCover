@@ -47,22 +47,22 @@ public class ArrayBranchManipulator extends AbstractDefaultManipulator
     private static final String ARRAY_NAME = "branches";
 
     private static final String COUNTER_INCREMENTING = "%1$s." + ARRAY_NAME
-            + "[%2$d]++;";
+            + ".getAndIncrement(%2$d);";
 
-    private static final String COUNTER_DECLARATION = "public static long[] "
-            + ARRAY_NAME + " = new long[%1$d];";
+    private static final String COUNTER_DECLARATION = "public static java.util.concurrent.atomic.AtomicLongArray "
+        + ARRAY_NAME + " = new java.util.concurrent.atomic.AtomicLongArray(%1$d);";
 
     private static final String COUNTER_FOR_LOOP = "for (int i = 1; i <= %1$d; i++)";
 
-    private static final String COUNTER_RESET = ARRAY_NAME + "[i] = 0L;";
+    private static final String COUNTER_RESET = ARRAY_NAME + ".set(i, 0L);";
 
     private static final String COUNTER_SERIALIZE_IF = "if (" + ARRAY_NAME
-            + "[i] != 0L)";
+            + ".get(i) != 0L)";
 
     private static final String COUNTER_SERIALIZE_PASS_COUNTER = LOG_NAME + "."
             + CoverageCounterLog.PASS_COUNTER_METHOD_NAME
             + "(\"" + ID_PREFIX + "\"+ i, "
-            + ARRAY_NAME + "[i]);";
+            + ARRAY_NAME + ".get(i));";
 
     // /////////////////////////////////////////////////////////////////////////
     //

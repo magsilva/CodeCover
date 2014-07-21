@@ -146,6 +146,7 @@ public class AnalyzeCommand extends Command {
         }
 
         try {
+            context.getLogger().info("Parsing coverage log " + this.coverageLog);
             CoverageLogParser logParser = new CoverageLogParser(
                     this.coverageLog, coverageLogCharset);
 
@@ -166,7 +167,7 @@ public class AnalyzeCommand extends Command {
                             "The coverage log file does not fit to the session container! Process aborted.",
                             e);
         } catch (ParseException e) {
-            context.getLogger().fatal("Error parsing the coverage log", e);
+            context.getLogger().fatal("Error parsing the coverage log:\n" + e.toString(), e);
         }
     }
 }

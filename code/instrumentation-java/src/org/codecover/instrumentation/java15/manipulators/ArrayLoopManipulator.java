@@ -42,50 +42,50 @@ public class ArrayLoopManipulator extends AbstractDefaultManipulator
     private static final String ARRAY_NAME = "loops";
 
     private static final String COUNTER_INCREMENTING = "%1$s." + ARRAY_NAME
-            + "[%2$d]++;";
+            + ".getAndIncrement(%2$d);";
 
     private static final String COUNTER_DECREMENTING = "%1$s." + ARRAY_NAME
-    + "[%2$d]--;";
+    + ".getAndDecrement(%2$d);";
 
-    private static final String COUNTER_DECLARATION = "public static long[] "
-            + ARRAY_NAME + " = new long[%1$d];";
+    private static final String COUNTER_DECLARATION = "public static java.util.concurrent.atomic.AtomicLongArray "
+            + ARRAY_NAME + " = new java.util.concurrent.atomic.AtomicLongArray(%1$d);";
 
     private static final String COUNTER_FOR_LOOP = "for (int i = 1; i <= %1$d; i++)";
 
-    private static final String COUNTER_RESET = ARRAY_NAME + "[i] = 0L;";
+    private static final String COUNTER_RESET = ARRAY_NAME + ".set(i, 0L);";
 
     private static final String COUNTER_SERIALIZE_IF_ZERO = "if ("
-            + ARRAY_NAME + "[i * 3 - 2] != 0L)";
+            + ARRAY_NAME + ".get(i * 3 - 2) != 0L)";
 
     private static final String COUNTER_SERIALIZE_PASS_COUNTER_ZERO = LOG_NAME
             + "." + CoverageCounterLog.PASS_COUNTER_METHOD_NAME + "(\""
             + ID_PREFIX + "\" + i + \"" + ID_SUFFIX_ZERO + "\", " + ARRAY_NAME
-            + "[i * 3 - 2]);";
+            + ".get(i * 3 - 2));";
 
     private static final String COUNTER_RESET_ZERO = ARRAY_NAME
-            + "[i * 3 - 2] = 0L;";
+            + ".set(i * 3 - 2, 0L);";
 
     private static final String COUNTER_SERIALIZE_IF_ONE = "if ( " + ARRAY_NAME
-            + "[i * 3 - 1] != 0L)";
+            + ".get(i * 3 - 1) != 0L)";
 
     private static final String COUNTER_SERIALIZE_PASS_COUNTER_ONE = LOG_NAME
             + "." + CoverageCounterLog.PASS_COUNTER_METHOD_NAME + "(\""
             + ID_PREFIX + "\" + i + \"" + ID_SUFFIX_ONE + "\", " + ARRAY_NAME
-            + "[i * 3 - 1]);";
+            + ".get(i * 3 - 1));";
 
     private static final String COUNTER_RESET_ONE = ARRAY_NAME
-            + "[i * 3 - 1] = 0L;";
+            + ".set(i * 3 - 1, 0L);";
 
     private static final String COUNTER_SERIALIZE_IF_ABOVE = "if ( "
-            + ARRAY_NAME + "[i * 3] != 0L)";
+            + ARRAY_NAME + ".get(i * 3) != 0L)";
 
     private static final String COUNTER_SERIALIZE_PASS_COUNTER_ABOVE = LOG_NAME
             + "." + CoverageCounterLog.PASS_COUNTER_METHOD_NAME + "(\""
             + ID_PREFIX + "\" + i + \"" + ID_SUFFIX_ABOVE + "\", "
-            + ARRAY_NAME + "[i * 3]);";
+            + ARRAY_NAME + ".get(i * 3));";
 
     private static final String COUNTER_RESET_ABOVE = ARRAY_NAME
-            + "[i * 3] = 0L;";
+            + ".set(i * 3, 0L);";
 
     // /////////////////////////////////////////////////////////////////////////
     //

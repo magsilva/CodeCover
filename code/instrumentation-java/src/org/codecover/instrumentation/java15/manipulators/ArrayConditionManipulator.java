@@ -122,14 +122,14 @@ public class ArrayConditionManipulator extends AbstractDefaultManipulator
     private static final String CONDITON_COUNTER_ARRAY_NAME = "conditionCounters";
 
     private static final String CONDITION_COUNTER_FORMAT = "%1$s" + "."
-            + CONDITON_COUNTER_ARRAY_NAME + "[%2$d]";
+            + CONDITON_COUNTER_ARRAY_NAME + ".get(%2$d)";
 
-    private static final String CONDITION_COUNTER_DECLARATION = "public static final "
-            + ConditionCounter.class.getName()
-            + "[] "
+    private static final String CONDITION_COUNTER_DECLARATION = "  public static final "
+            + "java.util.concurrent.atomic.AtomicReferenceArray<%1$s> "
             + CONDITON_COUNTER_ARRAY_NAME
-            + " = new "
-            + ConditionCounter.class.getName() + "[%1$d];";
+            + " = " + LINE_SEPARATOR
+            + "        new "
+            + "java.util.concurrent.atomic.AtomicReferenceArray<%2$s>(%3$d);";
 
     private static final String SECTION_NAME_ASSIGNMENT = "final String " +
             "SECTION_NAME = \"%1$s\";";
@@ -142,22 +142,22 @@ public class ArrayConditionManipulator extends AbstractDefaultManipulator
     private static final String CONDITION_COUNTER_INITIALIZATION =
         "      switch (CONDITION_COUNTER_TYPES[i]) {" + LINE_SEPARATOR +
         "        case 0 : break;" + LINE_SEPARATOR +
-        "        case 1 : " + CONDITON_COUNTER_ARRAY_NAME + "[i] = new " + SmallOneConditionCounter.class.getName() + "(SECTION_NAME, \"C\" + i); break;" + LINE_SEPARATOR +
-        "        case 2 : " + CONDITON_COUNTER_ARRAY_NAME + "[i] = new " + SmallTwoConditionCounter.class.getName() + "(SECTION_NAME, \"C\" + i); break;" + LINE_SEPARATOR +
-        "        case 3 : " + CONDITON_COUNTER_ARRAY_NAME + "[i] = new " + MediumConditionCounter.class.getName() + "(SECTION_NAME, \"C\" + i); break;" + LINE_SEPARATOR +
-        "        case 4 : " + CONDITON_COUNTER_ARRAY_NAME + "[i] = new " + LargeConditionCounter.class.getName() + "(SECTION_NAME, \"C\" + i); break;" + LINE_SEPARATOR +
+        "        case 1 : " + CONDITON_COUNTER_ARRAY_NAME + ".set(i, new " + SmallOneConditionCounter.class.getName() + "(SECTION_NAME, \"C\" + i)); break;" + LINE_SEPARATOR +
+        "        case 2 : " + CONDITON_COUNTER_ARRAY_NAME + ".set(i, new " + SmallTwoConditionCounter.class.getName() + "(SECTION_NAME, \"C\" + i)); break;" + LINE_SEPARATOR +
+        "        case 3 : " + CONDITON_COUNTER_ARRAY_NAME + ".set(i, new " + MediumConditionCounter.class.getName() + "(SECTION_NAME, \"C\" + i)); break;" + LINE_SEPARATOR +
+        "        case 4 : " + CONDITON_COUNTER_ARRAY_NAME + ".set(i, new " + LargeConditionCounter.class.getName() + "(SECTION_NAME, \"C\" + i)); break;" + LINE_SEPARATOR +
         "      }";
 
     private static final String LOOP_OVER_ARRAY = "for (int i = 1; i <= %1$d; i++)";
 
     private static final String IF_NOT_NULL = "if ("
-            + CONDITON_COUNTER_ARRAY_NAME + "[i] != null)";
+            + CONDITON_COUNTER_ARRAY_NAME + ".get(i) != null)";
 
     private static final String RESET_CONDITION_COUNTER = CONDITON_COUNTER_ARRAY_NAME
-            + "[i]." + CounterContainer.RESET_METHOD_NAME + "();";
+            + ".get(i)." + CounterContainer.RESET_METHOD_NAME + "();";
 
     private static final String SERIALIZE_CONDITION_COUNTER = CONDITON_COUNTER_ARRAY_NAME
-            + "[i]."
+            + ".get(i)."
             + CounterContainer.SERIALIZE_AND_RESET_METHOD_NAME
             + "("
             + CounterIDManager.LOG_NAME + ");";
@@ -573,8 +573,9 @@ public class ArrayConditionManipulator extends AbstractDefaultManipulator
 
             writer.write(LINE_SEPARATOR);
             writer.write("  ");
-            writer.write(String.format(CONDITION_COUNTER_DECLARATION, new Integer(
-                    this.maxConditionID + 1)));
+            writer.write(String.format(CONDITION_COUNTER_DECLARATION,
+                    ConditionCounter.class.getName(), ConditionCounter.class
+                            .getName(), new Integer(this.maxConditionID + 1)));
             writer.write(LINE_SEPARATOR);
 
             // now we produce something like that
